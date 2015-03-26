@@ -6,6 +6,7 @@ import view.*;
 /**
  * точка входа в сервер
  * @author GeneraL
+ * фывмфытимфыатимываьимывьтфыивтифывм пои
  */
 public class Afis {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
