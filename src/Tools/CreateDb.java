@@ -4,20 +4,20 @@
  * and open the template in the editor.
  */
 
-package src.java.Tools;
+package Tools;
 
-import src.java.db.DataAccessObject;
+import db.DataAccessObject;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import src.java.model.Airport;
-import src.java.model.Flight;
-import src.java.model.Model;
-import src.java.model.Plane;
-import src.java.model.Route;
-import src.java.model.aircraft.Boeing747SP;
-import src.java.model.airport.InternationalAirport;
-import src.java.model.flight.ReguarFlight;
-import src.java.model.route.RegularRoute;
+import model.Airport;
+import model.Flight;
+import model.Model;
+import model.Plane;
+import model.Route;
+import model.aircraft.Boeing747SP;
+import model.airport.InternationalAirport;
+import model.flight.ReguarFlight;
+import model.route.RegularRoute;
 
 /**
  *
@@ -30,7 +30,7 @@ public class CreateDb
        Plane plane = new Boeing747SP(0,"plane1");
        Airport port = new InternationalAirport(0, "Kurumoch", "Samara");
        Route route = new RegularRoute(0,0,0,0);
-       Flight flight = new ReguarFlight(0, plane, route);
+       Flight flight = new ReguarFlight(0, plane.getId(), route.getId(),new java.util.Date(0),new java.util.Date(0));
        DataAccessObject.addPlane(plane);
        DataAccessObject.addAirport(port);
        DataAccessObject.addRoute(route);

@@ -3,13 +3,14 @@
     Created on : 24.02.2015, 14:45:13
     Author     : Ксю
 --%>
-<%@page import="src.java.Tools.CreateDb"%>
-<%@page import="src.java.model.Plane"%>
+<%@page import="Tools.CreateDb"%>
+<%@page import="model.Plane"%>
 <%@page  import="java.util.ArrayList" %>
-<%@page import="src.java.Tools.CreateModel "%>
-<%@page import="src.java.db.Sql" %>
-<%@page import="src.java.db.DataAccessObject" %>
+<%@page import="Tools.CreateModel "%>
+<%@page import="db.Sql" %>
+<%@page import="db.DataAccessObject" %>
 <%@ page import="java.io.*,java.util.*" %>
+<%@ page import="model.aircraft.Boeing747SP" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -17,11 +18,13 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <title>JSP Page</title>
   <%
-    CreateModel model =new CreateModel();
-    //CreateDb db = new CreateDb();
-    ArrayList<Plane> list1 = model.getPlane();
+    ArrayList<Plane> list1 = new ArrayList<>();
+      list1.add(new Boeing747SP(0,"plane1"));
+      list1.add(new Boeing747SP(1,"plane2"));
+      list1.add(new Boeing747SP(2,"plane3"));
+      list1.add(new Boeing747SP(3,"plane4"));
+      list1.add(new Boeing747SP(4,"plane5"));
     int count = list1.size();
-  //  ArrayList<Plane> list2 = DataAccessObject.getPlanes();
   %>
 </head>
 <body>
