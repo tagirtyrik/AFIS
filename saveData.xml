@@ -1,0 +1,18 @@
+<Data>
+  <Data>
+    <model.aircraft.Boeing747SP>
+      <id>0</id>
+      <planeName>Boeing_747SP</planeName>
+      <planeNumber>asdasd</planeNumber>
+      <fuelConsumption>20.3</fuelConsumption>
+      <passengerSeatsCount>230</passengerSeatsCount>
+    </model.aircraft.Boeing747SP>
+  </Data>
+  <Data/>
+  <Data/>
+  <Data/>
+  <Id>1</Id>
+  <Id>0</Id>
+  <Id>0</Id>
+  <Id>0</Id>
+</Data>
