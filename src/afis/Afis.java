@@ -15,5 +15,6 @@ public class Afis {
         //ServerView view=new ServerView(8080);//для ввода-вывода команд в сеть
         Controller controller=new Controller(model,view);
         controller.launch(new String[0]);
+        controller.launch(new String[]{"help","hello"},true);
     }
 }

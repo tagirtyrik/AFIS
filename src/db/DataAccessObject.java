@@ -17,7 +17,10 @@ import static xml.OperationWithXml.saveAll;
 import exception.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+import javax.naming.NamingException;
+import javax.naming.Context;
 /*
     Инструкция по подключению к базе данных MySQL:
     1.Раскомментировать строки //для MySQL и заккоментировать //для derbyDB в классах Sql и DataAccessObject
@@ -54,6 +57,7 @@ import java.text.SimpleDateFormat;
  */
 public class DataAccessObject {
     private static Connection connection;
+    private static DataSource dataSource=null;
     /*
     private static final String connectionUrl="jdbc:derby://localhost:1527/AfisDB;create=true";//для derbyDB
     private static final String driverName="org.apache.derby.jdbc.ClientDriver";//для derbyDB
@@ -75,8 +79,18 @@ public class DataAccessObject {
      * @throws ClassNotFoundException 
      */
     public static void  initConnection()throws SQLException,ClassNotFoundException{
+
         Class.forName(driverName);
         connection = DriverManager.getConnection(connectionUrl);
+
+        /*DataSourceFactory.rebind();
+        try {
+            Context ctx = new InitialContext();
+            DataSource dataSource = (DataSource) ctx.lookup("jdbc/afisDB");
+            connection = dataSource.getConnection();
+        }catch ( NamingException e) {
+                e.printStackTrace();
+            }*/
         try{
             Statement statement = connection.createStatement();
             statement.execute(Sql.Table.createPlane);
