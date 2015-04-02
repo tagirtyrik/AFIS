@@ -1,7 +1,9 @@
 package controller;
 import exception.*;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import model.Airport;
@@ -16,8 +18,8 @@ import model.route.RegularRoute;
 import view.View;
 
 public class Controller {
-    private final Model model;
-    private final View view;
+    private Model model=null;
+    private View view=null;
     private boolean isLaunched=false;
     private final DateFormat formatter =new SimpleDateFormat("dd.MM.yy-kk:mm_z");
     private final String[] help=new String[]{//справка
@@ -69,13 +71,253 @@ public class Controller {
      "delall :: удаляет все ваши данные" 
     };
 
-    
+   public Controller(Model model)throws IOException, ClassNotFoundException{
+       CmdParser.setHelp(help);
+       model.loadData();
+       this.model=model;
+       this.view=null;
+   }
     public Controller(Model model,View view) throws IOException, ClassNotFoundException{
         CmdParser.setHelp(help);
         model.loadData();
         this.model=model;
         this.view=view;
         
+    }
+
+    /**
+     * метод парсинга комманд принимает на вход команду и перечень аргументов
+     * @param cmd
+     * @param arguments
+     * @throws AirportNotFoundException
+     * @throws FlightNotFoundException
+     * @throws PlaneNotFoundException
+     * @throws RouteNotFoundException
+     * @throws InvalidArgumentsException
+     * @throws java.sql.SQLException
+     * @throws java.lang.NumberFormatException
+     * @throws ComandException
+     * @throws java.text.ParseException
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    public void parse(String cmd,String[] arguments)throws AirportNotFoundException, FlightNotFoundException,
+            PlaneNotFoundException,  RouteNotFoundException, InvalidArgumentsException,
+            java.sql.SQLException, java.lang.NumberFormatException,ComandException,java.text.ParseException,
+            IOException,ClassNotFoundException{
+        if(cmd.equals("hello")){view.printSomeInfo(hello());}
+        else if (cmd.equals("model")){view.printSomeInfo(model().toString());}
+        else if (cmd.equals("exit")){view.printSomeInfo(exit());}
+        else if (cmd.equals("help")){
+            if(arguments.length>0)
+                view.printSomeInfo(help(arguments[0]));
+            else view.printSomeInfo(help());
+        }
+///////////////////////////////////////////////////////////////////////////////////////list-block
+        else if (cmd.equals("flightlist")){
+            ArrayList <Flight> list =flightList();
+            for (Flight list1 : list) {
+                view.printFlight(list1, model.takeRoute(list1.getRoute()), model.takePlane(list1.getPlane()));
+            }
+            if(list.isEmpty())view.printSomeInfo("Список пуст");
+        }
+        else if (cmd.equals("planelist")){
+            ArrayList <Plane> list =planeList();
+            for (Plane list1 : list) {
+                view.printPlane(list1);
+            }
+            if(list.isEmpty())view.printSomeInfo("Список пуст");
+        }
+        else if (cmd.equals("routelist")){
+            ArrayList <Route> list =routeList();
+            for (Route list1 : list) {
+                view.printRoute(list1);
+            }
+            if(list.isEmpty())view.printSomeInfo("Список пуст");
+        }
+        else if (cmd.equals("portlist")){
+            ArrayList <Airport> list =portList();
+            for (Airport list1 : list) {
+                view.printAirport(list1);
+            }
+            if(list.isEmpty())view.printSomeInfo("Список пуст");
+        }
+///////////////////////////////////////////////////////////////////////////////////////add-block
+        else if (cmd.equals("addplane")){
+            Plane plane=new Boeing747SP(-1,arguments[0]);
+            addPlane(plane);
+            view.printSomeInfo("Самолет добавлен");
+        }
+        else if (cmd.equals("addport")){
+            Airport port=new InternationalAirport(-1,arguments[0],arguments[1]);
+            addPort(port);
+            view.printSomeInfo("Аэропорт добавлен");
+        }
+        else if (cmd.equals("addroute")){
+            Route route=new RegularRoute(-1,
+                    Integer.parseInt(arguments[0]),
+                    Integer.parseInt(arguments[1]),
+                    Double.parseDouble(arguments[2]));
+            addRoute(route);
+            view.printSomeInfo("Маршрут добавлен");
+        }
+        else if (cmd.equals("addflight")){
+
+            Flight flight= new ReguarFlight(-1,
+                    (Integer.parseInt(arguments[0])),
+                    (Integer.parseInt(arguments[1])),
+                    formatter.parse(arguments[2]+"_GMT-0:00"),
+                    formatter.parse(arguments[3]+"_GMT-0:00"));
+            addFlight(flight);
+            view.printSomeInfo("Рейс добавлен");
+        }
+///////////////////////////////////////////////////////////////////////////////////////set-block
+        else if (cmd.equals("setplane")){
+
+            Plane plane=model.takePlane(Integer.parseInt(arguments[0]));
+            plane.setNumber(arguments[1]);
+            model.setPlane(plane);
+            view.printSomeInfo("Самолет модифицирован:");
+            view.printPlane(model.takePlane(Integer.parseInt(arguments[0])));
+            //model.saveData();
+        }
+        else if (cmd.equals("setport")){
+            Airport port=model.takeAirport(Integer.parseInt(arguments[0]));
+            port.setName(arguments[1]);
+            port.setLocation(arguments[2]);
+            model.setAirport(port);
+            view.printSomeInfo("Аэропорт модифицирован:");
+            view.printAirport(model.takeAirport(Integer.parseInt(arguments[0])));
+            //model.saveData();
+        }
+        else if (cmd.equals("setroute")){
+            Route route=model.takeRoute(Integer.parseInt(arguments[0]));
+            route.setTakeOffPort(Integer.parseInt(arguments[1]));
+            route.setLandingPort(Integer.parseInt(arguments[2]));
+            route.setDistance(Double.parseDouble(arguments[3]));
+            model.setRoute(route);
+            view.printSomeInfo("Маршрут модифицирован:");
+            view.printRoute(model.takeRoute(Integer.parseInt(arguments[0])));
+            //model.saveData();
+        }
+        else if (cmd.equals("setflight")){
+            Flight flight=model.takeFlight(Integer.parseInt(arguments[0]));
+            flight.setPlane(model.takePlane(Integer.parseInt(arguments[1])));
+            flight.setRoute(model.takeRoute(Integer.parseInt(arguments[2])));
+            flight.setTakeOffTimeShedule(formatter.parse(arguments[3]+"_GMT-0:00"));
+            flight.setLandingTimeShedule(formatter.parse(arguments[4]+"_GMT-0:00"));
+            model.setFlight(flight);
+            view.printSomeInfo("Рейс модифицирован:");
+
+            view.printFlight(flight, model.takeRoute(flight.getRoute()), model.takePlane(flight.getPlane()));
+            //model.saveData();
+        }
+///////////////////////////////////////////////////////////////////////////////////////get-block
+        else if (cmd.equals("getplane")){
+            view.printPlane(getPlane(Integer.parseInt(arguments[0])));
+        }
+        else if (cmd.equals("getfplane")){
+            boolean useOr;
+            useOr = arguments[5].equals("1");
+            ArrayList<Plane> list=getFPlane( arguments[0], arguments[1],
+                    arguments[2], arguments[3], arguments[4],useOr);
+            if(list.isEmpty()){
+                view.printSomeInfo("Список пуст");
+            }
+            else{
+                for (Plane list1 : list) {
+                    view.printPlane(list1);
+                }
+            }
+        }
+        else if (cmd.equals("getport")){
+            view.printAirport(model.takeAirport(Integer.parseInt(arguments[0])));
+        }
+        else if (cmd.equals("getfport")){
+            boolean useOr;
+            useOr = arguments[3].equals("1");
+            ArrayList<Airport> list=model.getAirports(useOr, arguments[0],
+                    arguments[1],arguments[2]);
+            if(list.isEmpty()){
+                view.printSomeInfo("Список пуст");
+            }
+            else{
+                for (Airport list1 : list) {
+                    view.printAirport(list1);
+                }
+            }
+        }
+        else if (cmd.equals("getroute")){
+            view.printRoute(model.takeRoute(Integer.parseInt(arguments[0])));
+        }
+        else if (cmd.equals("getfroute")){
+            boolean useOr;
+            useOr = arguments[4].equals("1");
+            ArrayList<Route> list=model.getRoutes(useOr, arguments[0],
+                    arguments[1],arguments[2],arguments[3]);
+            if(list.isEmpty()){
+                view.printSomeInfo("Список пуст");
+            }
+            else{
+                for (Route list1 : list) {
+                    view.printRoute(list1);
+                }
+            }
+        }
+        else if (cmd.equals("getflight")){
+            Flight flight = model.takeFlight(Integer.parseInt(arguments[0]));
+            view.printFlight(flight, model.takeRoute(flight.getRoute()), model.takePlane(flight.getPlane()));
+        }
+        else if (cmd.equals("getfflight")){
+            boolean useOr;
+            useOr = arguments[5].equals("1");
+            ArrayList<Flight> list=model.getFlights(useOr, arguments[0],
+                    arguments[1],arguments[2],arguments[3],arguments[4]);
+            if(list.isEmpty()){
+                view.printSomeInfo("Список пуст");
+            }
+            else{
+                for (Flight list1 : list) {
+                    view.printFlight(list1, model.takeRoute(list1.getRoute()), model.takePlane(list1.getPlane()));
+                }
+            }
+        }
+/////////////////////////////////////////////////////////////////////////////////////////count-block
+        else if (cmd.equals("flightcount")){
+            view.printFlightCount(model.flightCount());
+        }
+        else if (cmd.equals("routecount")){
+            view.printRouteCount(model.routesCount());
+        }
+        else if (cmd.equals("planecount")){
+            view.printPlaneCount(model.planesCount());
+        }
+        else if (cmd.equals("portcount")){
+            view.printAirportCount(model.airportsCount());
+        }
+////////////////////////////////////////////////////////////////////////////////////////// del-block
+        else if(cmd.equals("delplane")){
+            delPlane(Integer.parseInt(arguments[0]));
+            view.printSomeInfo("Самолет удален");
+        }
+        else if(cmd.equals("delport")){
+            delPort(Integer.parseInt(arguments[0]));
+            view.printSomeInfo("Аэропорт удален");
+        }
+        else if(cmd.equals("delroute")){
+            delRoute(Integer.parseInt(arguments[0]));
+            view.printSomeInfo("Маршрут удален");
+        }
+        else if(cmd.equals("delflight")){
+            delFlight(Integer.parseInt(arguments[0]));
+            view.printSomeInfo("Рейс удален");
+        }
+        else if(cmd.equals("delall")){
+            delAll();
+            view.printSomeInfo("База данных очищена");
+        }
+///////////////////////////////////////////////////////////////////////////////////////
+        else view.printSomeInfo("Комманда не поддерживается в этой версии: "+ cmd);  //ветка кода не должна быть достигнута
     }
     /**
      * launch() запускает цикл ввода команд в программу. команды зависимы. 
@@ -109,258 +351,19 @@ public class Controller {
                     temp[i-1]=commandList[i];
                 }
                 commandList=temp;
-                
             }
             else {
                 if(stopOnComplete){//если stopOnComplete, выходим из цикла ввода
                     isLaunched=false;
                     break;
                 }
-               
                 String input=null;
                    input=view.giveInput();
- 
                 if(input!=null)CmdParser.parseInput(input);
                 else continue;
             }
             System.err.println("execute "+ CmdParser.getCommand());
-            if(CmdParser.getCommand().equals("hello")){
-                view.printSomeInfo("Этот говорит \"Привет!!!\"");
-            }  
-            else if (CmdParser.getCommand().equals("model")){
-                view.printSomeInfo(model.toString());
-            }
-            else if (CmdParser.getCommand().equals("exit")){
-                view.printSomeInfo("До свидания!");
-                isLaunched=false;
-                model.close();
-            }
-            else if (CmdParser.getCommand().equals("help")){
-                if(CmdParser.getArguments().length>0)
-                    view.printSomeInfo(CmdParser.getHelp(CmdParser.getArgument(0)));
-                else view.printSomeInfo(CmdParser.getHelp());
-            }
-///////////////////////////////////////////////////////////////////////////////////////list-block
-            else if (CmdParser.getCommand().equals("flightlist")){
-                ArrayList <Flight> list =model.getFlights();
-                for (Flight list1 : list) {
-                    view.printFlight(list1, model.takeRoute(list1.getRoute()), model.takePlane(list1.getPlane()));
-                }
-                if(list.isEmpty())view.printSomeInfo("Список пуст");
-            }
-            else if (CmdParser.getCommand().equals("planelist")){
-                ArrayList <Plane> list =model.getPlanes();
-                for (Plane list1 : list) {
-                    view.printPlane(list1);
-                }
-                if(list.isEmpty())view.printSomeInfo("Список пуст");
-            }
-            else if (CmdParser.getCommand().equals("routelist")){
-                ArrayList <Route> list =model.getRoutes();
-                for (Route list1 : list) {
-                    view.printRoute(list1);
-                }
-                if(list.isEmpty())view.printSomeInfo("Список пуст");
-            }
-            else if (CmdParser.getCommand().equals("portlist")){
-                ArrayList <Airport> list =model.getAirports();
-                for (Airport list1 : list) {
-                    view.printAirport(list1);
-                }
-                if(list.isEmpty())view.printSomeInfo("Список пуст");
-            }
-///////////////////////////////////////////////////////////////////////////////////////add-block
-            else if (CmdParser.getCommand().equals("addplane")){
-                //int id=this.model.nextPlaneId();
-                Plane plane=new Boeing747SP(-1,CmdParser.getArgument(0));
-                int index=model.addPlane(plane);
-                view.printSomeInfo("Самолет добавлен");
-               //view.printPlane(model.takePlane(id));
-               //model.saveData();
-            }
-            else if (CmdParser.getCommand().equals("addport")){
-                //int id=this.model.nextAirportId();
-                Airport port=new InternationalAirport(-1,CmdParser.getArgument(0),CmdParser.getArgument(1));
-                int index=model.addAirport(port);
-                view.printSomeInfo("Аэропорт добавлен");
-               //view.printAirport(model.takeAirport(id));
-               //model.saveData();
-            }
-            else if (CmdParser.getCommand().equals("addroute")){
-                //int id=this.model.nextRouteId();
-                Route route=new RegularRoute(-1,
-                        Integer.parseInt(CmdParser.getArgument(0)),
-                        Integer.parseInt(CmdParser.getArgument(1)),
-                        Double.parseDouble(CmdParser.getArgument(2)));
-                int index=model.addRoute(route);
-                view.printSomeInfo("Маршрут добавлен");
-               //model.saveData();
-            }
-            else if (CmdParser.getCommand().equals("addflight")){
-               // int id=this.model.nextFlightId();
-                Flight flight= new ReguarFlight(-1,
-                        (Integer.parseInt(CmdParser.getArgument(0))),
-                        (Integer.parseInt(CmdParser.getArgument(1))),
-                        formatter.parse(CmdParser.getArgument(2)+"_GMT-0:00"),
-                        formatter.parse(CmdParser.getArgument(3)+"_GMT-0:00"));
-                int index=model.addFlight(flight);
-                view.printSomeInfo("Рейс добавлен");
-               //view.printFlight(model.takeFlight(id), model.takeRoute(flight.getRoute()), model.takePlane(flight.getPlane()));
-               //model.saveData();
-            }
-///////////////////////////////////////////////////////////////////////////////////////set-block
-            else if (CmdParser.getCommand().equals("setplane")){
-                
-                Plane plane=model.takePlane(Integer.parseInt(CmdParser.getArgument(0)));
-                plane.setNumber(CmdParser.getArgument(1));
-                model.setPlane(plane);
-                view.printSomeInfo("Самолет модифицирован:");
-               view.printPlane(model.takePlane(Integer.parseInt(CmdParser.getArgument(0))));
-               //model.saveData();
-            }
-            else if (CmdParser.getCommand().equals("setport")){
-                Airport port=model.takeAirport(Integer.parseInt(CmdParser.getArgument(0)));
-                port.setName(CmdParser.getArgument(1));
-                port.setLocation(CmdParser.getArgument(2));
-                model.setAirport(port);
-                view.printSomeInfo("Аэропорт модифицирован:");
-               view.printAirport(model.takeAirport(Integer.parseInt(CmdParser.getArgument(0))));
-               //model.saveData();
-            }
-            else if (CmdParser.getCommand().equals("setroute")){
-                Route route=model.takeRoute(Integer.parseInt(CmdParser.getArgument(0)));
-                route.setTakeOffPort(Integer.parseInt(CmdParser.getArgument(1)));
-                route.setLandingPort(Integer.parseInt(CmdParser.getArgument(2)));
-                route.setDistance(Double.parseDouble(CmdParser.getArgument(3)));
-                model.setRoute(route);
-                view.printSomeInfo("Маршрут модифицирован:");
-               view.printRoute(model.takeRoute(Integer.parseInt(CmdParser.getArgument(0))));
-               //model.saveData();
-            }
-            else if (CmdParser.getCommand().equals("setflight")){
-                Flight flight=model.takeFlight(Integer.parseInt(CmdParser.getArgument(0)));
-                flight.setPlane(model.takePlane(Integer.parseInt(CmdParser.getArgument(1))));
-                flight.setRoute(model.takeRoute(Integer.parseInt(CmdParser.getArgument(2))));
-                flight.setTakeOffTimeShedule(formatter.parse(CmdParser.getArgument(3)+"_GMT-0:00"));
-                flight.setLandingTimeShedule(formatter.parse(CmdParser.getArgument(4)+"_GMT-0:00"));
-                model.setFlight(flight);
-                view.printSomeInfo("Рейс модифицирован:");
-                
-               view.printFlight(flight, model.takeRoute(flight.getRoute()), model.takePlane(flight.getPlane()));
-               //model.saveData();
-            }           
-///////////////////////////////////////////////////////////////////////////////////////get-block
-            else if (CmdParser.getCommand().equals("getplane")){
-               view.printPlane(model.takePlane(Integer.parseInt(CmdParser.getArgument(0))));
-            }
-            else if (CmdParser.getCommand().equals("getfplane")){
-                boolean useOr;
-                useOr = CmdParser.getArgument(5).equals("1");
-               ArrayList<Plane> list=model.getPlanes(useOr
-                       , CmdParser.getArgument(0), CmdParser.getArgument(1),
-                       CmdParser.getArgument(2), CmdParser.getArgument(3), CmdParser.getArgument(4));
-               if(list.isEmpty()){
-                   view.printSomeInfo("Список пуст");
-               }
-               else{
-                    for (Plane list1 : list) {
-                        view.printPlane(list1);
-                    }
-               }
-            }
-            else if (CmdParser.getCommand().equals("getport")){
-                view.printAirport(model.takeAirport(Integer.parseInt(CmdParser.getArgument(0))));
-            }
-            else if (CmdParser.getCommand().equals("getfport")){
-                boolean useOr;
-                useOr = CmdParser.getArgument(3).equals("1");
-               ArrayList<Airport> list=model.getAirports(useOr, CmdParser.getArgument(0),
-                       CmdParser.getArgument(1),CmdParser.getArgument(2));
-               if(list.isEmpty()){
-                   view.printSomeInfo("Список пуст");
-               }
-               else{
-                    for (Airport list1 : list) {
-                        view.printAirport(list1);
-                    }
-               }
-            }
-            else if (CmdParser.getCommand().equals("getroute")){
-                view.printRoute(model.takeRoute(Integer.parseInt(CmdParser.getArgument(0))));
-            }
-            else if (CmdParser.getCommand().equals("getfroute")){
-                boolean useOr;
-                useOr = CmdParser.getArgument(4).equals("1");
-               ArrayList<Route> list=model.getRoutes(useOr, CmdParser.getArgument(0),
-                       CmdParser.getArgument(1),CmdParser.getArgument(2),CmdParser.getArgument(3));
-               if(list.isEmpty()){
-                   view.printSomeInfo("Список пуст");
-               }
-               else{
-                    for (Route list1 : list) {
-                        view.printRoute(list1);
-                    }
-               }
-            }
-            else if (CmdParser.getCommand().equals("getflight")){
-                Flight flight = model.takeFlight(Integer.parseInt(CmdParser.getArgument(0)));
-                view.printFlight(flight, model.takeRoute(flight.getRoute()), model.takePlane(flight.getPlane()));
-            }
-            else if (CmdParser.getCommand().equals("getfflight")){
-                boolean useOr;
-                useOr = CmdParser.getArgument(5).equals("1");
-               ArrayList<Flight> list=model.getFlights(useOr, CmdParser.getArgument(0),
-                       CmdParser.getArgument(1),CmdParser.getArgument(2),CmdParser.getArgument(3),CmdParser.getArgument(4));
-               if(list.isEmpty()){
-                   view.printSomeInfo("Список пуст");
-               }
-               else{
-                    for (Flight list1 : list) {
-                        view.printFlight(list1, model.takeRoute(list1.getRoute()), model.takePlane(list1.getPlane()));
-                    }
-               }
-            }
-/////////////////////////////////////////////////////////////////////////////////////////count-block
-            else if (CmdParser.getCommand().equals("flightcount")){
-                view.printFlightCount(model.flightCount());
-            }
-            else if (CmdParser.getCommand().equals("routecount")){
-                view.printRouteCount(model.routesCount());
-            }
-            else if (CmdParser.getCommand().equals("planecount")){
-                view.printPlaneCount(model.planesCount());
-            }
-            else if (CmdParser.getCommand().equals("portcount")){
-                view.printAirportCount(model.airportsCount());
-            }
-////////////////////////////////////////////////////////////////////////////////////////// del-block
-            else if(CmdParser.getCommand().equals("delplane")){
-                 model.deletePlane(Integer.parseInt(CmdParser.getArgument(0)));
-                 view.printSomeInfo("Самолет удален"); 
-                 //model.saveData();
-            }
-            else if(CmdParser.getCommand().equals("delport")){
-                model.deleteAirport(Integer.parseInt(CmdParser.getArgument(0)));
-                view.printSomeInfo("Аэропорт удален");
-                //model.saveData();
-            }
-            else if(CmdParser.getCommand().equals("delroute")){
-                model.deleteRoute(Integer.parseInt(CmdParser.getArgument(0)));
-                view.printSomeInfo("Маршрут удален"); 
-                //model.saveData();
-            }
-            else if(CmdParser.getCommand().equals("delflight")){
-                model.deleteFlight(Integer.parseInt(CmdParser.getArgument(0)));
-                view.printSomeInfo("Рейс удален"); 
-               // model.saveData();
-            }
-            else if(CmdParser.getCommand().equals("delall")){
-                model.delAll();
-                //model.saveData();
-                view.printSomeInfo("База данных очищена"); 
-            }
-///////////////////////////////////////////////////////////////////////////////////////
-            else view.printSomeInfo("Комманда не поддерживается в этой версии: "+ CmdParser.getCommand());  //ветка кода не должна быть достигнута
+              parse(CmdParser.getCommand(),CmdParser.getArguments());
         }
         catch (AirportNotFoundException | FlightNotFoundException | PlaneNotFoundException | 
                 RouteNotFoundException | CommandNotFoundException  | InvalidArgumentsException |
@@ -373,8 +376,103 @@ public class Controller {
         catch (java.text.ParseException e){
             view.printSomeInfo("Wrong Data Format. Should be dd.MM.yy-kk:mm");
         }
-            view.flush();//завершает ввод комманды на этот момент должен быть вывод
+            view.flush();
         }
     }
-   
+    public String hello() {
+        return "Hello!!!";
+    }
+    public Model model() {
+        return model;
+    }
+     public  String exit() throws SQLException{
+         isLaunched=false;
+         model.close();
+         return ("До свидания!");
+     }
+    public String help() {
+        return CmdParser.getHelp();
+    }
+     public String help(String cmd) {
+         return CmdParser.getHelp(cmd);
+     }
+    public ArrayList<Route> routeList() throws  SQLException,ParseException,
+            IOException,ClassNotFoundException{
+    return model.getRoutes();
+    }
+    public ArrayList<Airport>   portList()throws  SQLException,ParseException,
+            IOException,ClassNotFoundException{
+        return model.getAirports();
+    }
+    public ArrayList<Plane> planeList()throws  SQLException,ParseException,
+            IOException,ClassNotFoundException{
+        return model.getPlanes();
+    }
+    public ArrayList<Flight>   flightList()throws  SQLException,ParseException,
+    IOException,ClassNotFoundException{
+        return model.getFlights();
+    }
+    public int flightCount()throws  SQLException,ParseException,
+            IOException,ClassNotFoundException {
+    return model.flightCount();
+    }
+    public int planeCount()throws  SQLException,ParseException,
+            IOException,ClassNotFoundException {
+            return model.planesCount();
+    }
+    public int routeCount()throws  SQLException,ParseException,
+            IOException,ClassNotFoundException {
+        return model.routesCount();
+    }
+    public int portCount() throws  SQLException,ParseException,
+            IOException,ClassNotFoundException{
+        return model.airportsCount();
+    }
+    public void addPlane(Plane plane)throws SQLException,IOException
+            ,ClassNotFoundException{
+        model.addPlane(plane);
+    }
+    public Plane getPlane(int id)throws SQLException,IOException
+            ,ClassNotFoundException{
+        return(model.takePlane(id));
+    }
+    public  ArrayList<Plane> getFPlane(String id,String name,String number,
+                            String passengersSeats,String fuelCons,boolean useOr)
+            throws SQLException,IOException
+            ,ClassNotFoundException{
+        return model.getPlanes(useOr, id,name,number, passengersSeats, fuelCons);
+
+    }
+    public void addPort(Airport port)throws SQLException,IOException
+            ,ClassNotFoundException{
+        model.addAirport(port);
+    }
+    public void delPlane(int id)throws SQLException,IOException
+            ,ClassNotFoundException{
+        model.deletePlane(id);
+    }
+    public void delPort(int id)throws SQLException,IOException
+            ,ClassNotFoundException{
+        model.deleteAirport(id);
+    }
+    public void delFlight(int id)throws SQLException,IOException
+            ,ClassNotFoundException{
+        model.deleteFlight(id);
+    }
+    public void addRoute(Route route)throws SQLException,IOException
+            ,ClassNotFoundException{
+        model.addRoute(route);
+    }
+    public void addFlight(Flight flight)throws SQLException,IOException
+            ,ClassNotFoundException{
+        model.addFlight(flight);
+    }
+    public void delRoute(int id)throws SQLException,IOException
+            ,ClassNotFoundException{
+        model.deleteRoute(id);
+    }
+    public void delAll()throws SQLException,IOException
+            ,ClassNotFoundException{
+        model.delAll();
+    }
 }

@@ -11,26 +11,61 @@
 <%@page import="db.DataAccessObject" %>
 <%@ page import="java.io.*,java.util.*" %>
 <%@ page import="model.aircraft.Boeing747SP" %>
+<%@ page import="controller.Controller" %>
+<%@ page import="model.Model" %>
+<%@ page import="java.sql.SQLException" %>
+<%@ page import="java.text.ParseException" %>
+<%@ page import="view.LocalView" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>JSP Page</title>
+  <title>Plane Page</title>
+    <script type="text/javascript" src="/lib/ajax.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
   <%
-    ArrayList<Plane> list1 = new ArrayList<>();
-      list1.add(new Boeing747SP(0,"plane1"));
-      list1.add(new Boeing747SP(1,"plane2"));
-      list1.add(new Boeing747SP(2,"plane3"));
-      list1.add(new Boeing747SP(3,"plane4"));
-      list1.add(new Boeing747SP(4,"plane5"));
-    int count = list1.size();
+      ArrayList<Plane> list1;
+      Controller controller=new Controller(new Model());
+      list1 = controller.planeList();
+      controller.exit();
+
   %>
 </head>
+<script>
+    function addPlane(number){
+        var xmlhttp = getXmlHttp();
+        xmlhttp.open('GET', "View.jsp?cmd=addplane&0="+number, false);
+        xmlhttp.send(null);
+        if(xmlhttp.status == 200) {
+            //alert(xmlhttp.responseText);
+            this.location.reload();
+        }else alert("Произошла ошибка")
+
+    }
+    function setPlane(id,number){
+        var xmlhttp = getXmlHttp();
+        xmlhttp.open('GET', "View.jsp?cmd=setplane&0="+id+"&1="+number, false);
+        xmlhttp.send(null);
+        if(xmlhttp.status == 200) {
+           // alert(xmlhttp.responseText);
+        }else alert("Произошла ошибка")
+    }
+    function delPlane(id){
+        var xmlhttp = getXmlHttp();
+        xmlhttp.open('GET', "View.jsp?cmd=delplane&0="+id, false);
+        xmlhttp.send(null);
+        if(xmlhttp.status == 200) {
+            //alert(xmlhttp.responseText);
+            this.location.reload();
+        }else alert("Произошла ошибка")
+
+    }
+</script>
 <body>
   <h1 align="center">Plane</h1>
-  <form name="plane" method="post">
-    <table border = "1" width="250" height="170" align="center">
+<p align="center"><div style="width:70%; margin: auto;">
+    <table align="center">
         <th>Id</th><th>Name</th><th>Number</th><th>FuelConsumption</th><th>PassengerSeatsCount</th>
         <%
             for(Plane p:list1)
@@ -38,25 +73,31 @@
         %>
         <tr>
             <td>
-                <input type="text" value="<%=p.getId()%>">
+                <input type="text" value="<%=p.getId()%>" readonly >
+            </td>
+
+            <td>
+                <input type="text" value="<%=p.getName()%>" readonly>
             </td>
             <td>
-                <input type="text" value="<%=p.getName()%>">
+                <input type="text" value="<%=p.getNumber()%>" onchange="setPlane(<%=p.getId()%>,this.value)">
             </td>
             <td>
-                <input type="text" value="<%=p.getNumber()%>">
+                <input type="text" value="<%=p.getFuelConsumption()%>"readonly>
             </td>
             <td>
-                <input type="text" value="<%=p.getFuelConsumption()%>">
+                <input type="text" value="<%=p.getPassengerSeatsCount()%>"readonly>
             </td>
             <td>
-                <input type="text" value="<%=p.getPassengerSeatsCount()%>">
+                <input type="button" value="X" onclick="delPlane(<%=p.getId()%>)">
             </td>
         </tr>
         <%
             }
         %>
     </table>
-</form>
+      <p align="center"><input type="button" value="Добавить самолет" onclick="addPlane('')"></p>
+  </div>
+  </p>
 </body>
 </html>

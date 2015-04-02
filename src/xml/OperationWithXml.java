@@ -224,7 +224,7 @@ public class OperationWithXml
         lastPlaneId = OperationWithXml.getPlaneId();
         lastAirportId = OperationWithXml.getAirportId();
         lastRouteId = OperationWithXml.getAirportId();
-        lastFlightId = OperationWithXml.getFlightId(); 
+        lastFlightId = OperationWithXml.getFlightId();
     }
     //создаем объект "большой список", в котором будут храниться-
     //-все передаваемые списки и последнее id

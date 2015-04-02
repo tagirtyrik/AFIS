@@ -7,6 +7,11 @@
         <element id="directory" name="classes">
           <element id="module-output" name="afis" />
         </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="derbyclient" />
+          <element id="library" level="project" name="mysql-connector-java-5.0.8-bin" />
+          <element id="library" level="project" name="xstream-1.4.7" />
+        </element>
       </element>
     </root>
   </artifact>
