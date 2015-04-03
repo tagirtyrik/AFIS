@@ -16,7 +16,7 @@
 <center>
   <div>
     <h1>Afis</h1>
-    <input type="button" value="Plane" onclick="location.href('Plane.jsp')"/>
+    <input type="button" value="Plane" onclick='location.href("Plane.jsp")'/>
     <a href="Plane.jsp">Plane</a>
   </div>
 </center>
