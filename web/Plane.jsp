@@ -3,19 +3,14 @@
     Created on : 24.02.2015, 14:45:13
     Author     : Ксю
 --%>
-<%@page import="Tools.CreateDb"%>
 <%@page import="model.Plane"%>
 <%@page  import="java.util.ArrayList" %>
-<%@page import="Tools.CreateModel "%>
 <%@page import="db.Sql" %>
 <%@page import="db.DataAccessObject" %>
 <%@ page import="java.io.*,java.util.*" %>
 <%@ page import="model.aircraft.Boeing747SP" %>
 <%@ page import="controller.Controller" %>
 <%@ page import="model.Model" %>
-<%@ page import="java.sql.SQLException" %>
-<%@ page import="java.text.ParseException" %>
-<%@ page import="view.LocalView" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>

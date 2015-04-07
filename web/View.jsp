@@ -2,9 +2,6 @@
         import="java.util.ArrayList"
         import="controller.Controller"
         import="model.Model"
-        import="java.sql.SQLException"
-        import="java.text.ParseException"
-        import="view.LocalView"
         contentType="text/xml;charset=UTF-8" language="java"
         import="view.XmlWebView"
 %>
@@ -14,7 +11,7 @@
     String cmd=request.getParameter("cmd");
     Controller controller=new Controller(new Model(),view);
     int argNum=0;
-    ArrayList<String> args=new ArrayList<>();
+    ArrayList<String> args=new ArrayList<String>();
 
     while(request.getParameter(Integer.toString(argNum))!=null){
       args.add(request.getParameter(Integer.toString(argNum)));

@@ -8,17 +8,31 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-  <title>TODO supply a title</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <title>Index Page</title>
 </head>
 <body>
-<center>
-  <div>
-    <h1>Afis</h1>
-    <input type="button" value="Plane" onclick='location.href("Plane.jsp")'/>
-    <a href="Plane.jsp">Plane</a>
-  </div>
-</center>
+<h1 align="center">Добро пожаловать в систему Afis!</h1>
+<p align="center">Выбирите таблицу для редактирования:</p>
+<p align="center"><div style="width:30%; margin: auto;">
+  <table align="center">
+    <th>1</th><th>2</th><th>3</th><th>4</th>
+    <tr>
+      <td>
+        <p align="center"><a href="Plane.jsp">Plane</a></p>
+      </td>
+      <td>
+        <p align="center"><a href="Airport.jsp">Airport</a></p>
+      </td>
+      <td>
+        <p align="center"><a href="Route.jsp">Route</a></p>
+      </td>
+      <td>
+        <p align="center"><a href="Flight.jsp">Flight</a></p>
+      </td>
+    </tr>
+  </table>
+</div></p>
 </body>
 </html>
