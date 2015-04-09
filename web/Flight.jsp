@@ -105,6 +105,9 @@
   }
 </script>
 <body>
+<br>
+<%@ include file="Header.jspf" %>
+<br>
 <div class="content">
 <h1 align="center">Flight</h1>
   <table align="center">

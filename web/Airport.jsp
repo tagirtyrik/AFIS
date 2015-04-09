@@ -53,6 +53,9 @@
   }
 </script>
 <body>
+<br>
+<%@ include file="Header.jspf" %>
+<br>
 <div class="content">
 <h1 align="center">Airport</h1>
 <p align="center">

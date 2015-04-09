@@ -56,6 +56,9 @@
   }
 </script>
 <body>
+<br>
+<%@ include file="Header.jspf" %>
+<br>
 <div class="content">
 <h1 align="center">Route</h1>
   <table align="center">

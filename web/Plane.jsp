@@ -72,6 +72,9 @@
     }
 </script>
 <body>
+<br>
+<%@ include file="Header.jspf" %>
+<br>
 <div class="content">
   <h1 align="center">Plane</h1>
     <table align="center">
