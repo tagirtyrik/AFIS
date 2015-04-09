@@ -95,4 +95,24 @@ public class ReguarFlight implements Flight,Serializable{
         return this.fuelPrice*route.getDistance()*plane.getFuelConsumption()/
                 plane.getPassengerSeatsCount();//надеюсь сделает что надо
     }
+    public String toString(){
+        StringBuilder rezult=new StringBuilder("<flight>\n");
+        rezult.append("<id>");
+        rezult.append(this.id);
+        rezult.append("</id>");
+        rezult.append("<planeId>");
+        rezult.append(this.getPlane());
+        rezult.append("</planeId>\n");
+        rezult.append("<routeId>");
+        rezult.append(this.getRoute());
+        rezult.append("</routeId>\n");
+        rezult.append("<takeOffTime>");
+        rezult.append(this.getTakeOffTimeShedule().toString());
+        rezult.append("</takeOffTime>\n");
+        rezult.append("<landingTime>");
+        rezult.append(this.getLandingTimeShedule().toString());
+        rezult.append("</landingTime>\n");
+        rezult.append("</flight>");
+        return new String(rezult);
+    }
 }

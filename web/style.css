@@ -98,3 +98,25 @@ div {
 	background: -moz-linear-gradient(top,  #f2f2f2,  #f0f0f0);
 }
 .divbutton { cursor: pointer; }
+body {
+	background-color: #fff;
+	background-image: url("img/bacgrnd.png");
+	background-size: 70px 70px;
+	background-attachment: fixed;
+	background-repeat: repeat;
+}
+.content{
+	align-content: center;
+	margin: auto;
+	background: #ddd;
+	max-width: 80%;
+	min-width: 1000px;
+	border:1px solid #000;
+	border-radius:5px;
+	-webkit-border-radius:5px;
+	-moz-border-radius:2px;
+	box-shadow: 0 0 10px 2px #1A3457;
+	-webkit-box-shadow: 0 0 10px 2px #1A3457;
+	-moz-box-shadow: 0 0 10px 2px #1A3457;
+	padding: 20px;
+}

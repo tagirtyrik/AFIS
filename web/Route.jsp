@@ -56,8 +56,8 @@
   }
 </script>
 <body>
+<div class="content">
 <h1 align="center">Route</h1>
-<p align="center"><div style="width:50%; margin: auto;">
   <table align="center">
     <th>Id</th><th>Name</th><th>Location</th>
     <%
@@ -89,6 +89,5 @@
     <input type="button" value="Добавить аэропорт" onclick="addRoute(<%=list2.get(0).getId()%>, <%=list2.get(1).getId()%>, 0)">
   </p>
 </div>
-</p>
 </body>
 </html>

@@ -53,8 +53,9 @@
   }
 </script>
 <body>
+<div class="content">
 <h1 align="center">Airport</h1>
-<p align="center"><div style="width:50%; margin: auto;">
+<p align="center">
   <table align="center">
     <th>Id</th><th>Name</th><th>Location</th>
     <%
@@ -80,8 +81,8 @@
     %>
   </table>
   <p align="center"><input type="button" value="Добавить аэропорт" onclick="addPort('', '')"></p>
-</div>
 </p>
+</div>
 </body>
 </html>
 

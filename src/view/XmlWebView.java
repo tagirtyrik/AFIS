@@ -65,30 +65,33 @@ public class XmlWebView  implements View{
         }
         if(airport.size()>0){
             for(int i=0;i<airport.size();i++) {
-                responce.append("<airport>");
+              //  responce.append("<airport>");
                     responce.append(airport.get(i).toString());//делайте что хотите
-                responce.append("</airport>\n");
+               // responce.append("</airport>\n");
             }
         }
         if(plane.size()>0){
             for(int i=0;i<plane.size();i++) {
-                responce.append("<plane>");
+               // responce.append("<plane>");
                 responce.append(plane.get(i).toString());//делайте что хотите
-                responce.append("</plane>\n");
+                responce.append("\n");
+                //responce.append("</plane>\n");
             }
         }
         if(route.size()>0){
             for(int i=0;i<route.size();i++) {
-                responce.append("<route>");
+               // responce.append("<route>");
                 responce.append(route.get(i).toString());//делайте что хотите
-                responce.append("</route>\n");
+                responce.append("\n");
+               // responce.append("</route>\n");
             }
         }
         if(flight.size()>0){
             for(int i=0;i<flight.size();i++) {
-                responce.append("<flight>");
+                //responce.append("<flight>");
                 responce.append(flight.get(i).toString());//делайте что хотите
-                responce.append("</flight>\n");
+                responce.append("\n");
+                //responce.append("</flight>\n");
             }
         }
         if(planeCount!=null){

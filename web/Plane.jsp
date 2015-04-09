@@ -35,16 +35,27 @@
         if(xmlhttp.status == 200) {
             //alert(xmlhttp.responseText);
             this.location.reload();
-        }else alert("Произошла ошибка")
+        }else{
+            alert("Произошла ошибка");
+            this.location.reload();
+        }
 
     }
-    function setPlane(id,number){
+    function setPlane(id){
+        var number=document.getElementById("number_"+id).value;
+        var name=document.getElementById("name_"+id).value;
+        var passangers=parseInt(document.getElementById("passengers_"+id).value);
+        var fuel=parseFloat(document.getElementById("fuel_"+id).value);
         var xmlhttp = getXmlHttp();
-        xmlhttp.open('GET', "View.jsp?cmd=setplane&0="+id+"&1="+number, false);
+        var url="?cmd=setplane&0="+id+"&1="+number+"&2="+name+"&3="+passangers+"&4="+fuel;
+        xmlhttp.open('GET', "View.jsp"+url, false);
         xmlhttp.send(null);
         if(xmlhttp.status == 200) {
            // alert(xmlhttp.responseText);
-        }else alert("Произошла ошибка")
+        }else{
+            alert("Произошла ошибка");
+            this.location.reload();
+        }
     }
     function delPlane(id){
         var xmlhttp = getXmlHttp();
@@ -53,13 +64,16 @@
         if(xmlhttp.status == 200) {
             //alert(xmlhttp.responseText);
             this.location.reload();
-        }else alert("Произошла ошибка")
+        }else {
+            alert("Произошла ошибка");
+            this.location.reload();
+        }
 
     }
 </script>
 <body>
+<div class="content">
   <h1 align="center">Plane</h1>
-<p align="center"><div style="width:70%; margin: auto;">
     <table align="center">
         <th>Id</th><th>Name</th><th>Number</th><th>FuelConsumption</th><th>PassengerSeatsCount</th>
         <%
@@ -72,16 +86,16 @@
             </td>
 
             <td>
-                <input type="text" value="<%=p.getName()%>" readonly>
+                <input id="name_<%=p.getId()%>" type="text" value="<%=p.getName()%>" onchange="setPlane(<%=p.getId()%>)">
             </td>
             <td>
-                <input type="text" value="<%=p.getNumber()%>" onchange="setPlane(<%=p.getId()%>,this.value)">
+                 <input id="number_<%=p.getId()%>" type="text" value="<%=p.getNumber()%>" onchange="setPlane(<%=p.getId()%>)">
             </td>
             <td>
-                <input type="text" value="<%=p.getFuelConsumption()%>"readonly>
+                <input id="fuel_<%=p.getId()%>" type="text" value="<%=p.getFuelConsumption()%>" onchange="setPlane(<%=p.getId()%>)">
             </td>
             <td>
-                <input type="text" value="<%=p.getPassengerSeatsCount()%>"readonly>
+                <input id="passengers_<%=p.getId()%>" type="text" value="<%=p.getPassengerSeatsCount()%>" onchange="setPlane(<%=p.getId()%>)">
             </td>
             <td>
                 <input type="button" value="X" onclick="delPlane(<%=p.getId()%>)">
@@ -92,7 +106,6 @@
         %>
     </table>
       <p align="center"><input type="button" value="Добавить самолет" onclick="addPlane('')"></p>
-  </div>
-  </p>
+</div>
 </body>
 </html>

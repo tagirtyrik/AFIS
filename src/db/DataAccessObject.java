@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.logging.*;
 import model.Airport;
 import model.Flight;
@@ -63,12 +64,14 @@ public class DataAccessObject {
     private static final String driverName="org.apache.derby.jdbc.ClientDriver";//для derbyDB
     */
     private static final String connectionUrl="jdbc:mysql://localhost:3306/afisdb?zeroDateTimeBehavior=convertToNull"
-            + "&user=root";//для MySQL
+            + "&user=root&characterEncoding=utf8";//для MySQL
     private static final String driverName="com.mysql.jdbc.Driver";//для MySQL
 
-    private static final DateFormat fromDatabaseformatter =new SimpleDateFormat("yyyy-dd-MM kk:mm:ss.SSS_z");
+    private static final DateFormat fromDatabaseformatter =new SimpleDateFormat("yyyy-dd-MM kk:mm:ss.SSS");
     private static final DateFormat fromClientformatter =new SimpleDateFormat("dd.MM.yy-kk:mm");
     private static final SimpleDateFormat toDatabaseFormat = new SimpleDateFormat("yyyy-dd-MM kk:mm:ss.SSS");
+
+
     public static void  closeConnection()throws SQLException{
         connection.close();
         System.err.println("Сonnection is closed");
@@ -79,6 +82,9 @@ public class DataAccessObject {
      * @throws ClassNotFoundException 
      */
     public static void  initConnection()throws SQLException,ClassNotFoundException{
+       /* fromDatabaseformatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        fromClientformatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        toDatabaseFormat.setTimeZone(TimeZone.getTimeZone("UTC"));*/
 
         Class.forName(driverName);
         connection = DriverManager.getConnection(connectionUrl);
@@ -344,8 +350,8 @@ public class DataAccessObject {
             int id=sqlResult.getInt(Sql.Flight.Field.id);
             int planeId=sqlResult.getInt(Sql.Flight.Field.planeId);
             int routeId=sqlResult.getInt(Sql.Flight.Field.routeId);
-            java.util.Date takeoffTime=fromDatabaseformatter.parse(sqlResult.getString(Sql.Flight.Field.takeOffTime)+"00_GMT-0:00");
-            java.util.Date landindTime=fromDatabaseformatter.parse(sqlResult.getString(Sql.Flight.Field.landingTime)+"00_GMT-0:00");
+            java.util.Date takeoffTime=fromDatabaseformatter.parse(sqlResult.getString(Sql.Flight.Field.takeOffTime));
+            java.util.Date landindTime=fromDatabaseformatter.parse(sqlResult.getString(Sql.Flight.Field.landingTime));
             rezult.add(new ReguarFlight(id,planeId,routeId,takeoffTime,landindTime));
         }
         return rezult;
@@ -360,8 +366,8 @@ public class DataAccessObject {
         while (sqlResult.next()) {
             int planeId=sqlResult.getInt(Sql.Flight.Field.planeId);
             int routeId=sqlResult.getInt(Sql.Flight.Field.routeId);
-            java.util.Date takeoffTime=fromDatabaseformatter.parse(sqlResult.getString(Sql.Flight.Field.takeOffTime)+"00_GMT-0:00");
-            java.util.Date landindTime=fromDatabaseformatter.parse(sqlResult.getString(Sql.Flight.Field.landingTime)+"00_GMT-0:00");
+            java.util.Date takeoffTime=fromDatabaseformatter.parse(sqlResult.getString(Sql.Flight.Field.takeOffTime));
+            java.util.Date landindTime=fromDatabaseformatter.parse(sqlResult.getString(Sql.Flight.Field.landingTime));
             flight=new ReguarFlight(id,planeId,routeId,takeoffTime,landindTime);
             count++;
         }
@@ -373,8 +379,12 @@ public class DataAccessObject {
         //System.err.println(Sql.Flight.update);
         statement.setInt(1, (flight.getPlane()));
         statement.setInt(2, (flight.getRoute()));
-        statement.setDate(3, new java.sql.Date(flight.getTakeOffTimeShedule().getTime())); 
-        statement.setDate(4, new java.sql.Date(flight.getLandingTimeShedule().getTime())); 
+        statement.setTimestamp(3, new java.sql.Timestamp(flight.getTakeOffTimeShedule().getTime()));
+        statement.setTimestamp(4, new java.sql.Timestamp(flight.getLandingTimeShedule().getTime()));
+        /*statement.setDate(3, new java.sql.Date(flight.getTakeOffTimeShedule().getTime()));
+        statement.setDate(4, new java.sql.Date(flight.getLandingTimeShedule().getTime()));
+        System.err.println(new java.sql.Timestamp(flight.getTakeOffTimeShedule().getTime()).toString());
+        System.err.println(flight.getTakeOffTimeShedule().toString());*/
         statement.setInt(5, flight.getId());
         return statement.executeUpdate()==1;
     }

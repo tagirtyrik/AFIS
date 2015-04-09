@@ -6,6 +6,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.TimeZone;
+
 import model.Airport;
 import model.Flight;
 import model.Model;
@@ -22,7 +24,7 @@ public class Controller {
     private Model model=null;
     private View view=null;
     private boolean isLaunched=false;
-    private final DateFormat formatter =new SimpleDateFormat("dd.MM.yy-kk:mm_z");
+    private final DateFormat formatter =new SimpleDateFormat("dd.MM.yy-kk:mm");
     private final String[] help=new String[]{//справка
      "hello :: выводит приветствие",
      "model :: выводит toString()-представление модели",
@@ -39,11 +41,11 @@ public class Controller {
      "routecount :: выводит число маршрутов в БД",
      "portcount :: выводит число аэропортов в БД",
 
-     "addplane номер :: добавляет новый самолет",
+     "addplane номер имя passengersSeats fuelCons :: добавляет новый самолет",
      "getplane id :: выводит самолет по id",
      "getfplane id name number passengersSeats fuelCons useOr:: выводит самолет по заданным параметрам, useOr должен быть 0 или 1 ::"
             + "getfplane null Boeing_747SP SP-500 null null 0",
-     "setplane id номер :: изменяет самолет по id",
+     "setplane id номер имя passengersSeats fuelCons:: изменяет самолет по id",
      "delplane id :: удаляет самолет по id",
      
      "addport название местоположение :: добавляет аэропорт",
@@ -77,12 +79,14 @@ public class Controller {
        model.loadData();
        this.model=model;
        this.view=null;
+      // formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
    }
     public Controller(Model model,View view) throws IOException, ClassNotFoundException{
         CmdParser.setHelp(help);
         model.loadData();
         this.model=model;
         this.view=view;
+       // formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
         
     }
 
@@ -145,7 +149,14 @@ public class Controller {
         }
 ///////////////////////////////////////////////////////////////////////////////////////add-block
         else if (cmd.equals("addplane")){
+
             Plane plane=new Boeing747SP(-1,arguments[0]);
+            if(arguments.length>1)
+                plane.setName(arguments[1]);
+            if(arguments.length>2)
+                plane.setPassengerSeatsCount(Integer.parseInt(arguments[2]));
+            if(arguments.length>3)
+                plane.setFuelConsumption(Double.parseDouble(arguments[3]));
             addPlane(plane);
             view.printSomeInfo("Самолет добавлен");
         }
@@ -167,8 +178,8 @@ public class Controller {
             Flight flight= new ReguarFlight(-1,
                     (Integer.parseInt(arguments[0])),
                     (Integer.parseInt(arguments[1])),
-                    formatter.parse(arguments[2]+"_GMT-0:00"),
-                    formatter.parse(arguments[3]+"_GMT-0:00"));
+                    formatter.parse(arguments[2]),
+                    formatter.parse(arguments[3]));
             addFlight(flight);
             view.printSomeInfo("Рейс добавлен");
         }
@@ -177,9 +188,16 @@ public class Controller {
 
             Plane plane=model.takePlane(Integer.parseInt(arguments[0]));
             plane.setNumber(arguments[1]);
+            if(arguments.length>2)
+                plane.setName(arguments[2]);
+            if(arguments.length>3)
+                plane.setPassengerSeatsCount(Integer.parseInt(arguments[3]));
+            if(arguments.length>4)
+                plane.setFuelConsumption(Double.parseDouble(arguments[4]));
             model.setPlane(plane);
             view.printSomeInfo("Самолет модифицирован:");
             view.printPlane(model.takePlane(Integer.parseInt(arguments[0])));
+
             //model.saveData();
         }
         else if (cmd.equals("setport")){
@@ -205,8 +223,8 @@ public class Controller {
             Flight flight=model.takeFlight(Integer.parseInt(arguments[0]));
             flight.setPlane(model.takePlane(Integer.parseInt(arguments[1])));
             flight.setRoute(model.takeRoute(Integer.parseInt(arguments[2])));
-            flight.setTakeOffTimeShedule(formatter.parse(arguments[3]+"_GMT-0:00"));
-            flight.setLandingTimeShedule(formatter.parse(arguments[4]+"_GMT-0:00"));
+            flight.setTakeOffTimeShedule(formatter.parse(arguments[3]));
+            flight.setLandingTimeShedule(formatter.parse(arguments[4]));
             model.setFlight(flight);
             view.printSomeInfo("Рейс модифицирован:");
 
@@ -232,7 +250,7 @@ public class Controller {
             }
         }
         else if (cmd.equals("getport")){
-            view.printAirport(model.takeAirport(Integer.parseInt(arguments[0])));
+            view.printAirport(getAirport(Integer.parseInt(arguments[0])));
         }
         else if (cmd.equals("getfport")){
             boolean useOr;
@@ -249,7 +267,7 @@ public class Controller {
             }
         }
         else if (cmd.equals("getroute")){
-            view.printRoute(model.takeRoute(Integer.parseInt(arguments[0])));
+            view.printRoute(getRoute(Integer.parseInt(arguments[0])));
         }
         else if (cmd.equals("getfroute")){
             boolean useOr;
@@ -436,6 +454,14 @@ public class Controller {
     public Plane getPlane(int id)throws SQLException,IOException
             ,ClassNotFoundException{
         return(model.takePlane(id));
+    }
+    public Route getRoute(int id)throws SQLException,IOException
+            ,ClassNotFoundException {
+        return(model.takeRoute(id));
+    }
+    public Airport getAirport(int id)throws SQLException,IOException
+            ,ClassNotFoundException {
+        return(model.takeAirport(id));
     }
     public  ArrayList<Plane> getFPlane(String id,String name,String number,
                             String passengersSeats,String fuelCons,boolean useOr)
