@@ -35,9 +35,12 @@
     }else alert("Произошла ошибка")
 
   }
-  function setPort(id, name, location){
+  function setPort(id){
+    var name=document.getElementById("name_"+id).value;
+    var location=(document.getElementById("location_"+id).value);
     var xmlhttp = getXmlHttp();
-    xmlhttp.open('GET', "View.jsp?cmd=setport&0="+id+"&1="+name+"&2="+location, false);
+    var url="?cmd=setport&0="+id+"&1="+name+"&2="+location;
+    xmlhttp.open('GET', "View.jsp"+url, false);
     xmlhttp.send(null);
     if(xmlhttp.status == 200) {
     }else alert("Произошла ошибка")
@@ -70,10 +73,10 @@
         <input type="text" value="<%=a.getId()%>" readonly >
       </td>
       <td>
-        <input type="text" value="<%=a.getName()%>" onchange="setPort(<%=a.getId()%>,this.value, this.value)" >
+        <input id="name_<%=a.getId()%>" type="text" value="<%=a.getName()%>" onchange="setPort(<%=a.getId()%>)">
       </td>
       <td>
-        <input type="text" value="<%=a.getLocation()%>" onchange="setPort(<%=a.getId()%>,this.value, this.value)" >
+        <input id="location_<%=a.getId()%>" type="text" value="<%=a.getLocation()%>" onchange="setPort(<%=a.getId()%>)">
       </td>
       <td>
         <input type="button" value="X" onclick="delPort(<%=a.getId()%>)">

@@ -78,7 +78,7 @@
 <div class="content">
   <h1 align="center">Plane</h1>
     <table align="center">
-        <th>Id</th><th>Name</th><th>Number</th><th>FuelConsumption</th><th>PassengerSeatsCount</th>
+        <th>Id</th><th>Title</th><th>Name</th><th>FuelConsumption</th><th>PassengerSeatsCount</th>
         <%
             for(Plane p:list1)
             {
