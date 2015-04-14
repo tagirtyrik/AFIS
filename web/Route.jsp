@@ -24,23 +24,30 @@
     Controller controller=new Controller(new Model(true));
     list1 = controller.routeList();
     list2 = controller.portList();
-    controller.exit();
-
   %>
 </head>
 <script>
-  function addRoute(idPort1, idPort2, distance){
+  function addRoute(){
+    var takeOfPortId = parseInt(document.getElementById("selectTakeOfPort").value);
+    var landingPortId = parseInt(document.getElementById("selectLandingPort").value);
+    var distance = parseFloat(document.getElementById("distance").value);
+    var url="?cmd=addroute&0="+takeOfPortId+"&1="+landingPortId+"&2="+distance;
     var xmlhttp = getXmlHttp();
-    xmlhttp.open('GET', "View.jsp?cmd=addroute&0="+idPort1+"&1="+idPort2+"&2="+distance, false);
+    xmlhttp.open('GET', "View.jsp"+url, false);
     xmlhttp.send(null);
     if(xmlhttp.status == 200) {
       this.location.reload();
     }else alert("Произошла ошибка")
 
   }
-  function setRoute(id, idPort1, idPort2, distance){
+  function setRoute(id){
+    var takeOfPortId = parseInt(document.getElementById("selectTakeOfPort_"+id).value);
+    var landingPortId = parseInt(document.getElementById("selectLandingPort_"+id).value);
+    var distance =parseFloat(document.getElementById("distance_"+id).value);
     var xmlhttp = getXmlHttp();
-    xmlhttp.open('GET', "View.jsp?cmd=setroute&0="+id+"&1="+idPort1+"&2="+idPort2+"&3="+distance, false);
+    var url="?cmd=setroute&0="+id+"&1="+takeOfPortId+"&2="+landingPortId+"&3="+distance;
+    var xmlhttp = getXmlHttp();
+    xmlhttp.open('GET', "View.jsp"+url, false);
     xmlhttp.send(null);
     if(xmlhttp.status == 200) {
     }else alert("Произошла ошибка")
@@ -62,7 +69,7 @@
 <div class="content">
 <h1 align="center">Route</h1>
   <table align="center">
-    <th>Id</th><th>Name</th><th>Location</th>
+    <th>Id</th><th>Take-Off Port</th><th>Landing Port</th><th>Distance</th>
     <%
       for(Route r:list1)
       {
@@ -72,13 +79,21 @@
         <input type="text" value="<%=r.getId()%>" readonly >
       </td>
       <td>
-        <input type="text" value="<%=r.getLandingPort()%>" onchange="setRoute(<%=r.getId()%>,this.value, this.value, this.value)">
+        <select id="selectTakeOfPort_<%=r.getId()%>" onchange="setRoute(<%=r.getId()%>)">
+          <%for(Airport port: list2){%>
+          <option value="<%=port.getId()%>" <%=r.getTakeOffPort()==port.getId()?"selected":""%> ><%=new String(port.getId()+":"+port.getName())%></option>
+          <%}%>
+        </select>
       </td>
       <td>
-        <input type="text" value="<%=r.getTakeOffPort()%>" onchange="setRoute(<%=r.getId()%>,this.value, this.value, this.value)">
+        <select id="selectLandingPort_<%=r.getId()%>" onchange="setRoute(<%=r.getId()%>)">
+          <%for(Airport port: list2){%>
+          <option value="<%=port.getId()%>" <%=r.getLandingPort()==port.getId()?"selected":""%> ><%=new String(port.getId()+":"+port.getName())%></option>
+          <%}%>
+        </select>
       </td>
       <td>
-        <input type="text" value="<%=r.getDistance()%>" onchange="setRoute(<%=r.getId()%>,this.value, this.value, this.value)">
+        <input id="distance_<%=r.getId()%>" type="text" value="<%=r.getDistance()%>" onchange="setRoute(<%=r.getId()%>)">
       </td>
       <td>
         <input type="button" value="X" onclick="delRoute(<%=r.getId()%>)">
@@ -88,9 +103,35 @@
       }
     %>
   </table>
-  <p align="center">
-    <input type="button" value="Добавить аэропорт" onclick="addRoute(<%=list2.get(0).getId()%>, <%=list2.get(1).getId()%>, 0)">
-  </p>
+  <br>
+  <table  align="center">
+    <tr>
+      <td>
+        <input type="text" value="новый" readonly size="3">
+      </td>
+      <td>
+        <select id="selectTakeOfPort">
+          <%for(Airport a: list2){%>
+          <option value="<%=a.getId()%>"><%=new String(a.getId()+":"+a.getName())%></option>
+          <%}%>
+        </select>
+      </td>
+      <td>
+        <select id="selectLandingPort">
+            <%for(Airport a: list2){%>
+          <option value="<%=a.getId()%>"><%=new String(a.getId()+":"+a.getName())%></option>
+            <%}%>
+         </select>
+      </td>
+      <td>
+        <input id="distance" type="text" value="0.0" >
+      </td>
+      <td>
+        <input type="button" value="Добавить маршрут" onclick="addRoute()">
+      </td>
+  </tr>
+  </table>
 </div>
 </body>
+<%controller.exit();%>
 </html>
