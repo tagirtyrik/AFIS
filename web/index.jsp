@@ -1,3 +1,5 @@
+<%@ page import="javax.naming.InitialContext" %>
+<%@ page import="javax.sql.DataSource" %>
 <%--
   Created by IntelliJ IDEA.
   User: Ксю

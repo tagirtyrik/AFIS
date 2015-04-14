@@ -1,23 +1,20 @@
 package model;
-//import Xml.OperationWithXml1;
-import exception.AirportNotFoundException;
-import exception.FlightNotFoundException;
-import exception.PlaneNotFoundException;
-import exception.RouteNotFoundException;
 import exception.ComandException;
 import java.io.IOException;
 import java.util.ArrayList;
 import xml.OperationWithXml;
 import db.DataAccessObject;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 /**
  * модель управляет источником данных, поддерживает работоспособность контроллера
  * @author GeneraL
  */
 public class Model {
     private static boolean databaseIsOn=true;//переменная, отвечающая за использование базы данных либо XML-файла
+    public Model(boolean useDataSourse){
+        DataAccessObject.setUseDataSourse(useDataSourse);
+    }
     public Model(){
     }
     public void close()throws SQLException{
@@ -223,12 +220,11 @@ public class Model {
         if(databaseIsOn)return DataAccessObject.airportCount();
         else return OperationWithXml.airportCount();
     } 
-    public void loadData() throws IOException, ClassNotFoundException{
+    public void loadData() throws IOException, ClassNotFoundException {
         if(databaseIsOn){
             try{
             DataAccessObject.initConnection();
             }catch(ClassNotFoundException | SQLException e){
-                //Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, e);
                 System.err.println(e.toString());
                 System.err.println("unable to connect database. using XML");
                 OperationWithXml.initData();

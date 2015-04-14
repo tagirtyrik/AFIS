@@ -21,7 +21,7 @@
     <link rel="stylesheet" type="text/css" href="style.css">
   <%
       ArrayList<Plane> list1;
-      Controller controller=new Controller(new Model());
+      Controller controller=new Controller(new Model(true));
       list1 = controller.planeList();
       controller.exit();
 

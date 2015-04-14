@@ -74,14 +74,16 @@ public class Controller {
      "delall :: удаляет все ваши данные" 
     };
 
-   public Controller(Model model)throws IOException, ClassNotFoundException{
+   public Controller(Model model)throws IOException,
+           ClassNotFoundException{
        CmdParser.setHelp(help);
        model.loadData();
        this.model=model;
        this.view=null;
       // formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
    }
-    public Controller(Model model,View view) throws IOException, ClassNotFoundException{
+    public Controller(Model model,View view) throws IOException,
+            ClassNotFoundException{
         CmdParser.setHelp(help);
         model.loadData();
         this.model=model;

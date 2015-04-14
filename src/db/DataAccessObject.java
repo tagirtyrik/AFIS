@@ -1,11 +1,7 @@
 
 package db;
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.TimeZone;
-import java.util.logging.*;
 import model.Airport;
 import model.Flight;
 import model.Plane;
@@ -14,39 +10,12 @@ import model.aircraft.*;
 import model.airport.*;
 import model.flight.*;
 import model.route.*;
-import static xml.OperationWithXml.saveAll;
 import exception.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import javax.naming.NamingException;
-import javax.naming.Context;
-/*
-    Инструкция по подключению к базе данных MySQL:
-    1.Раскомментировать строки //для MySQL и заккоментировать //для derbyDB в классах Sql и DataAccessObject
-    2. запустить сервер БД MySQL (я использовал это https://www.apachefriends.org/ru/index.html )
-    3. Создать БД и именем afisdb (я делал так https://netbeans.org/kb/docs/ide/mysql_ru.html )
-    4. запустить приложение
-
-    если connectionUrl верный, сервер запущен и база данных существует, должно работать
-*/
-/*
-    Инструкция по подключению к базе данных derby:
-    1.Раскомментировать строки //для derbyDB и заккоментировать //для MySQL в классах Sql и DataAccessObject
-        (URL-строки соединения должны содержать быть верными!)
-    2. запустить сервер БД
-        кликнуть службы -> базы данных(раскрыть) -> ПКМ JavaDB -> запустите сервер
-    3. запустить приложение
-    4. молиться
-    5.(доп) если молитв недостточно, самостоятельно создаем базу
-        кликнуть службы -> базы данных(раскрыть) -> ПКМ JavaDB -> создать базу данных -> ввести имя AfisDB (имени пользовтеля и пароля нету)
-    В случае успеха приложение выведет Сonnection is established
-                    иначе unable to connect database. using XML
-*/
-
-
-
 /**
  * объект для доступа к базе данных
  * *управляет соединением
@@ -70,11 +39,14 @@ public class DataAccessObject {
     private static final DateFormat fromDatabaseformatter =new SimpleDateFormat("yyyy-dd-MM kk:mm:ss.SSS");
     private static final DateFormat fromClientformatter =new SimpleDateFormat("dd.MM.yy-kk:mm");
     private static final SimpleDateFormat toDatabaseFormat = new SimpleDateFormat("yyyy-dd-MM kk:mm:ss.SSS");
-
+    private static boolean useDataSourse=false;
+    public static void setUseDataSourse(boolean useDataSourse) {
+        DataAccessObject.useDataSourse = useDataSourse;
+    }
 
     public static void  closeConnection()throws SQLException{
-        connection.close();
-        System.err.println("Сonnection is closed");
+        if(!useDataSourse)connection.close();
+        //System.err.println("Сonnection is closed");
     }
     /**
      * инициализация соединения с БД и создание таблиц, если их нет
@@ -86,21 +58,33 @@ public class DataAccessObject {
         fromClientformatter.setTimeZone(TimeZone.getTimeZone("UTC"));
         toDatabaseFormat.setTimeZone(TimeZone.getTimeZone("UTC"));*/
 
+    if(useDataSourse) {
+        try {
+            InitialContext ic = new InitialContext();
+            DataSource dataSource = (javax.sql.DataSource) ic.lookup("java:comp/env/jdbc/afisdb");
+            connection = dataSource.getConnection();
+                Statement statement = connection.createStatement();
+                statement.execute("SELECT 1");
+            System.err.println("Connection from Data Source");
+        }catch (NamingException e){
+            System.err.println("Unable to use DataSourse");
+            System.err.println("Application working in DriverManager mode");
+            useDataSourse=false;
+            initConnection();
+            return;
+        }
+    }
+    else {
+
         Class.forName(driverName);
         connection = DriverManager.getConnection(connectionUrl);
+        System.err.println("Connection from Driver Manager");
+    }
 
-        /*DataSourceFactory.rebind();
-        try {
-            Context ctx = new InitialContext();
-            DataSource dataSource = (DataSource) ctx.lookup("jdbc/afisDB");
-            connection = dataSource.getConnection();
-        }catch ( NamingException e) {
-                e.printStackTrace();
-            }*/
         try{
             Statement statement = connection.createStatement();
             statement.execute(Sql.Table.createPlane);
-            System.err.println("Create table "+Sql.Table.Names.plane);
+            //System.err.println("Create table "+Sql.Table.Names.plane);
         }catch (SQLException e){
             //System.err.println(e.toString());
         }try{
@@ -123,7 +107,7 @@ public class DataAccessObject {
         }catch (SQLException e){
             //System.err.println(e.toString());
         }
-        System.err.println("Сonnection is established");
+        //System.err.println("Сonnection is established");
         
     }
     public static ArrayList<Plane> getPlanes() throws SQLException

@@ -32,7 +32,7 @@
     ArrayList<Flight> flights;
     ArrayList<Plane> planes;
     ArrayList<Route> routes;
-    Controller controller=new Controller(new Model());
+    Controller controller=new Controller(new Model(true));
     flights = controller.flightList();
     planes=controller.planeList();
     routes=controller.routeList();
@@ -122,14 +122,14 @@
       </td>
 
       <td>
-        <select id="selectPlane_<%=flight.getId()%>" onchange="setFlight(<%=flight.getId()%>)"  style="max-width: 200px;">
+        <select id="selectPlane_<%=flight.getId()%>" onchange="setFlight(<%=flight.getId()%>)"  style="max-width: 150px;">
           <%for(Plane plane: planes){%>
           <option value="<%=plane.getId()%>" <%=flight.getPlane()==plane.getId()?"selected":""%> ><%=new String(plane.getId()+":"+plane.getNumber())%></option>
           <%}%>
         </select>
       </td>
       <td>
-        <select id="selectRoute_<%=flight.getId()%>" onchange="setFlight(<%=flight.getId()%>)" style="max-width: 200px;">
+        <select id="selectRoute_<%=flight.getId()%>" onchange="setFlight(<%=flight.getId()%>)" style="max-width: 150px;">
           <%for(Route route: routes){%>
           <option value="<%=route.getId()%>" <%=flight.getRoute()==route.getId()?"selected":""%> ><%=new String(controller.getAirport(route.getTakeOffPort()).getLocation() +"->"+controller.getAirport(route.getLandingPort()).getLocation())%></option>
           <%}%>
@@ -158,18 +158,18 @@
   <table>
     <tr>
       <td>
-        <input type="text" value="новый" readonly size="3">
+        <input type="text" value="" readonly size="3">
       </td>
 
       <td>
-        <select id="selectPlane" style="max-width: 200px;">
+        <select id="selectPlane" style="max-width: 150px;">
           <%for(Plane plane: planes){%>
           <option value="<%=plane.getId()%>"><%=new String(plane.getId()+":"+plane.getNumber())%></option>
           <%}%>
         </select>
       </td>
       <td>
-        <select id="selectRoute" style="max-width: 200px;">
+        <select id="selectRoute" style="max-width: 150px;">
           <%for(Route route: routes){%>
           <option value="<%=route.getId()%>"><%=new String(controller.getAirport(route.getTakeOffPort()).getLocation() +"->"+controller.getAirport(route.getLandingPort()).getLocation())%></option>
           <%}%>

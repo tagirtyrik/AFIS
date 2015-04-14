@@ -21,7 +21,7 @@
   <%
     ArrayList<Route> list1;
     ArrayList<Airport> list2;
-    Controller controller=new Controller(new Model());
+    Controller controller=new Controller(new Model(true));
     list1 = controller.routeList();
     list2 = controller.portList();
     controller.exit();
