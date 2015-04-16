@@ -36,9 +36,9 @@ public class DataAccessObject {
             + "&user=root&characterEncoding=utf8";//для MySQL
     private static final String driverName="com.mysql.jdbc.Driver";//для MySQL
 
-    private static final DateFormat fromDatabaseformatter =new SimpleDateFormat("yyyy-dd-MM kk:mm:ss.SSS");
-    private static final DateFormat fromClientformatter =new SimpleDateFormat("dd.MM.yy-kk:mm");
-    private static final SimpleDateFormat toDatabaseFormat = new SimpleDateFormat("yyyy-dd-MM kk:mm:ss.SSS");
+    private static final DateFormat fromDatabaseformatter =new SimpleDateFormat("yyyy-dd-MM HH:mm:ss");
+    private static final DateFormat fromClientformatter =new SimpleDateFormat("dd.MM.yy-HH:mm");
+    private static final SimpleDateFormat toDatabaseFormat = new SimpleDateFormat("yyyy-dd-MM HH:mm:ss");
     private static boolean useDataSourse=false;
     public static void setUseDataSourse(boolean useDataSourse) {
         DataAccessObject.useDataSourse = useDataSourse;
@@ -322,7 +322,7 @@ public class DataAccessObject {
         insertDateArg(where,Sql.Flight.Field.landingTime,landTime, useOr);
      if(where.toString().equals("("))where=new StringBuilder("true");
      else where.append(")");
-     System.err.println((Sql.Flight.selectWhere+where));
+     //System.err.println((Sql.Flight.selectWhere+where));
      return selectFlights((Sql.Flight.selectWhere+where));
      //getfflight 1 1 1 null null 1
     }

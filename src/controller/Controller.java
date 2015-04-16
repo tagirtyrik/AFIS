@@ -24,7 +24,7 @@ public class Controller {
     private Model model=null;
     private View view=null;
     private boolean isLaunched=false;
-    private final DateFormat formatter =new SimpleDateFormat("dd.MM.yy-kk:mm");
+    public final DateFormat formatter =new SimpleDateFormat("dd.MM.yy-HH:mm");
     private final String[] help=new String[]{//справка
      "hello :: выводит приветствие",
      "model :: выводит toString()-представление модели",
@@ -292,8 +292,9 @@ public class Controller {
         else if (cmd.equals("getfflight")){
             boolean useOr;
             useOr = arguments[5].equals("1");
-            ArrayList<Flight> list=model.getFlights(useOr, arguments[0],
-                    arguments[1],arguments[2],arguments[3],arguments[4]);
+            //getfflight id самолетId маршрутId время_взлета время_посадки useOr
+            ArrayList<Flight> list= getFFlight( arguments[0],
+                    arguments[2], arguments[1], arguments[3], arguments[4],useOr);
             if(list.isEmpty()){
                 view.printSomeInfo("Список пуст");
             }
@@ -465,8 +466,28 @@ public class Controller {
             ,ClassNotFoundException {
         return(model.takeAirport(id));
     }
+    public  ArrayList<Flight> getFFlight(String id,String routeId,String planeId,
+                            String takeOffTime,String landingTime,boolean useOr)
+            throws SQLException,IOException
+            ,ClassNotFoundException,ParseException{
+        return model.getFlights(useOr, id, routeId, planeId,takeOffTime,landingTime);
+
+    }
+    public  ArrayList<Route> getFRoute(String id,String takeOffId,String landId,
+                                       String distance,boolean useOr)
+            throws SQLException,IOException
+            ,ClassNotFoundException{
+        return model.getRoutes(useOr, id, takeOffId, landId, distance);
+
+    }
+    public  ArrayList<Plane> getFPort(String id,String name,String location,boolean useOr)
+            throws SQLException,IOException
+            ,ClassNotFoundException{
+        return model.getAirports(useOr, id, name, location);
+
+    }
     public  ArrayList<Plane> getFPlane(String id,String name,String number,
-                            String passengersSeats,String fuelCons,boolean useOr)
+                                       String passengersSeats,String fuelCons,boolean useOr)
             throws SQLException,IOException
             ,ClassNotFoundException{
         return model.getPlanes(useOr, id,name,number, passengersSeats, fuelCons);
