@@ -480,7 +480,7 @@ public class Controller {
         return model.getRoutes(useOr, id, takeOffId, landId, distance);
 
     }
-    public  ArrayList<Plane> getFPort(String id,String name,String location,boolean useOr)
+    public  ArrayList<Airport> getFPort(String id,String name,String location,boolean useOr)
             throws SQLException,IOException
             ,ClassNotFoundException{
         return model.getAirports(useOr, id, name, location);
