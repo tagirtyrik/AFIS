@@ -6,22 +6,31 @@
   </p>
   <p align="center">Выбирите таблицу для редактирования:</p>
   <p align="center">
-  <table align="center">
-    <th>1</th><th>2</th><th>3</th><th>4</th>
-    <tr>
-      <td class="divbutton" onclick="window.location='Plane.jsp'">
-        <p align="center"><a href="Plane.jsp">Plane</a></p>
-      </td>
-      <td class="divbutton" onclick="window.location='Airport.jsp'">
-        <p align="center"><a href="Airport.jsp">Airport</a></p>
-      </td>
-      <td class="divbutton" onclick="window.location='Route.jsp'">
-        <p align="center"><a href="Route.jsp">Route</a></p>
-      </td>
-      <td class="divbutton" onclick="window.location='Flight.jsp'">
-        <p align="center"><a href="Flight.jsp">Flight</a></p>
-      </td>
-    </tr>
-  </table>
+      <ul>
+        <li onclick="window.location='Plane.jsp'"><a href="Plane.jsp">Plane</a>
+          <ul>
+            <li onclick="window.location='Plane.jsp'"><a href="Plane.jsp">Обычная версия</a></li>
+            <li onclick="window.location='simplePlane.jsp'"><a href="simplePlane.jsp">Версия для печати</a></li>
+          </ul>
+        </li>
+        <li onclick="window.location='Airport.jsp'"><a href="Airport.jsp">Airport</a>
+          <ul>
+            <li onclick="window.location='Airport.jsp'"><a href="Airport.jsp">Обычная версия</a></li>
+            <li onclick="window.location='simplePort.jsp'"><a href="simplePort.jsp">Версия для печати</a></li>
+          </ul>
+        </li>
+        <li onclick="window.location='Route.jsp'"><a href="Route.jsp">Route</a>
+          <ul>
+            <li onclick="window.location='Route.jsp'"><a href="Route.jsp">Обычная версия</a></li>
+            <li onclick="window.location='simpleRoute.jsp'"><a href="simpleRoute.jsp">Версия для печати</a></li>
+          </ul>
+        </li>
+        <li onclick="window.location='Flight.jsp'"><a href="Flight.jsp">Flight</a>
+          <ul>
+            <li onclick="window.location='Flight.jsp'"><a href="Flight.jsp">Обычная версия</a></li>
+            <li onclick="window.location='simpleFlight.jsp'"><a href="simpleFlight.jsp">Версия для печати</a></li>
+          </ul>
+        </li>
+        </ul>
   </p>
 </div>

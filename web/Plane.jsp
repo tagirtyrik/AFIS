@@ -174,6 +174,7 @@
         %>
     </table>
       <p align="center"><input type="button" value="Добавить самолет" onclick="addPlane('')"></p>
+    <p align="Right"><a href="simplePlane.jsp">Версия для печати</a></p>
 </div>
 </body>
 </html>

@@ -49,7 +49,7 @@
     var takeOfPortId = parseInt(document.getElementById("selectTakeOfPort").value);
     var landingPortId = parseInt(document.getElementById("selectLandingPort").value);
     var distance = parseFloat(document.getElementById("distance").value);
-    var url="?cmd=addroutes&0="+takeOfPortId+"&1="+landingPortId+"&2="+distance;
+    var url="?cmd=addroute&0="+takeOfPortId+"&1="+landingPortId+"&2="+distance;
     var xmlhttp = getXmlHttp();
     xmlhttp.open('GET', "View.jsp"+url, false);
     xmlhttp.send(null);
@@ -187,6 +187,7 @@
       </td>
   </tr>
   </table>
+  <p align="Right"><a href="simpleRoute.jsp">Версия для печати</a></p>
 </div>
 </body>
 <%controller.exit();%>
