@@ -18,6 +18,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <title>Plane Page</title>
     <script type="text/javascript" src="/lib/ajax.js"></script>
+    <script type="text/javascript" src="/lib/fileSaver.js"></script><!--библиотека для созранения файлов на клиенте-->
     <link rel="stylesheet" type="text/css" href="style.css">
   <%
       String id=request.getParameter("id");
@@ -50,6 +51,34 @@
   %>
 </head>
 <script>
+
+
+    
+    function saveData()//если вызвать эту функцию, браузер скачает файл helloWorld.txt
+    {
+        var data="Hello World!!!";
+        var blob = new Blob([data], {type: "text/html;charset=utf-8"});//type определяет MIME-тип документа
+        saveAs(blob, "helloWorld.txt");
+    }
+    document.getElementById('get-File').addEventListener('change', loadData, false);//в этот момент где-то в HTML: <input type='file' id='get-File'/>
+    function loadData(e)//функция для загрузки файла с диска клиента
+    {
+        var file = e.target.files[0];
+        if (!file) {
+            return;
+        }
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var contents = e.target.result;//содержимое файла
+        };
+        reader.readAsText(file);
+    }
+
+
+
+
+
+
     function addPlane(number){
         var xmlhttp = getXmlHttp();
         xmlhttp.open('GET', "View.jsp?cmd=addplane&0="+number, false);
