@@ -51,7 +51,6 @@
     else useFSearch=true;
     if(landing==null)landing="null";
     else useFSearch=true;
-
     SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-dd-MM");
     /*timeFormat.setTimeZone(TimeZone.getDefault());
@@ -67,77 +66,12 @@
     routes=controller.routeList();
   %>
 </head>
-<script>
-  function search(){
-    var id=document.getElementById("id_F").value;
-    var selectPlane=document.getElementById("selectPlane_F").value;
-    var selectRoute=document.getElementById("selectRoute_F").value;
-    var takeOffDate=document.getElementById("takeOffDate_F").value;
-    var takeOffTime=document.getElementById("takeOffTime_F").value;
-    var landDate=document.getElementById("landingDate_F").value;
-    var landTime=document.getElementById("landingTime_F").value;
-    var dateArr=takeOffDate.split("-");
-    var timeArr=takeOffTime.split(":");
-    var  takeOff=dateArr[1]+"."+dateArr[2]+"."+dateArr[0]+"-"+timeArr[0]+":"+timeArr[1];
-    var dateArr=landDate.split("-");
-    var timeArr=landTime.split(":");
-    var landing=dateArr[1]+"."+dateArr[2]+"."+dateArr[0]+"-"+timeArr[0]+":"+timeArr[1];
-    //dd.MM.yy-kk:mm
-    var useor=!document.getElementById("useOr").checked;
-    if(id=="")id="null";
-    if(takeOff=="" || takeOffDate=="" || takeOffTime=="")takeOff="null";
-    if(selectRoute=="")selectRoute="null";
-    if(selectPlane=="")selectPlane="null";
-    if(landing=="" || landDate=="" || landTime=="")landing="null";
-    window.location=window.location.pathname+"?id="+id+"&selectPlane="+selectPlane+"&selectRoute="+selectRoute+"&takeOff="+takeOff+"&landing="+landing+"&useor="+useor+"#id_F";
-
-  }
-</script>
 <body>
 <br>
 <%@ include file="Header.jspf" %>
 <br>
-<div class="content">
-  <table align="center">
-    <th>Id</th><th>Plane</th><th>Route</th><th>Take-Off</th><th >Landing</th><th></th>
-    <tr>
-      <td>
-        <input type="text" id="id_F" value="<%=id.equalsIgnoreCase("null")?"":id%>" size="3">
-      </td>
-
-      <td>
-        <select id="selectPlane_F"  style="max-width: 150px;">
-          <option value="null" <%=selectPlane.equalsIgnoreCase("null")? "selected":""%> ></option>
-          <%for(Plane plane: planes){%>
-          <option value="<%=plane.getId()%>" <%=(selectPlane.equalsIgnoreCase("null")?-1:Integer.parseInt(selectPlane)) == plane.getId() ? "selected":""%> ><%=new String(plane.getId()+":"+plane.getNumber())%></option>
-          <%}%>
-        </select>
-      </td>
-      <td>
-        <select id="selectRoute_F" style="max-width: 150px;">
-          <option value="null" <%=selectRoute.equalsIgnoreCase("null")? "selected":""%> ></option>
-          <%for(Route route: routes){%>
-          <option value="<%=route.getId()%>" <%=(selectRoute.equalsIgnoreCase("null")?-1:Integer.parseInt(selectRoute)) == route.getId() ? "selected":""%> ><%=new String(controller.getAirport(route.getTakeOffPort()).getLocation() +"->"+controller.getAirport(route.getLandingPort()).getLocation())%></option>
-          <%}%>
-        </select>
-      </td>
-      <td style="min-width: 240px">
-        <input id="takeOffDate_F" type="date" value="<%=takeOffDate!=null?dateFormat.format(takeOffDate):""%>" >
-        <input id="takeOffTime_F" type="time" value="<%=takeOffDate!=null?timeFormat.format(takeOffDate):""%>" >
-      </td>
-      <td style="min-width: 240px">
-        <input id="landingDate_F" type="date" value="<%=landingDate!=null?dateFormat.format(landingDate):""%>" >
-        <input id="landingTime_F" type="time" value="<%=landingDate!=null?timeFormat.format(landingDate):""%>" >
-      </td>
-      <td>
-        <input type="button" value="Поиск" onclick="search()">
-        <br>
-        <input type="checkbox" id="useOr" <%=useOr?"":"checked"%>>Точное совпадение
-      </td>
-    </tr>
-  </table>
-</div>
-  <br>
+<%@ include file="search/Flight.jspf" %>
+<br>
 <div class="content">
 <h1 align="center">Flight</h1>
   <table align="center">

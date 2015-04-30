@@ -157,7 +157,7 @@ public class DataAccessObject {
         StringBuilder where=new StringBuilder("(");
         insertIntArg(where,Sql.Plane.Field.id,id, useOr);
         insertStringArg(where,Sql.Plane.Field.planeName,name, useOr);
-        insertStringArg(where,Sql.Plane.Field.planeNumber,number, useOr);
+        insertStringArg(where, Sql.Plane.Field.planeNumber, number, useOr);
         insertIntArg(where,Sql.Plane.Field.passengerSeatsCount,passengerSeatsCount, useOr);
         insertDoubleArg(where,Sql.Plane.Field.fuelConsumption,fuelCons, useOr);
      if(where.toString().equals("("))where=new StringBuilder("true");
@@ -449,16 +449,21 @@ public class DataAccessObject {
         return isOne;
         
     }
-        private static void insertStringArg(StringBuilder where,String name,String arg,boolean useOr){
+    private static void insertStringArg(StringBuilder where,String name,String arg,boolean useOr){
+        insertStringArg( where, name, arg, useOr,true);
+    }
+    private static void insertStringArg(StringBuilder where,String name,String arg,boolean useOr,boolean useLike){
         if(!arg.equalsIgnoreCase("null")){
         String logic;
         if(useOr)logic=" OR ";
         else logic=" AND ";
         if(!(where.toString().equals("") || where.toString().equals("(")))where.append(logic);
         where.append(name);
-        where.append("='");
+            if (useLike)where.append(" LIKE '");
+            else where.append("='");
         where.append(arg.replace("'", "\'"));
         where.append("'");
+            System.err.println(where);
         }
     }
     private static void insertIntArg(StringBuilder where,String name,String arg,boolean useOr){

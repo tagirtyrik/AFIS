@@ -78,49 +78,12 @@
       this.location.reload();
     }else alert("Произошла ошибка")
   }
-  function search(){
-    var id=document.getElementById("id_F").value;
-    var takeOffPort=document.getElementById("takeOffPort_F").value;
-    var landingPort=document.getElementById("landingPort_F").value;
-    var distance=document.getElementById("distance_F").value;
-    var useor=!document.getElementById("useOr").checked;
-    if(id=="")id="null";
-    if(takeOffPort=="")takeOffPort="null";
-    if(landingPort=="")landingPort="null";
-    if(distance=="")distance="null";
-    window.location=window.location.pathname+"?id="+id+"&takeOffPort="+takeOffPort+"&landingPort="+landingPort+"&distance="+distance+"&useor="+useor+"#id_F";
-  }
-
-
 </script>
 <body>
 <br>
 <%@ include file="Header.jspf" %>
 <br>
-<div class="content">
-  <table align="center">
-    <th>Id</th><th>Take-Off Port</th><th>Landing Port</th><th>Distance</th>
-    <tr>
-      <td>
-        <input id="id_F" type="text" value="<%=id.equalsIgnoreCase("null")?"":id%>">
-      </td>
-      <td>
-        <input id="takeOffPort_F" type="text" value="<%=takeOffPort.equalsIgnoreCase("null")?"":takeOffPort%>">
-      </td>
-      <td>
-        <input id="landingPort_F" type="text" value="<%=landingPort.equalsIgnoreCase("null")?"":landingPort%>">
-      </td>
-      <td>
-        <input id="distance_F" type="text" value="<%=distance.equalsIgnoreCase("null")?"":distance%>">
-      </td>
-      <td>
-        <input type="button" value="Поиск" onclick="search()">
-        <br>
-        <input type="checkbox" id="useOr" <%=useOr?"":"checked"%>>Точное совпадение
-      </td>
-    </tr>
-  </table>
-</div>
+<%@ include file="search/Route.jspf" %>
 <br>
 <div class="content">
 <h1 align="center">Route</h1>

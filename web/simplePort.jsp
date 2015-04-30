@@ -35,43 +35,11 @@
 
   %>
 </head>
-<script>
-  function search(){
-    var id=document.getElementById("id_F").value;
-    var name=document.getElementById("name_F").value;
-    var location=document.getElementById("location_F").value;
-    var useor=!document.getElementById("useOr").checked;
-    if(id=="")id="null";
-    if(name=="")name="null";
-    if(location=="")location="null";
-    window.location=window.location.pathname+"?id="+id+"&name="+name+"&location="+location+"&useor="+useor+"#id_F";
-  }
-</script>
 <body>
 <br>
 <%@ include file="Header.jspf" %>
 <br>
-<div class="content">
-  <table align="center">
-    <th>Id</th><th>Name</th><th>Location</th>
-    <tr>
-      <td>
-        <input id="id_F" type="text" value="<%=id.equalsIgnoreCase("null")?"":id%>">
-      </td>
-      <td>
-        <input id="name_F" type="text" value="<%=name.equalsIgnoreCase("null")?"":name%>">
-      </td>
-      <td>
-        <input id="location_F" type="text" value="<%=location.equalsIgnoreCase("null")?"":location%>">
-      </td>
-      <td>
-        <input type="button" value="Поиск" onclick="search()">
-        <br>
-        <input type="checkbox" id="useOr" <%=useOr?"":"checked"%>>Точное совпадение
-      </td>
-    </tr>
-  </table>
-</div>
+<%@ include file="search/Airport.jspf" %>
 <br>
 <div class="content">
   <h1 align="center">Airport</h1>
