@@ -64,10 +64,10 @@
         <%=p.getName()%>
       </td>
       <td>
-        <%=p.getNumber()%>"
+        <%=p.getNumber()%>
       </td>
       <td>
-        <%=p.getFuelConsumption()%>"
+        <%=p.getFuelConsumption()%>
       </td>
       <td>
         <%=p.getPassengerSeatsCount()%>
