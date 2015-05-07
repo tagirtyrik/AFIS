@@ -16,6 +16,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <title>Route Page</title>
+  <script type="text/javascript" src="/lib/fileSaver.js"></script><!--библиотека для созданения файлов на клиенте-->
   <script type="text/javascript" src="/lib/ajax.js"></script>
   <link rel="stylesheet" type="text/css" href="style.css">
   <%
@@ -45,6 +46,26 @@
   %>
 </head>
 <script>
+
+  function saveData()
+  {
+    var xmlhttp = getXmlHttp();
+    xmlhttp.open('GET', "View.jsp?cmd=saveXml&0="+"routes", false);
+    xmlhttp.send(null);
+    if(xmlhttp.status == 200) {
+      //alert(xmlhttp.responseText);
+      this.location.reload();
+    }else{
+      alert("Произошла ошибка");
+      this.location.reload();
+    }
+    var data=xmlhttp.response;
+    var blob = new Blob([data], {type: "text/xml;charset=utf-8"});
+    saveAs(blob, "Routes.xml");
+  }
+
+
+
   function addRoute(){
     var takeOfPortId = parseInt(document.getElementById("selectTakeOfPort").value);
     var landingPortId = parseInt(document.getElementById("selectLandingPort").value);
@@ -150,6 +171,7 @@
       </td>
   </tr>
   </table>
+  <p align="right"><input type="button" value="Сохранить как Xml" onclick="saveData()"></p>
   <p align="Right"><a href="simpleRoute.jsp">Версия для печати</a></p>
 </div>
 </body>

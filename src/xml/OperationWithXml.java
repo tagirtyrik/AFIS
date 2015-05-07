@@ -287,16 +287,67 @@ public class OperationWithXml
         }
         return (ArrayList<Object>) list;
     }
-    private static void marshalling(List bigList) throws IOException
+    public static ArrayList<Object> addObjects(String xml)
+    {
+        List<Object> list = new ArrayList<>();
+        XStream xStream = new XStream(new DomDriver());//создаем объект
+        try{
+
+            xStream.alias("Data", List.class);
+            xStream.alias("Id", int.class);
+            xStream.registerConverter((Converter) new EncodedByteArrayConverter());//какое-то конвертирование
+            if(saveIsCorrect()){
+                list = (ArrayList<Object>)xStream.fromXML(xml);//считываение объекта "большой список" из файла
+            } else{//значения по-умолчанию
+                list=defaultList();
+            }
+        }
+        catch(Exception e)
+        {
+            System.err.println("Извините, ошибка открытия файла. Перезапустите программу.");
+            System.exit(0);
+
+        }
+        return (ArrayList<Object>) list;
+    }
+
+
+
+
+
+    private static String marshalling(List bigList) throws IOException
     {//запись в xml
         XStream xStream = new XStream(new DomDriver()); //создаем объект XStream
         xStream.alias("Data", List.class);
         xStream.alias("Id", int.class);
-        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(new File(saveFileName)));//записываем текст xml обычным бафером в файл saveData.xml
+    //    BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(new File(saveFileName)));//записываем текст xml обычным бафером в файл saveData.xml
         String xml = xStream.toXML(bigList);//запихиваем в xml наш объект "большой список"
-        bufferedWriter.write(xml);//записываем xml в файл
-        bufferedWriter.close();
+        return xml;
+    /*    bufferedWriter.write(xml);//записываем xml в файл
+        bufferedWriter.close();*/
     }
+
+    public static String savePlane(ArrayList<Plane> planes) throws IOException {
+
+      return marshalling(planes);
+
+    }
+    public static String saveAirport(ArrayList<Airport> airports) throws IOException {
+
+        return  marshalling(airports);
+    }
+    public static String saveRoute(ArrayList<Route> routes) throws IOException {
+
+        return  marshalling(routes);
+    }
+    public static String saveFlight(ArrayList<Flight> flights) throws IOException {
+
+        return  marshalling(flights);
+    }
+
+
+
+
     //я решила сделать еще отдельные сохранения каждого списка и id,если не надо, то можно убрать
     private static void save(int index, Object object) throws IOException, ClassNotFoundException
     {

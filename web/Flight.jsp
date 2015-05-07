@@ -24,6 +24,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <title>Flight Page</title>
   <script type="text/javascript" src="/lib/ajax.js"></script>
+  <script type="text/javascript" src="/lib/fileSaver.js"></script><!--библиотека для созданения файлов на клиенте-->
   <link rel="stylesheet" type="text/css" href="style.css">
   <%
     DateFormat formatter =new SimpleDateFormat("dd.MM.yy-HH:mm");
@@ -74,6 +75,24 @@
   %>
 </head>
 <script>
+  function saveData()
+  {
+    var xmlhttp = getXmlHttp();
+    xmlhttp.open('GET', "View.jsp?cmd=saveXml&0="+"flights", false);
+    xmlhttp.send(null);
+    if(xmlhttp.status == 200) {
+      //alert(xmlhttp.responseText);
+      this.location.reload();
+    }else{
+      alert("Произошла ошибка");
+      this.location.reload();
+    }
+    var data=xmlhttp.response;
+    var blob = new Blob([data], {type: "text/xml;charset=utf-8"});
+    saveAs(blob, "Flights.xml");
+  }
+
+
   function addFlight(){
     var planeId=parseInt(document.getElementById("selectPlane").value);
     var routeId=parseInt(document.getElementById("selectRoute").value);
@@ -225,8 +244,9 @@
       </td>
     </tr>
   </table>
+  <p align="right"><input type="button" value="Сохранить как Xml" onclick="saveData()"></p>
   <p align="Right"><a href="simpleFlight.jsp">Версия для печати</a></p>
-</div>
+  </div>
 </body>
 <%controller.exit();%>
 </html>

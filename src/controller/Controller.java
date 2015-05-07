@@ -18,6 +18,8 @@ import model.airport.InternationalAirport;
 import model.flight.ReguarFlight;
 import model.route.RegularRoute;
 import view.View;
+import xml.OperationWithXml;
+
 import javax.servlet.AsyncEvent;
 
 public class Controller {
@@ -337,6 +339,32 @@ public class Controller {
         else if(cmd.equals("delall")){
             delAll();
             view.printSomeInfo("База данных очищена");
+        }
+        else if(cmd.equals("saveXml"))
+        {
+            String xmlList;
+            if (arguments[0].equals("planes"))
+            {
+                xmlList = OperationWithXml.savePlane(model.getPlanes());
+            }
+            else if (arguments[0].equals("ports"))
+            {
+                xmlList = OperationWithXml.saveAirport(model.getAirports());
+            }
+            else if (arguments[0].equals("routes"))
+            {
+                xmlList = OperationWithXml.saveRoute(model.getRoutes());
+            }
+            else if (arguments[0].equals("flights"))
+            {
+                xmlList = OperationWithXml.saveFlight(model.getFlights());
+            }
+            else
+            {
+                xmlList = "";
+            }
+            view.printSomeInfo(xmlList);
+
         }
 ///////////////////////////////////////////////////////////////////////////////////////
         else view.printSomeInfo("Комманда не поддерживается в этой версии: "+ cmd);  //ветка кода не должна быть достигнута

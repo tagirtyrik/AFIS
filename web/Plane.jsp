@@ -11,6 +11,7 @@
 <%@ page import="model.aircraft.Boeing747SP" %>
 <%@ page import="controller.Controller" %>
 <%@ page import="model.Model" %>
+<%@ page import="xml.OperationWithXml" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -54,29 +55,27 @@
 
 
     
-    function saveData()//если вызвать эту функцию, браузер скачает файл helloWorld.txt
+    function saveData()
     {
-        var data="Hello World!!!";
-        var blob = new Blob([data], {type: "text/html;charset=utf-8"});//type определяет MIME-тип документа
-        saveAs(blob, "helloWorld.txt");
+        var xmlhttp = getXmlHttp();
+        xmlhttp.open('GET', "View.jsp?cmd=saveXml&0="+"planes", false);
+        xmlhttp.send(null);
+        if(xmlhttp.status == 200) {
+            //alert(xmlhttp.responseText);
+            this.location.reload();
+        }else{
+            alert("Произошла ошибка");
+            this.location.reload();
+        }
+        var data=xmlhttp.response;
+        var blob = new Blob([data], {type: "text/xml;charset=utf-8"});
+        saveAs(blob, "Planes.xml");
     }
+
     document.getElementById('get-File').addEventListener('change', loadData, false);//в этот момент где-то в HTML: <input type='file' id='get-File'/>
     function loadData(e)//функция для загрузки файла с диска клиента
     {
-        var file = e.target.files[0];
-        if (!file) {
-            return;
-        }
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            var contents = e.target.result;//содержимое файла
-        };
-        reader.readAsText(file);
     }
-
-
-
-
 
 
     function addPlane(number){
@@ -162,7 +161,9 @@
         %>
     </table>
       <p align="center"><input type="button" value="Добавить самолет" onclick="addPlane('')"></p>
+    <p align="right"><input type="button" value="Сохранить как Xml" onclick="saveData()"></p>
     <p align="Right"><a href="simplePlane.jsp">Версия для печати</a></p>
+    <input type="file" id = "get-File">
 </div>
 </body>
 </html>

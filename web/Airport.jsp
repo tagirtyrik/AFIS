@@ -16,6 +16,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <title>Airport Page</title>
   <script type="text/javascript" src="/lib/ajax.js"></script>
+  <script type="text/javascript" src="/lib/fileSaver.js"></script><!--библиотека для созданения файлов на клиенте-->
   <link rel="stylesheet" type="text/css" href="style.css">
   <%
     String id=request.getParameter("id");
@@ -42,6 +43,25 @@
   %>
 </head>
 <script>
+
+  function saveData()
+  {
+    var xmlhttp = getXmlHttp();
+    xmlhttp.open('GET', "View.jsp?cmd=saveXml&0="+"ports", false);
+    xmlhttp.send(null);
+    if(xmlhttp.status == 200) {
+      //alert(xmlhttp.responseText);
+      this.location.reload();
+    }else{
+      alert("Произошла ошибка");
+      this.location.reload();
+    }
+    var data=xmlhttp.response;
+    var blob = new Blob([data], {type: "text/xml;charset=utf-8"});
+    saveAs(blob, "Airports.xml");
+  }
+
+
   function addPort(name, location){
     var xmlhttp = getXmlHttp();
     xmlhttp.open('GET', "View.jsp?cmd=addport&0="+name+"&1="+location, false);
@@ -105,7 +125,7 @@
     %>
   </table>
   <p align="center"><input type="button" value="Добавить аэропорт" onclick="addPort('', '')"></p>
-</p>
+  <p align="right"><input type="button" value="Сохранить как Xml" onclick="saveData()"></p>
   <p align="Right"><a href="simplePort.jsp">Версия для печати</a></p>
 </div>
 </body>
