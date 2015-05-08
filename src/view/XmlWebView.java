@@ -22,7 +22,7 @@ public class XmlWebView  implements View{
     Integer portCount=null;
     Integer flightCount=null;
     public void printSomeInfo(String info){
-        if(info==null)this.info=info;
+        if(this.info==null)this.info=info;
         else this.info+=info;
     }
     public String giveInput(){

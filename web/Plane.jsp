@@ -68,13 +68,35 @@
             this.location.reload();
         }
         var data=xmlhttp.response;
-        var blob = new Blob([data], {type: "text/xml;charset=utf-8"});
+        var xmlDoc;
+        if (window.DOMParser)
+        {
+            parser=new DOMParser();
+            xmlDoc=parser.parseFromString(data,"text/xml");
+        }
+        else // Internet Explorer
+        {
+            xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
+            xmlDoc.async=false;
+            xmlDoc.loadXML(data);
+        }
+        var blob = new Blob([xmlDoc.getElementsByTagName("info")[0].innerHTML], {type: "text/xml;charset=utf-8"});
         saveAs(blob, "Planes.xml");
     }
 
-    document.getElementById('get-File').addEventListener('change', loadData, false);//в этот момент где-то в HTML: <input type='file' id='get-File'/>
+
     function loadData(e)//функция для загрузки файла с диска клиента
     {
+        var file = e.target.files[0];
+        if (!file) {
+            return;
+        }
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var contents = e.target.result;
+            alert(contents);
+        };
+        reader.readAsText(file);
     }
 
 
@@ -120,8 +142,11 @@
         }
 
     }
+    function onLoad(){
+        document.getElementById('get-File').addEventListener('change', loadData, false);//в этот момент где-то в HTML: <input type='file' id='get-File'/>
+    }
 </script>
-<body>
+<body onload="onLoad()">
 <br>
 <%@ include file="Header.jspf" %>
 <br>
@@ -161,9 +186,9 @@
         %>
     </table>
       <p align="center"><input type="button" value="Добавить самолет" onclick="addPlane('')"></p>
-    <p align="right"><input type="button" value="Сохранить как Xml" onclick="saveData()"></p>
+    <p align="right"><input type="button" value="Сохранить как Xml" onclick="saveData()">
+        <input type="file" id = "get-File"></p>
     <p align="Right"><a href="simplePlane.jsp">Версия для печати</a></p>
-    <input type="file" id = "get-File">
 </div>
 </body>
 </html>
