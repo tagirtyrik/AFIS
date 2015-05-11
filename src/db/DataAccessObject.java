@@ -80,7 +80,6 @@ public class DataAccessObject {
         connection = DriverManager.getConnection(connectionUrl);
         System.err.println("Connection from Driver Manager");
     }
-
         try{
             Statement statement = connection.createStatement();
             statement.execute(Sql.Table.createPlane);
@@ -186,6 +185,17 @@ public class DataAccessObject {
         statement.executeUpdate();
         return 0;//тут вернуть id
     }
+    public static int addPlaneManual(Plane plane)throws SQLException{
+        PreparedStatement statement = connection.prepareStatement(Sql.Plane.addManual);
+        //System.err.println(Sql.Plane.add);
+        statement.setInt(1, plane.getId());
+        statement.setString(2, plane.getName());
+        statement.setString(3, plane.getNumber());
+        statement.setDouble(4, plane.getFuelConsumption());
+        statement.setInt(5, plane.getPassengerSeatsCount());
+        statement.executeUpdate();
+        return 0;//тут вернуть id
+    }
     public static ArrayList<Airport> getAirports() throws SQLException{
         return selectAirports(Sql.Airport.selectAll);
     }
@@ -243,6 +253,15 @@ public class DataAccessObject {
         //System.err.println(Sql.Airport.add);
         statement.setString(1, airport.getName());
         statement.setString(2, airport.getLocation()); 
+        statement.executeUpdate();
+        return 0;//тут вернуть id
+    }
+    public static int addAirportManual(Airport airport)throws SQLException{
+        PreparedStatement statement = connection.prepareStatement(Sql.Airport.addManual);
+        //System.err.println(Sql.Airport.add);
+        statement.setInt(1,airport.getId());
+        statement.setString(2, airport.getName());
+        statement.setString(3, airport.getLocation());
         statement.executeUpdate();
         return 0;//тут вернуть id
     }
@@ -306,6 +325,16 @@ public class DataAccessObject {
         statement.setInt(1, (route.getTakeOffPort()));
         statement.setInt(2, (route.getLandingPort()));
         statement.setDouble(3, (route.getDistance())); 
+        statement.executeUpdate();
+        return 0;//тут вернуть id
+    }
+    public static int addRouteManual(Route route)throws SQLException{
+        PreparedStatement statement = connection.prepareStatement(Sql.Route.addManual);
+        //System.err.println(Sql.Route.add);
+        statement.setInt(1, (route.getId()));
+        statement.setInt(2, (route.getTakeOffPort()));
+        statement.setInt(3, (route.getLandingPort()));
+        statement.setDouble(4, (route.getDistance()));
         statement.executeUpdate();
         return 0;//тут вернуть id
     }
@@ -379,6 +408,17 @@ public class DataAccessObject {
         statement.setInt(2, (flight.getRoute()));
         statement.setDate(3, new java.sql.Date(flight.getTakeOffTimeShedule().getTime())); 
         statement.setDate(4, new java.sql.Date(flight.getLandingTimeShedule().getTime())); 
+        statement.executeUpdate();
+        return 0;//тут вернуть id
+    }
+    public static int addFlightManual(Flight flight)throws SQLException{
+        PreparedStatement statement = connection.prepareStatement(Sql.Flight.addManual);
+        //System.err.println(Sql.Flight.add);
+        statement.setInt(1, (flight.getId()));
+        statement.setInt(2, (flight.getPlane()));
+        statement.setInt(3, (flight.getRoute()));
+        statement.setDate(4, new java.sql.Date(flight.getTakeOffTimeShedule().getTime()));
+        statement.setDate(5, new java.sql.Date(flight.getLandingTimeShedule().getTime()));
         statement.executeUpdate();
         return 0;//тут вернуть id
     }

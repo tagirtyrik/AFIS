@@ -92,6 +92,11 @@ public class Sql {
                 Field.planeName + ", " +Field.planeNumber + ", " +
                 Field.fuelConsumption + ", " + Field.passengerSeatsCount +
                 ") VALUES (?, ?, ?, ?)";
+        public static final String addManual="INSERT INTO "+Table.Names.plane+"("+
+                Field.id + ", " +
+                Field.planeName + ", " +Field.planeNumber + ", " +
+                Field.fuelConsumption + ", " + Field.passengerSeatsCount +
+                ") VALUES (?, ?, ?, ?, ?)";
         public static final String count="SELECT COUNT(*) FROM "+Table.Names.plane;
         public static final String delete="DELETE FROM "+Table.Names.plane+
                 " WHERE ("+Field.id+" = ?)";
@@ -115,6 +120,10 @@ public class Sql {
         public static final String add="INSERT INTO "+Table.Names.airport+"("+
                 Field.airportName + ", " + Field.airportLocation + 
                 ") VALUES (?, ?)";
+        public static final String addManual="INSERT INTO "+Table.Names.airport+"("+
+                Field.id+", "+
+                Field.airportName + ", " + Field.airportLocation +
+                ") VALUES (?, ?, ?)";
         public static final String count="SELECT COUNT(*) FROM "+Table.Names.airport;
         public static final String delete="DELETE FROM "+Table.Names.airport+
                 " WHERE ("+Field.id+" = ?)";
@@ -140,6 +149,10 @@ public class Sql {
         public static final String add="INSERT INTO "+Table.Names.route+"("+
                 Field.takeOffPortId + ", " + Field.landingPortId + ", " + Field.distance+
                 ") VALUES (?, ?, ?)";
+        public static final String addManual="INSERT INTO "+Table.Names.route+"("+
+                Field.id+", "+
+                Field.takeOffPortId + ", " + Field.landingPortId + ", " + Field.distance+
+                ") VALUES (?, ?, ?, ?)";
         public static final String count="SELECT COUNT(*) FROM "+Table.Names.route;
         public static final String delete="DELETE FROM "+Table.Names.route+
                 " WHERE ("+Field.id+" = ?)";
@@ -168,6 +181,10 @@ public class Sql {
         public static final String add="INSERT INTO "+Table.Names.flight+"("+
                 Field.planeId + ", " + Field.routeId + ", " + Field.takeOffTime + ", " +Field.landingTime+
                 ") VALUES (?, ?, ?, ?)";
+        public static final String addManual="INSERT INTO "+Table.Names.flight+"("+
+                Field.id+", "+
+                Field.planeId + ", " + Field.routeId + ", " + Field.takeOffTime + ", " +Field.landingTime+
+                ") VALUES (?, ?, ?, ?, ?)";
         public static final String count="SELECT COUNT(*) FROM "+Table.Names.flight;
         public static final String delete="DELETE FROM "+Table.Names.flight+
                 " WHERE ("+Field.id+" = ?)";
