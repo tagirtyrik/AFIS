@@ -1,6 +1,7 @@
 package model;
 import exception.ComandException;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import xml.OperationWithXml;
 import db.DataAccessObject;
@@ -172,7 +173,52 @@ public class Model {
         if(databaseIsOn) return DataAccessObject.addFlight(flight);
         else return OperationWithXml.addFlight(flight);
      }
-      /**
+    /**
+     * добавляет самолет в список, с заданным id
+     * (если существует - заменяет его)
+     * если в списке есть объект с таким id - заменяет его, иначе добавляет новый
+     * @param plane добавляемый самолет
+     * @return 0
+     */
+    public void addPlaneManual(Plane plane)throws SQLException,IOException, ClassNotFoundException{
+            if (databaseIsOn) DataAccessObject.addPlaneManual(plane);
+            else  OperationWithXml.addPlaneManual(plane);
+    }
+    /**
+     * добавляет аэропорт в список, с заданным id
+     * (если существует - заменяет его)
+     * если в списке есть объект с таким id - заменяет его, иначе добавляет новый
+     * @param port добавляемый аэропорт
+     * @return 0
+     */
+    public void addAirportManual(Airport port)throws SQLException,IOException, ClassNotFoundException{
+            if (databaseIsOn) DataAccessObject.addAirportManual(port);
+            else OperationWithXml.addAirportManual(port);
+    }
+    /**
+     * добавляет маршрут в список,с заданным id
+     * (если существует - заменяет его)
+     * если в списке есть объект с таким id - заменяет его, иначе добавляет новый
+     * @param route добавляемый маршрут
+     * @return 0
+     */
+    public void addRouteManual(Route route)throws SQLException,IOException, ClassNotFoundException{
+            if (databaseIsOn) DataAccessObject.addRouteManual(route);
+            else OperationWithXml.addRouteManual(route);
+    }
+
+    /**
+     * добавляет рейс в список, с заданным id
+     * (если существует - заменяет его)
+     * если в списке есть объект с таким id - заменяет его, иначе добавляет новый
+     * @param flight добавляемый рейс
+     * @return 0
+     */
+    public void addFlightManual(Flight flight)throws SQLException,IOException, ClassNotFoundException{
+            if (databaseIsOn) DataAccessObject.addFlightManual(flight);
+            else OperationWithXml.addFlightManual(flight);
+    }
+    /**
       * удаляет рейс
       * @param id - идентификатор рейса
       */
@@ -238,5 +284,18 @@ public class Model {
         if(databaseIsOn){
             DataAccessObject.dropData();
         }else OperationWithXml.delAll();
+    }
+
+    public String getXmlPlane() throws SQLException, IOException, ClassNotFoundException {
+        return OperationWithXml.savePlane(getPlanes());
+    }
+    public String getXmlPort() throws SQLException, IOException, ClassNotFoundException {
+        return OperationWithXml.savePlane(getAirports());
+    }
+    public String getXmlRoute() throws SQLException, IOException, ClassNotFoundException {
+        return OperationWithXml.savePlane(getRoutes());
+    }
+    public String getXmlFlight() throws SQLException, IOException, ClassNotFoundException, ParseException {
+        return OperationWithXml.savePlane(getFlights());
     }
 }

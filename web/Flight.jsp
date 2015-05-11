@@ -88,10 +88,77 @@
       this.location.reload();
     }
     var data=xmlhttp.response;
-    var blob = new Blob([data], {type: "text/xml;charset=utf-8"});
+    var xmlDoc;
+    if (window.DOMParser)
+    {
+      parser=new DOMParser();
+      xmlDoc=parser.parseFromString(data,"text/xml");
+    }
+    else // Internet Explorer
+    {
+      xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
+      xmlDoc.async=false;
+      xmlDoc.loadXML(data);
+    }
+    var blob = new Blob([xmlDoc.getElementsByTagName("info")[0].innerHTML], {type: "text/xml;charset=utf-8"});
     saveAs(blob, "Flights.xml");
   }
 
+  function loadData(e)//функция для загрузки файла с диска клиента
+  {
+    var file = e.target.files[0];
+    if (!file) {
+      return;
+    }
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var contents = e.target.result;
+      var xml;
+      if (window.DOMParser)
+      {
+        parser=new DOMParser();
+        xml=parser.parseFromString(contents,"text/xml");
+      }
+      else // Internet Explorer
+      {
+        xml=new ActiveXObject("Microsoft.XMLDOM");
+        xml.async=false;
+        xml.loadXML(contents);
+      }
+      var data =  xml.getElementsByTagName("Data")[0];;
+      var flights = data.getElementsByTagName("model.flight.ReguarFlight");
+      var flight = null;
+      if(flights)
+        for(var i=0; i< flights.length; i++)
+        {
+          flight = flights[i];
+          var id = flight.getElementsByTagName("id")[0].innerHTML;
+          var planeId = flight.getElementsByTagName("planeId")[0].innerHTML;
+          var routeId = flight.getElementsByTagName("routeId")[0].innerHTML;
+          var takeOffTime = flight.getElementsByTagName("takeOffTime")[0].innerHTML;
+          var landingTime = flight.getElementsByTagName("landingTime")[0].innerHTML;
+
+          var year = takeOffTime.substring(0, 4);
+          var monthe = takeOffTime.substring(5, 7);
+          var day = takeOffTime.substring(8, 10);
+          var time = takeOffTime.substring(11, 16);
+          var takeOff = day + "."+monthe+"."+year+"-"+time;
+
+          year = landingTime.substring(0, 4);
+          monthe = landingTime.substring(5, 7);
+          day =  landingTime.substring(8, 10);
+          time = landingTime.substring(11, 16);
+          var landing = day + "."+monthe+"."+year+"-"+time;
+
+
+          var xmlhttp = getXmlHttp();
+          xmlhttp.open('GET', "View.jsp?cmd=addflight&0="+planeId+"&1="+routeId+"&2="+takeOff+"&3="+landing, false);
+          xmlhttp.send(null);
+        }
+      setTimeout("window.location.reload()",5)
+    };
+    reader.readAsText(file);
+  }
 
   function addFlight(){
     var planeId=parseInt(document.getElementById("selectPlane").value);
@@ -106,6 +173,7 @@
     var dateArr=landDate.split("-");
     var timeArr=landTime.split(":");
     var Landing=dateArr[1]+"."+dateArr[2]+"."+dateArr[0]+"-"+timeArr[0]+":"+timeArr[1];
+    alert(Landing)
     var url="?cmd=addflight&0="+planeId+"&1="+routeId+"&2="+takeOff+"&3="+Landing;
     var xmlhttp = getXmlHttp();
     xmlhttp.open('GET', "View.jsp"+url, false);
@@ -156,9 +224,11 @@
       this.location.reload();
     }
 
+  }function onLoad(){
+    document.getElementById('get-File').addEventListener('change', loadData, false);//в этот момент где-то в HTML: <input type='file' id='get-File'/>
   }
 </script>
-<body>
+<body onload="onLoad()">
 <br>
 <%@ include file="Header.jspf" %>
 <br>
@@ -244,7 +314,8 @@
       </td>
     </tr>
   </table>
-  <p align="right"><input type="button" value="Сохранить как Xml" onclick="saveData()"></p>
+  <p align="right"><input type="button" value="Сохранить как Xml" onclick="saveData()">
+    <input type="file" id = "get-File"></p>
   <p align="Right"><a href="simpleFlight.jsp">Версия для печати</a></p>
   </div>
 </body>

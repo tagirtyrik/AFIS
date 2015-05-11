@@ -60,10 +60,65 @@
       this.location.reload();
     }
     var data=xmlhttp.response;
-    var blob = new Blob([data], {type: "text/xml;charset=utf-8"});
+    var xmlDoc;
+    if (window.DOMParser)
+    {
+      parser=new DOMParser();
+      xmlDoc=parser.parseFromString(data,"text/xml");
+    }
+    else // Internet Explorer
+    {
+      xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
+      xmlDoc.async=false;
+      xmlDoc.loadXML(data);
+    }
+    var blob = new Blob([xmlDoc.getElementsByTagName("info")[0].innerHTML], {type: "text/xml;charset=utf-8"});
     saveAs(blob, "Routes.xml");
   }
 
+  function loadData(e)//функция для загрузки файла с диска клиента
+  {
+    var file = e.target.files[0];
+    if (!file) {
+      return;
+    }
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var contents = e.target.result;
+      var xml;
+      if (window.DOMParser)
+      {
+        parser=new DOMParser();
+        xml=parser.parseFromString(contents,"text/xml");
+      }
+      else // Internet Explorer
+      {
+        xml=new ActiveXObject("Microsoft.XMLDOM");
+        xml.async=false;
+        xml.loadXML(contents);
+      }
+      var data =  xml.getElementsByTagName("Data")[0];
+      var routes = data.getElementsByTagName("model.route.RegularRoute");
+      var route = null;
+      if(routes)
+        for(var i=0; i< routes.length; i++)
+        {
+          route = routes[i];
+          var id = route.getElementsByTagName("id")[0].innerHTML;
+          var takeOffPort = route.getElementsByTagName("takeOffPortId")[0].innerHTML;
+          var landingPort = route.getElementsByTagName("landingPortId")[0].innerHTML;
+          var distance = route.getElementsByTagName("distance")[0].innerHTML;
+          var xmlhttp = getXmlHttp();
+          xmlhttp.open('GET', "View.jsp?cmd=recoveryroute&0="+id+"&1="+takeOffPort+"&2="+landingPort+"&3="+distance, false);
+          xmlhttp.send(null);
+        }
+      setTimeout("window.location.reload()",5)
+    };
+    reader.readAsText(file);
+  }
+  function onLoad(){
+    document.getElementById('get-File').addEventListener('change', loadData, false);//в этот момент где-то в HTML: <input type='file' id='get-File'/>
+  }
 
 
   function addRoute(){
@@ -100,7 +155,7 @@
     }else alert("Произошла ошибка")
   }
 </script>
-<body>
+<body onload="onLoad()">
 <br>
 <%@ include file="Header.jspf" %>
 <br>
@@ -171,7 +226,8 @@
       </td>
   </tr>
   </table>
-  <p align="right"><input type="button" value="Сохранить как Xml" onclick="saveData()"></p>
+  <p align="right"><input type="button" value="Сохранить как Xml" onclick="saveData()">
+    <input type="file" id = "get-File"></p>
   <p align="Right"><a href="simpleRoute.jsp">Версия для печати</a></p>
 </div>
 </body>

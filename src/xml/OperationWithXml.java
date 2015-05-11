@@ -137,13 +137,33 @@ public class OperationWithXml
         airport.setId(nextAirportId());
         airports.add(airport);
         saveAll(planes, airports, routes, flights, lastPlaneId, lastAirportId, lastRouteId, lastFlightId);
-        return airport.getId();
+        return 0;
     }
     public static int addFlight(Flight flight)throws IOException,ClassNotFoundException{
         flight.setId(nextFlightId());
         flights.add(flight);
         saveAll(planes, airports, routes, flights, lastPlaneId, lastAirportId, lastRouteId, lastFlightId);
         return flight.getId();
+    }
+    public static void addPlaneManual(Plane plane)throws IOException,ClassNotFoundException{
+        plane.setId(plane.getId());
+        planes.add(plane);
+        saveAll(planes, airports, routes, flights, lastPlaneId, lastAirportId, lastRouteId, lastFlightId);
+    }
+    public static void addRouteManual(Route route)throws IOException,ClassNotFoundException{
+        route.setId(route.getId());
+        routes.add(route);
+        saveAll(planes, airports, routes, flights, lastPlaneId, lastAirportId, lastRouteId, lastFlightId);
+    }
+    public static void addAirportManual(Airport airport)throws IOException,ClassNotFoundException{
+        airport.setId(airport.getId());
+        airports.add(airport);
+        saveAll(planes, airports, routes, flights, lastPlaneId, lastAirportId, lastRouteId, lastFlightId);
+    }
+    public static void addFlightManual(Flight flight)throws IOException,ClassNotFoundException{
+        flight.setId(flight.getId());
+        flights.add(flight);
+        saveAll(planes, airports, routes, flights, lastPlaneId, lastAirportId, lastRouteId, lastFlightId);
     }
 
      public static void deletePlane(int id)throws IOException,ClassNotFoundException{
@@ -344,11 +364,86 @@ public class OperationWithXml
 
         return  marshalling(flights);
     }
+ /*   public static ArrayList<Plane> recoveryPlane(String xml) throws IOException {
 
+        List<Plane> list = new ArrayList<>();
+        XStream xStream = new XStream(new DomDriver());
+        try {
 
+            xStream.alias("Data", List.class);
+            xStream.alias("Id", int.class);
+            xStream.registerConverter((Converter) new EncodedByteArrayConverter());
+            if (saveIsCorrect()) {
+                list = (ArrayList<Plane>) xStream.fromXML(xml);
+                System.out.println(list.get(1).getName());
+            }
+        } catch (Exception e) {
+            System.err.println("Извините, ошибка открытия файла. Перезапустите программу.");
+        }
+        return (ArrayList<Plane>) list;
+    }
+    public static ArrayList<Airport> recoveryAirport(String xml) throws IOException {
 
+        List<Airport> list = new ArrayList<>();
+        XStream xStream = new XStream(new DomDriver());
+        try{
 
-    //я решила сделать еще отдельные сохранения каждого списка и id,если не надо, то можно убрать
+            xStream.alias("Data", List.class);
+            xStream.alias("Id", int.class);
+            xStream.registerConverter((Converter) new EncodedByteArrayConverter());
+            if(saveIsCorrect())
+            {
+                list = (ArrayList<Airport>)xStream.fromXML(xml);
+            }
+        }
+        catch(Exception e)
+        {
+            System.err.println("Извините, ошибка открытия файла. Перезапустите программу.");
+        }
+        return (ArrayList<Airport>) list;
+    }
+    public static ArrayList<Route> recoveryRoute(String xml) throws IOException {
+
+        List<Route> list = new ArrayList<>();
+        XStream xStream = new XStream(new DomDriver());
+        try{
+
+            xStream.alias("Data", List.class);
+            xStream.alias("Id", int.class);
+            xStream.registerConverter((Converter) new EncodedByteArrayConverter());
+            if(saveIsCorrect())
+            {
+                list = (ArrayList<Route>)xStream.fromXML(xml);
+            }
+        }
+        catch(Exception e)
+        {
+            System.err.println("Извините, ошибка открытия файла. Перезапустите программу.");
+        }
+        return (ArrayList<Route>) list;
+    }
+    public static ArrayList<Flight> recoveryFlight(String xml) throws IOException {
+
+        List<Flight> list = new ArrayList<>();
+        XStream xStream = new XStream(new DomDriver());
+        try{
+
+            xStream.alias("Data", List.class);
+            xStream.alias("Id", int.class);
+            xStream.registerConverter((Converter) new EncodedByteArrayConverter());
+            if(saveIsCorrect())
+            {
+                list = (ArrayList<Flight>)xStream.fromXML(xml);
+            }
+        }
+        catch(Exception e)
+        {
+            System.err.println("Извините, ошибка открытия файла. Перезапустите программу.");
+        }
+        return (ArrayList<Flight>) list;
+    }
+*/
+     //я решила сделать еще отдельные сохранения каждого списка и id,если не надо, то можно убрать
     private static void save(int index, Object object) throws IOException, ClassNotFoundException
     {
         List<Object> bigList = new ArrayList<>();

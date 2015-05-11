@@ -5,13 +5,8 @@
 --%>
 <%@page import="model.Plane"%>
 <%@page  import="java.util.ArrayList" %>
-<%@page import="db.Sql" %>
-<%@page import="db.DataAccessObject" %>
-<%@ page import="java.io.*,java.util.*" %>
-<%@ page import="model.aircraft.Boeing747SP" %>
 <%@ page import="controller.Controller" %>
 <%@ page import="model.Model" %>
-<%@ page import="xml.OperationWithXml" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -52,9 +47,6 @@
   %>
 </head>
 <script>
-
-
-    
     function saveData()
     {
         var xmlhttp = getXmlHttp();
@@ -94,7 +86,35 @@
         var reader = new FileReader();
         reader.onload = function(e) {
             var contents = e.target.result;
-            alert(contents);
+            var xml;
+            if (window.DOMParser)
+            {
+                parser=new DOMParser();
+                xml=parser.parseFromString(contents,"text/xml");
+            }
+            else // Internet Explorer
+            {
+                xml=new ActiveXObject("Microsoft.XMLDOM");
+                xml.async=false;
+                xml.loadXML(contents);
+            }
+            var data =  xml.getElementsByTagName("Data")[0];
+            var boeings = data.getElementsByTagName("model.aircraft.Boeing747SP");
+            var boeing = null;
+            if(boeings)
+                for(var i=0; i< boeings.length; i++)
+                {
+                    boeing = boeings[i];
+                    var id = boeing.getElementsByTagName("id")[0].innerHTML;
+                    var name = boeing.getElementsByTagName("planeName")[0].innerHTML;
+                    var number = boeing.getElementsByTagName("planeNumber")[0].innerHTML;
+                    var fuel = boeing.getElementsByTagName("fuelConsumption")[0].innerHTML;
+                    var passangers = boeing.getElementsByTagName("passengerSeatsCount")[0].innerHTML;
+                    var xmlhttp = getXmlHttp();
+                    xmlhttp.open('GET', "View.jsp?cmd=recoveryplane&0="+id+"&1="+number+"&2="+name+"&3="+passangers+"&4="+fuel, false);
+                    xmlhttp.send(null);
+                }
+            setTimeout("window.location.reload()",5)
         };
         reader.readAsText(file);
     }

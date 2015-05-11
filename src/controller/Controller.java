@@ -345,27 +345,84 @@ public class Controller {
             String xmlList;
             if (arguments[0].equals("planes"))
             {
-                xmlList = OperationWithXml.savePlane(model.getPlanes());
+                xmlList = xmlPlane();
             }
             else if (arguments[0].equals("ports"))
             {
-                xmlList = OperationWithXml.saveAirport(model.getAirports());
+                xmlList = xmlPort();
             }
             else if (arguments[0].equals("routes"))
             {
-                xmlList = OperationWithXml.saveRoute(model.getRoutes());
+                xmlList = xmlRoute();
             }
             else if (arguments[0].equals("flights"))
             {
-                xmlList = OperationWithXml.saveFlight(model.getFlights());
+                xmlList = xmlFlight();
             }
             else
             {
                 xmlList = "";
             }
             view.printSomeInfo(xmlList);
-
         }
+        //////////////////////////////////////////////////////////////////////////// сохранение данных в xml
+        else if(cmd.equals("saveXml"))
+        {
+            String xmlList;
+            if (arguments[0].equals("planes"))
+            {
+                xmlList = xmlPlane();
+            }
+            else if (arguments[0].equals("ports"))
+            {
+                xmlList = xmlPort();
+            }
+            else if (arguments[0].equals("routes"))
+            {
+                xmlList = xmlRoute();
+            }
+            else if (arguments[0].equals("flights"))
+            {
+                xmlList = xmlFlight();
+            }
+            else
+            {
+                xmlList = "";
+            }
+            view.printSomeInfo(xmlList);
+        }
+        ////////////////////////////////////////////////////////////////////////////восстановление данных из xml
+        else if (cmd.equals("recoveryplane"))
+        {
+            Plane plane = new Boeing747SP(Integer.parseInt(arguments[0]), arguments[1]);
+            plane.setName(arguments[2]);
+            plane.setPassengerSeatsCount(Integer.parseInt(arguments[3]));
+            plane.setFuelConsumption(Double.parseDouble(arguments[4]));
+            addPlaneManual(plane);
+        }
+        else if (cmd.equals("recoveryport"))
+        {
+            Airport port = new InternationalAirport(Integer.parseInt(arguments[0]), arguments[1], arguments[2]);
+            addPortManual(port);
+        }
+        else if (cmd.equals("recoveryroute"))
+        {
+            Route route=new RegularRoute(Integer.parseInt(arguments[0]),
+                    Integer.parseInt(arguments[1]),
+                    Integer.parseInt(arguments[2]),
+                    Double.parseDouble(arguments[3]));
+            addRouteManual(route);
+        }
+        else if (cmd.equals("recoveryflight"))
+        {
+            Flight flight= new ReguarFlight(Integer.parseInt(arguments[0]),
+                    Integer.parseInt(arguments[1]),
+                    Integer.parseInt(arguments[2]),
+                    formatter.parse(arguments[3]),
+                    formatter.parse(arguments[4]));
+            addFlightManual(flight);
+        }
+
 ///////////////////////////////////////////////////////////////////////////////////////
         else view.printSomeInfo("Комманда не поддерживается в этой версии: "+ cmd);  //ветка кода не должна быть достигнута
     }
@@ -553,4 +610,29 @@ public class Controller {
             ,ClassNotFoundException{
         model.delAll();
     }
+    public String xmlPlane() throws SQLException, IOException, ClassNotFoundException {
+        return model.getXmlPlane();
+    }
+    public String xmlPort() throws SQLException, IOException, ClassNotFoundException {
+        return model.getXmlPort();
+    }
+    public String xmlRoute() throws SQLException, IOException, ClassNotFoundException {
+        return model.getXmlRoute();
+    }
+    public String xmlFlight() throws SQLException, IOException, ClassNotFoundException, ParseException {
+        return model.getXmlFlight();
+    }
+    public void addPlaneManual(Plane plane) throws SQLException, IOException, ClassNotFoundException {
+        model.addPlaneManual(plane);
+    }
+    public void addPortManual(Airport port) throws SQLException, IOException, ClassNotFoundException {
+        model.addAirportManual(port);
+    }
+    public void addRouteManual(Route route) throws SQLException, IOException, ClassNotFoundException {
+        model.addRouteManual(route);
+    }
+    public void addFlightManual(Flight flight) throws SQLException, IOException, ClassNotFoundException {
+        model.addFlightManual(flight);
+    }
+
 }
