@@ -172,8 +172,7 @@
     var  takeOff=dateArr[1]+"."+dateArr[2]+"."+dateArr[0]+"-"+timeArr[0]+":"+timeArr[1];
     var dateArr=landDate.split("-");
     var timeArr=landTime.split(":");
-    var Landing=dateArr[1]+"."+dateArr[2]+"."+dateArr[0]+"-"+timeArr[0]+":"+timeArr[1];
-    alert(Landing)
+    var Landing=dateArr[1]+"."+dateArr[2]+"."+dateArr[0]+"-"+timeArr[0]+":"+timeArr[1]
     var url="?cmd=addflight&0="+planeId+"&1="+routeId+"&2="+takeOff+"&3="+Landing;
     var xmlhttp = getXmlHttp();
     xmlhttp.open('GET', "View.jsp"+url, false);
