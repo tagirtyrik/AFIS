@@ -23,8 +23,10 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <title>Flight Page</title>
-  <script type="text/javascript" src="/lib/ajax.js"></script>
-  <script type="text/javascript" src="/lib/fileSaver.js"></script><!--библиотека для созданения файлов на клиенте-->
+  <script type="text/javascript" src="/lib/ajax.js" charset="utf-8"></script>
+  <script type="text/javascript" src="/lib/fileSaver.js" charset="utf-8"></script><!--библиотека для созранения файлов на клиенте-->
+  <script type="text/javascript" src="/lib/XmlReader.js" charset="utf-8"></script><!--библиотека для парсинга XML-->
+  <script type="text/javascript" src="/lib/showModalDialog.js" charset="UTF-8"></script><!--фикс модального диалога-->
   <link rel="stylesheet" type="text/css" href="style.css">
   <%
     DateFormat formatter =new SimpleDateFormat("dd.MM.yy-HH:mm");
@@ -82,24 +84,18 @@
     xmlhttp.send(null);
     if(xmlhttp.status == 200) {
       //alert(xmlhttp.responseText);
+      if (document.getElementById("checkResponse")!=undefined && document.getElementById("checkResponse").checked)
+        checkResponce(xmlhttp.responseText);
       this.location.reload();
     }else{
-      alert("Произошла ошибка");
+      var xml=getDomXml(xmlhttp.responseText);
+      if (confirm("Произошла ошибка:\n"+xml.getElementsByTagName("info")[0].innerHTML+"\n\nПосмотреть полный отклик сервера?")) {
+        var ret =  window.showModalDialog("ModalDialog.html", xmlhttp.responseText, "dialogWidth:90%");
+      }
       this.location.reload();
     }
     var data=xmlhttp.response;
-    var xmlDoc;
-    if (window.DOMParser)
-    {
-      parser=new DOMParser();
-      xmlDoc=parser.parseFromString(data,"text/xml");
-    }
-    else // Internet Explorer
-    {
-      xmlDoc=new ActiveXObject("Microsoft.XMLDOM");
-      xmlDoc.async=false;
-      xmlDoc.loadXML(data);
-    }
+    var xmlDoc=getDomXml(data);
     var blob = new Blob([xmlDoc.getElementsByTagName("info")[0].innerHTML], {type: "text/xml;charset=utf-8"});
     saveAs(blob, "Flights.xml");
   }
@@ -113,18 +109,7 @@
     var reader = new FileReader();
     reader.onload = function(e) {
       var contents = e.target.result;
-      var xml;
-      if (window.DOMParser)
-      {
-        parser=new DOMParser();
-        xml=parser.parseFromString(contents,"text/xml");
-      }
-      else // Internet Explorer
-      {
-        xml=new ActiveXObject("Microsoft.XMLDOM");
-        xml.async=false;
-        xml.loadXML(contents);
-      }
+      var xml=getDomXml(contents);
       var data =  xml.getElementsByTagName("Data")[0];;
       var flights = data.getElementsByTagName("model.flight.ReguarFlight");
       var flight = null;
@@ -179,9 +164,14 @@
     xmlhttp.send(null);
     if(xmlhttp.status == 200) {
       //alert(xmlhttp.responseText);
+      if (document.getElementById("checkResponse")!=undefined && document.getElementById("checkResponse").checked)
+        checkResponce(xmlhttp.responseText);
       this.location.reload();
     }else{
-      alert("Произошла ошибка");
+      var xml=getDomXml(xmlhttp.responseText);
+      if (confirm("Произошла ошибка:\n"+xml.getElementsByTagName("info")[0].innerHTML+"\n\nПосмотреть полный отклик сервера?")) {
+        var ret =  window.showModalDialog("ModalDialog.html", xmlhttp.responseText, "dialogWidth:90%");
+      }
       this.location.reload();
     }
 
@@ -206,8 +196,13 @@
     xmlhttp.send(null);
     if(xmlhttp.status == 200) {
       // alert(xmlhttp.responseText);
+      if (document.getElementById("checkResponse")!=undefined && document.getElementById("checkResponse").checked)
+        checkResponce(xmlhttp.responseText);
     }else{
-      alert("Произошла ошибка");
+      var xml=getDomXml(xmlhttp.responseText);
+      if (confirm("Произошла ошибка:\n"+xml.getElementsByTagName("info")[0].innerHTML+"\n\nПосмотреть полный отклик сервера?")) {
+        var ret =  window.showModalDialog("ModalDialog.html", xmlhttp.responseText, "dialogWidth:90%");
+      }
       this.location.reload();
     }
   }
@@ -217,9 +212,14 @@
     xmlhttp.send(null);
     if(xmlhttp.status == 200) {
       //alert(xmlhttp.responseText);
+      if (document.getElementById("checkResponse")!=undefined && document.getElementById("checkResponse").checked)
+        checkResponce(xmlhttp.responseText);
       this.location.reload();
     }else {
-      alert("Произошла ошибка");
+      var xml=getDomXml(xmlhttp.responseText);
+      if (confirm("Произошла ошибка:\n"+xml.getElementsByTagName("info")[0].innerHTML+"\n\nПосмотреть полный отклик сервера?")) {
+        var ret =  window.showModalDialog("ModalDialog.html", xmlhttp.responseText, "dialogWidth:90%");
+      }
       this.location.reload();
     }
 

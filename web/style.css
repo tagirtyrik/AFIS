@@ -120,7 +120,20 @@ body {
 	-moz-box-shadow: 0 0 10px 2px #1A3457;
 	padding: 20px;
 }
-
+.plain{
+	align-content: center;
+	margin: auto;
+	background: #fff;
+	font-family:Arial, Helvetica, sans-serif;
+	color:#000;
+	font-size:12px;
+	text-shadow: 0px 0px 0px #fff;
+	border:1px solid #000;
+	border-radius:4px;
+	-webkit-border-radius:2px;
+	-moz-border-radius:2px;
+	padding: 20px;
+}
 
 a:link {color: #4a4a4a; text-decoration:none;}
 a:visited {color: #4a4a4a; text-decoration:none; color:inherit;}
@@ -149,7 +162,7 @@ ul li {
 	position: relative;
 	padding: 15px 20px;
 	background: #fff;
-	cursor: pointer;
+	/*cursor: pointer;*/
 	-webkit-transition: all 0.2s;
 	-moz-transition: all 0.2s;
 	-ms-transition: all 0.2s;
@@ -166,6 +179,7 @@ ul li:hover {
 }
 
 ul li ul {
+	cursor: pointer;
 	width: 100%;
 	padding: 0;
 	position: absolute;
