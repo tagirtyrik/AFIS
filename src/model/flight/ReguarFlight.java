@@ -5,19 +5,41 @@ import java.util.Date;
 import model.Flight;
 import model.Plane;
 import model.Route;
+
+import javax.persistence.*;
+
 /*
     рейс, совершаемый самолетом по маршруту
 */
+@SequenceGenerator(name = "SEQ_ID", sequenceName = "SEQ_ID")
+@Entity
+@Table(name = "flight")
 public class ReguarFlight implements Flight,Serializable{
     
    // double fuelPrice=26.80;//стоимость литра авиационного керосина(возможно стоит сделать какой-нибудь глобальной константой?)
-    
-    int planeId;// абстрактный самолет, летящий по рейсу(какой угодно модели)
-    int routeId;// абстрактный маршрут самолета
-    
-    Date takeOffTime;//время взлета самолета
-    Date landingTime;//время посадки, если в Plane ввести поле averageSpeed, время посадки можно расчитать
-    int id;
+
+    @javax.persistence.Id
+    @GeneratedValue(generator = "SEQ_ID")
+    @Column(name = "flight_id")
+    private int id;
+
+    @Column(name = "plane_id")
+    private int planeId;
+
+    @Column(name = "route_id")
+    private int routeId;
+
+    @Column(name = "takeofftime")
+    private Date takeOffTime;
+
+    @Column(name = "landingtime")
+    private  Date landingTime;
+
+    public ReguarFlight()
+    {
+
+    }
+
     public ReguarFlight(int id,int planeId,int routeId,Date takeOffTime, Date landingTime){//конструктор создает рейс с самолетом, маршрутом и датами
         this.planeId=planeId;
         this.routeId=routeId;

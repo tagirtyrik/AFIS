@@ -98,7 +98,7 @@ public class DataAccessObject {
         return selectPlanes(Sql.Plane.selectAll);
     }
     private static ArrayList<Plane> selectPlanes(String sql) throws SQLException, ClassNotFoundException {
-        ArrayList<Plane> rezult=new ArrayList<Plane>();
+       /* ArrayList<Plane> rezult=new ArrayList<Plane>();
         Statement statement = connection.createStatement();
             ResultSet sqlResult = statement.executeQuery(sql);
         while (sqlResult.next()) {
@@ -112,8 +112,8 @@ public class DataAccessObject {
             plane.setName(name);
             plane.setPassengerSeatsCount(passengers);
             rezult.add(plane);
-        }
-        return rezult;
+        }*/
+        return Hdb.getPlane();
     }
     public static Plane getPlane(int id) throws SQLException,PlaneNotFoundException{
         Plane rezult=null;
