@@ -3,7 +3,7 @@ package exception;
 
 /**
  *
- * @author GeneraL
+ * @author Ксю
  */
 public class CommandNotFoundException extends ComandException{
     public CommandNotFoundException(){

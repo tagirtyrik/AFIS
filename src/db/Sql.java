@@ -2,15 +2,15 @@
 package db;
 
 /**
- *ерундень для автоматического формирования sql
- * 
- * @author GeneraL
+ *JDBC
+ *
+ * @author Ксю
  */
 public class Sql {
     public class Table {
         class Names {
             public static final String plane="Plane";
-            public static final String airport="Port";
+            public static final String airport="Airport";
             public static final String route="Route";
             public static final String flight="Flight";
         }
@@ -70,13 +70,13 @@ public class Sql {
     }
     class Plane {
         class Field {
-            public static final String id="id";
-            public static final String planeName="name";
-            public static final String planeNumber="number";
-            public static final String fuelConsumption="fuelConsumption";
-            public static final String passengerSeatsCount="passengerSeatsCount";
+            public static final String id="plane_id";
+            public static final String planeName="title";
+            public static final String planeNumber="type";
+            public static final String fuelConsumption="fuelconst";
+            public static final String passengerSeatsCount="passegers";
         }
-        public static final String selectAll="SELECT * FROM "+Table.Names.plane+"";
+        public static final String selectAll="SELECT * FROM " + Table.Names.plane + "";
         public static final String select="SELECT * FROM "+Table.Names.plane+
                 " WHERE ("+Field.id+" = ?)";
         public static final String selectWhere="SELECT * FROM "+Table.Names.plane+
@@ -103,9 +103,9 @@ public class Sql {
     }
     class Airport{
         class Field {
-            public static final String id="Id";
-            public static final String airportName="Name";
-            public static final String airportLocation="Location";
+            public static final String id="port_id";
+            public static final String airportName="title";
+            public static final String airportLocation="location";
         }
         public static final String selectAll="SELECT * FROM "+Table.Names.airport+"";
         public static final String select="SELECT * FROM "+Table.Names.airport+
@@ -130,10 +130,10 @@ public class Sql {
     }
     class Route{
         class Field {
-            public static final String id="Id";
-            public static final String takeOffPortId="TakeoffId";
-            public static final String landingPortId="LandingId";
-            public static final String distance="Distance";
+            public static final String id="route_id";
+            public static final String takeOffPortId="takeoffport";
+            public static final String landingPortId="landingport";
+            public static final String distance="distance";
         }
         public static final String selectAll="SELECT * FROM "+Table.Names.route+"";
         public static final String select="SELECT * FROM "+Table.Names.route+
@@ -159,12 +159,12 @@ public class Sql {
     }
     class Flight{
         class Field {
-            public static final String id="Id";
+            public static final String id="flight_id";
             public static final String fuelPrice="Price";//не используется
-            public static final String planeId="PlaneId";
-            public static final String routeId="RouteId";
-            public static final String takeOffTime="TakeoffTime";
-            public static final String landingTime="landingTime";
+            public static final String planeId="plane_Id";
+            public static final String routeId="route_Id";
+            public static final String takeOffTime="takeofftime";
+            public static final String landingTime="landingtime";
         }
         public static final String selectAll="SELECT * FROM "+Table.Names.flight+"";
         public static final String select="SELECT * FROM "+Table.Names.flight+

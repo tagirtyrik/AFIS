@@ -1,37 +1,13 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <div class="content">
-  <h1 align="center">Добро пожаловать в систему Afis!</h1>
+  <h1 align="center">Welcome to Afis!</h1>
+  <p align="center">Select the table for entering:</p>
   <p align="center">
-    <img src="img/AFIS.png" width="450" height="110">
+  <ul>
+    <li onclick="window.location='Plane.jsp'"><a href="Plane.jsp">Plane</a></li>
+    <li onclick="window.location='Airport.jsp'"><a href="Airport.jsp">Airport</a></li>
+    <li onclick="window.location='Route.jsp'"><a href="Route.jsp">Route</a></li>
+    <li onclick="window.location='Flight.jsp'"><a href="Flight.jsp">Flight</a></li>
+  </ul>
   </p>
-  <p align="center">Выбирите таблицу для редактирования:</p>
-  <p align="center">
-      <ul>
-        <li><a href="Plane.jsp">Plane</a>
-          <ul>
-            <li onclick="window.location='Plane.jsp'"><a href="Plane.jsp">Обычная версия</a></li>
-            <li onclick="window.location='simplePlane.jsp'"><a href="simplePlane.jsp">Версия для печати</a></li>
-          </ul>
-        </li>
-        <li><a href="Airport.jsp">Airport</a>
-          <ul>
-            <li onclick="window.location='Airport.jsp'"><a href="Airport.jsp">Обычная версия</a></li>
-            <li onclick="window.location='simplePort.jsp'"><a href="simplePort.jsp">Версия для печати</a></li>
-          </ul>
-        </li>
-        <li><a href="Route.jsp">Route</a>
-          <ul>
-            <li onclick="window.location='Route.jsp'"><a href="Route.jsp">Обычная версия</a></li>
-            <li onclick="window.location='simpleRoute.jsp'"><a href="simpleRoute.jsp">Версия для печати</a></li>
-          </ul>
-        </li>
-        <li><a href="Flight.jsp">Flight</a>
-          <ul>
-            <li onclick="window.location='Flight.jsp'"><a href="Flight.jsp">Обычная версия</a></li>
-            <li onclick="window.location='simpleFlight.jsp'"><a href="simpleFlight.jsp">Версия для печати</a></li>
-          </ul>
-        </li>
-        </ul>
-  </p>
-  <br><input type="checkbox" id="checkResponse">всегда проверять разультат запросов
 </div>

@@ -3,15 +3,9 @@ package exception;
 
 /**
  *
- * @author GeneraL
+ * @author Ксю
  */
 public class PlaneNotFoundException extends IndexOutOfBoundsException{
-    public PlaneNotFoundException(){
-        super();
-    }
-    public PlaneNotFoundException(String s){
-        super(s);
-    }
     public PlaneNotFoundException(int id){
         super("Самолета не существует с id: "+id);
     }

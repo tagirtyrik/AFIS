@@ -7,7 +7,7 @@ package exception;
 
 /**
  *
- * @author GeneraL
+ * @author Ксю
  */
 public class ComandException extends NullPointerException{
     public ComandException(){

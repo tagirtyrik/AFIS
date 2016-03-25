@@ -3,7 +3,7 @@ package model.route;
 import java.io.Serializable;
 import model.Route;
 /*
-    простой маршрут между двумя точками
+    маршрут между двумя точками
 */
 public class RegularRoute implements Route,Serializable{
    // private Airport takeOffPort; //..откуда
@@ -39,7 +39,5 @@ public class RegularRoute implements Route,Serializable{
     public double getDistance(){
         return this.distance;
     }
-    public void setDistance(double distance){
-        this.distance=distance;
-    }
+    public void setDistance(double distance){this.distance=distance;}
 }

@@ -13,7 +13,7 @@ import model.Route;
 
 /**
  *
- * @author GeneraL
+ * @author Ксю
  */
 public interface View {
         public void printSomeInfo(String info);

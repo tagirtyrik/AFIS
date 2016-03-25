@@ -3,7 +3,7 @@ package exception;
 
 /**
  *
- * @author GeneraL
+ * @author Ксю
  */
 public class InvalidArgumentsException extends IndexOutOfBoundsException{
     public InvalidArgumentsException(){

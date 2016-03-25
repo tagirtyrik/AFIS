@@ -5,16 +5,14 @@
     var id=document.getElementById("id_F").value;
     var name=document.getElementById("name_F").value;
     var location=document.getElementById("location_F").value;
-    var useor=!document.getElementById("useOr").checked;
     if(id=="")id="null";
     if(name=="")name="null";
     if(location=="")location="null";
-    window.location=window.location.pathname+"?id="+id+"&name="+encodeURIComponent(name)+"&location="+encodeURIComponent(location)+"&useor="+useor+"#id_F";
+    window.location=window.location.pathname+"?id="+id+"&name="+encodeURIComponent(name)+"&location="+encodeURIComponent(location)+"#id_F";
   }
 </script>
 <div class="content">
-  <details <%=useFSearch?"open":""%>>
-    <summary>Поиск - удачная находка!</summary>
+    <div align="center">Поиск</div>
   <table align="center">
     <th>Id</th><th>Name</th><th>Location</th>
     <tr>
@@ -28,11 +26,9 @@
         <input id="location_F" type="text" value="<%=location.equalsIgnoreCase("null")?"":location%>">
       </td>
       <td>
-        <input type="button" value="Поиск" onclick="search()">
+        <input  type="button" value="Поиск" onclick="search()">
         <br>
-        <input type="checkbox" id="useOr" <%=useOr?"":"checked"%>>Точное совпадение
       </td>
     </tr>
   </table>
-  </details>
 </div>

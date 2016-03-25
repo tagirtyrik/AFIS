@@ -11,6 +11,7 @@
           <element id="library" level="project" name="derbyclient" />
           <element id="library" level="project" name="mysql-connector-java-5.0.8-bin" />
           <element id="library" level="project" name="xstream-1.4.7" />
+          <element id="library" level="project" name="postgresql-9.4-1201.jdbc4" />
         </element>
       </element>
     </root>

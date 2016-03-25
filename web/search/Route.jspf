@@ -6,17 +6,15 @@
     var takeOffPort=document.getElementById("takeOffPort_F").value;
     var landingPort=document.getElementById("landingPort_F").value;
     var distance=document.getElementById("distance_F").value;
-    var useor=!document.getElementById("useOr").checked;
     if(id=="")id="null";
     if(takeOffPort=="")takeOffPort="null";
     if(landingPort=="")landingPort="null";
     if(distance=="")distance="null";
-    window.location=window.location.pathname+"?id="+id+"&takeOffPort="+takeOffPort+"&landingPort="+landingPort+"&distance="+distance+"&useor="+useor+"#id_F";
+    window.location=window.location.pathname+"?id="+id+"&takeOffPort="+takeOffPort+"&landingPort="+landingPort+"&distance="+distance+"#id_F";
   }
 </script>
 <div class="content">
-  <details <%=useFSearch?"open":""%>>
-    <summary>Поиск - удачная находка!</summary>
+    <div align="center">Поиск</div>
   <table align="center">
     <th>Id</th><th>Take-Off Port</th><th>Landing Port</th><th>Distance</th>
     <tr>
@@ -35,9 +33,7 @@
       <td>
         <input type="button" value="Поиск" onclick="search()">
         <br>
-        <input type="checkbox" id="useOr" <%=useOr?"":"checked"%>>Точное совпадение
       </td>
     </tr>
   </table>
-  </details>
 </div>

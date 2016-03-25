@@ -25,5 +25,6 @@
     <orderEntry type="library" exported="" name="xstream-1.4.7" level="project" />
     <orderEntry type="library" exported="" name="jsp-api" level="project" />
     <orderEntry type="library" exported="" name="servlet-api" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="postgresql-9.4-1201.jdbc4" level="project" />
   </component>
 </module>

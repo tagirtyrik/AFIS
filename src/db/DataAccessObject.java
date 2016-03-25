@@ -1,6 +1,7 @@
 
 package db;
 import java.sql.*;
+import java.text.ParseException;
 import java.util.ArrayList;
 import model.Airport;
 import model.Flight;
@@ -13,28 +14,27 @@ import model.route.*;
 import exception.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
-import javax.naming.NamingException;
+
 /**
  * объект для доступа к базе данных
  * *управляет соединением
- * *плодит лбъекты
+ * *плодит объекты
  * *переводит объекты в SQL
  * *не содержит самого SQL
  * *данные не хранит
- * @author GeneraL
+ * @author Ксю
  */
 public class DataAccessObject {
     private static Connection connection;
-    private static DataSource dataSource=null;
-    /*
-    private static final String connectionUrl="jdbc:derby://localhost:1527/AfisDB;create=true";//для derbyDB
-    private static final String driverName="org.apache.derby.jdbc.ClientDriver";//для derbyDB
-    */
-    private static final String connectionUrl="jdbc:mysql://localhost:3306/afisdb?zeroDateTimeBehavior=convertToNull"
-            + "&user=root&characterEncoding=utf8";//для MySQL
-    private static final String driverName="com.mysql.jdbc.Driver";//для MySQL
+
+     private static final String url = "jdbc:postgresql://127.0.0.1:5432/Afis";
+    //имя пользователя
+    private final static String name = "postgres";
+    //пароль
+    private static final String password = "1234";
+
+    private static final String driverName="org.postgresql.Driver";
+
 
     private static final DateFormat fromDatabaseformatter =new SimpleDateFormat("yyyy-dd-MM HH:mm:ss");
     private static final DateFormat fromClientformatter =new SimpleDateFormat("dd.MM.yy-HH:mm");
@@ -46,7 +46,6 @@ public class DataAccessObject {
 
     public static void  closeConnection()throws SQLException{
         if(!useDataSourse)connection.close();
-        //System.err.println("Сonnection is closed");
     }
     /**
      * инициализация соединения с БД и создание таблиц, если их нет
@@ -54,19 +53,15 @@ public class DataAccessObject {
      * @throws ClassNotFoundException 
      */
     public static void  initConnection()throws SQLException,ClassNotFoundException{
-       /* fromDatabaseformatter.setTimeZone(TimeZone.getTimeZone("UTC"));
-        fromClientformatter.setTimeZone(TimeZone.getTimeZone("UTC"));
-        toDatabaseFormat.setTimeZone(TimeZone.getTimeZone("UTC"));*/
-
     if(useDataSourse) {
         try {
-            InitialContext ic = new InitialContext();
-            DataSource dataSource = (javax.sql.DataSource) ic.lookup("java:comp/env/jdbc/afisdb");
-            connection = dataSource.getConnection();
+
+            Class.forName(driverName);
+            connection = DriverManager.getConnection(url, name, password);
                 Statement statement = connection.createStatement();
                 statement.execute("SELECT 1");
-            System.err.println("Connection from Data Source");
-        }catch (NamingException e){
+            System.out.println("Connection from Driver Manager");
+        }catch (Exception e){
             System.err.println("Unable to use DataSourse");
             System.err.println("Application working in DriverManager mode");
             useDataSourse=false;
@@ -74,46 +69,35 @@ public class DataAccessObject {
             return;
         }
     }
-    else {
-
-        Class.forName(driverName);
-        connection = DriverManager.getConnection(connectionUrl);
-        System.err.println("Connection from Driver Manager");
-    }
         try{
-            Statement statement = connection.createStatement();
-            statement.execute(Sql.Table.createPlane);
-            //System.err.println("Create table "+Sql.Table.Names.plane);
+            getPlanes();
+            System.err.println("Select table "+Sql.Table.Names.plane);
         }catch (SQLException e){
-            //System.err.println(e.toString());
+            System.err.println(e.toString());
         }try{
-            Statement statement = connection.createStatement();
-            statement.execute(Sql.Table.createPort);
-            System.err.println("Create table "+Sql.Table.Names.airport);
+           getAirports();
+            System.err.println("Select table "+Sql.Table.Names.airport);
         }catch (SQLException e){
-            //System.err.println(e.toString());
+            System.err.println(e.toString());
         }try{
-            Statement statement = connection.createStatement();
-            statement.execute(Sql.Table.createRoute);
-            System.err.println("Create table "+Sql.Table.Names.route);
+            getRoutes();
+            System.err.println("Select table "+Sql.Table.Names.route);
             
         }catch (SQLException e){
-            //System.err.println(e.toString());
+            System.err.println(e.toString());
         }try{
-            Statement statement = connection.createStatement();
-            statement.execute(Sql.Table.createFlight);
-            System.err.println("Create table "+Sql.Table.Names.flight);
+            getFlights();
+            System.err.println("Select table "+Sql.Table.Names.flight);
         }catch (SQLException e){
-            //System.err.println(e.toString());
+            System.err.println(e.toString());
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-        //System.err.println("Сonnection is established");
-        
     }
-    public static ArrayList<Plane> getPlanes() throws SQLException
-    {
+    public static ArrayList<Plane> getPlanes() throws SQLException, ClassNotFoundException {
         return selectPlanes(Sql.Plane.selectAll);
     }
-    private static ArrayList<Plane> selectPlanes(String sql)throws SQLException{
+    private static ArrayList<Plane> selectPlanes(String sql) throws SQLException, ClassNotFoundException {
         ArrayList<Plane> rezult=new ArrayList<Plane>();
         Statement statement = connection.createStatement();
             ResultSet sqlResult = statement.executeQuery(sql);
@@ -123,7 +107,7 @@ public class DataAccessObject {
             String number=sqlResult.getString(Sql.Plane.Field.planeNumber);
             int passengers=sqlResult.getInt(Sql.Plane.Field.passengerSeatsCount);
             double fuelCons=sqlResult.getDouble(Sql.Plane.Field.fuelConsumption);
-            Plane plane=new Boeing747SP(id,number);
+            Plane plane=new Aircraft(id,number);
             plane.setFuelConsumption(fuelCons);
             plane.setName(name);
             plane.setPassengerSeatsCount(passengers);
@@ -134,7 +118,7 @@ public class DataAccessObject {
     public static Plane getPlane(int id) throws SQLException,PlaneNotFoundException{
         Plane rezult=null;
         PreparedStatement statement = connection.prepareStatement(Sql.Plane.select);
-        statement.setString(1, Integer.toString(id));
+        statement.setInt(1, id);
         ResultSet sqlResult =statement.executeQuery();
         int count=0;
         while (sqlResult.next()) {
@@ -142,7 +126,7 @@ public class DataAccessObject {
             String number=sqlResult.getString(Sql.Plane.Field.planeNumber);
             int passengers=sqlResult.getInt(Sql.Plane.Field.passengerSeatsCount);
             double fuelCons=sqlResult.getDouble(Sql.Plane.Field.fuelConsumption);
-            rezult=new Boeing747SP(id,number);
+            rezult=new Aircraft(id,number);
             rezult.setFuelConsumption(fuelCons);
             rezult.setName(name);
             rezult.setPassengerSeatsCount(passengers);
@@ -151,14 +135,14 @@ public class DataAccessObject {
         if (count==0) throw new PlaneNotFoundException(id);
         return rezult;
     }
-    public static ArrayList<Plane> getPlane(boolean useOr,String id,String name,String number,
-        String passengerSeatsCount,String fuelCons)throws SQLException{
+    public static ArrayList<Plane> getPlane(String id,String name,String number,
+        String passengerSeatsCount,String fuelCons) throws SQLException, ClassNotFoundException {
         StringBuilder where=new StringBuilder("(");
-        insertIntArg(where,Sql.Plane.Field.id,id, useOr);
-        insertStringArg(where,Sql.Plane.Field.planeName,name, useOr);
-        insertStringArg(where, Sql.Plane.Field.planeNumber, number, useOr);
-        insertIntArg(where,Sql.Plane.Field.passengerSeatsCount,passengerSeatsCount, useOr);
-        insertDoubleArg(where,Sql.Plane.Field.fuelConsumption,fuelCons, useOr);
+        insertIntArg(where,Sql.Plane.Field.id,id);
+        insertStringArg(where,Sql.Plane.Field.planeName,name);
+        insertStringArg(where, Sql.Plane.Field.planeNumber, number);
+        insertIntArg(where,Sql.Plane.Field.passengerSeatsCount,passengerSeatsCount);
+        insertDoubleArg(where,Sql.Plane.Field.fuelConsumption,fuelCons);
      if(where.toString().equals("("))where=new StringBuilder("true");
      else where.append(")");
      //System.err.println((Sql.Plane.selectWhere+where));
@@ -176,12 +160,13 @@ public class DataAccessObject {
         return statement.executeUpdate()==1;
     }
     public static int addPlane(Plane plane)throws SQLException{
-        PreparedStatement statement = connection.prepareStatement(Sql.Plane.add);
+        PreparedStatement statement = connection.prepareStatement(Sql.Plane.addManual);
         //System.err.println(Sql.Plane.add);
-        statement.setString(1, plane.getName());
+        statement.setInt(1, plane.getId());
         statement.setString(2, plane.getNumber());
-        statement.setDouble(3, plane.getFuelConsumption());
-        statement.setInt(4, plane.getPassengerSeatsCount()); 
+        statement.setString(3, plane.getName());
+        statement.setDouble(4, plane.getFuelConsumption());
+        statement.setInt(5, plane.getPassengerSeatsCount());
         statement.executeUpdate();
         return 0;//тут вернуть id
     }
@@ -199,12 +184,12 @@ public class DataAccessObject {
     public static ArrayList<Airport> getAirports() throws SQLException{
         return selectAirports(Sql.Airport.selectAll);
     }
-    public static ArrayList<Airport> getAirports(boolean useOr,String id,String name,String location
+    public static ArrayList<Airport> getAirports(String id,String name,String location
             )throws SQLException{
         StringBuilder where=new StringBuilder("(");
-        insertIntArg(where,Sql.Airport.Field.id,id, useOr);
-        insertStringArg(where,Sql.Airport.Field.airportName,name, useOr);
-        insertStringArg(where,Sql.Airport.Field.airportLocation,location, useOr);
+        insertIntArg(where,Sql.Airport.Field.id,id);
+        insertStringArg(where,Sql.Airport.Field.airportName,name);
+        insertStringArg(where,Sql.Airport.Field.airportLocation,location);
      if(where.toString().equals("("))where=new StringBuilder("true");
      else where.append(")");
      System.err.println((Sql.Airport.selectWhere+where));
@@ -228,7 +213,7 @@ public class DataAccessObject {
         Airport rezult=null;
         PreparedStatement statement = connection.prepareStatement(Sql.Airport.select);
         //System.err.println(Sql.Airport.select);
-        statement.setString(1, Integer.toString(id));
+        statement.setInt(1, id);
         ResultSet sqlResult =statement.executeQuery();
         int count=0;
         while (sqlResult.next()) {
@@ -249,12 +234,13 @@ public class DataAccessObject {
         return statement.executeUpdate()==1;
     }
     public static int addAirport(Airport airport)throws SQLException{
-        PreparedStatement statement = connection.prepareStatement(Sql.Airport.add);
+        PreparedStatement statement = connection.prepareStatement(Sql.Airport.addManual);
         //System.err.println(Sql.Airport.add);
-        statement.setString(1, airport.getName());
-        statement.setString(2, airport.getLocation()); 
+        statement.setInt(1, airport.getId());
+        statement.setString(2, airport.getName());
+        statement.setString(3, airport.getLocation());
         statement.executeUpdate();
-        return 0;//тут вернуть id
+        return 0;
     }
     public static void addAirportManual(Airport airport)throws SQLException{
         PreparedStatement statement = connection.prepareStatement(Sql.Airport.addManual);
@@ -268,13 +254,13 @@ public class DataAccessObject {
     public static ArrayList<Route> getRoutes()throws SQLException{
         return selectRoutes(Sql.Route.selectAll);
     }
-    public static ArrayList<Route> getRoutes(boolean useOr,String id,String takeOffId,
+    public static ArrayList<Route> getRoutes(String id,String takeOffId,
         String landId,String dist)throws SQLException{
         StringBuilder where=new StringBuilder("(");
-        insertIntArg(where,Sql.Route.Field.id,id, useOr);
-        insertIntArg(where,Sql.Route.Field.takeOffPortId,takeOffId, useOr);
-        insertIntArg(where,Sql.Route.Field.landingPortId,landId, useOr);
-        insertDoubleArg(where,Sql.Route.Field.distance,dist, useOr);
+        insertIntArg(where,Sql.Route.Field.id,id);
+        insertIntArg(where,Sql.Route.Field.takeOffPortId,takeOffId);
+        insertIntArg(where,Sql.Route.Field.landingPortId,landId);
+        insertDoubleArg(where,Sql.Route.Field.distance,dist);
      if(where.toString().equals("("))where=new StringBuilder("true");
      else where.append(")");
      System.err.println((Sql.Route.selectWhere+where));
@@ -297,8 +283,8 @@ public class DataAccessObject {
         Route route=null;
         PreparedStatement statement = connection.prepareStatement(Sql.Route.select);
         //System.err.println(Sql.Route.select);
-        statement.setString(1, Integer.toString(id));
-        ResultSet sqlResult =statement.executeQuery();
+        statement.setInt(1, id);
+        ResultSet sqlResult = statement.executeQuery();
         int count=0;
         while (sqlResult.next()) {
             int takeoffId=sqlResult.getInt(Sql.Route.Field.takeOffPortId);
@@ -320,11 +306,12 @@ public class DataAccessObject {
         return statement.executeUpdate()==1;
     }
     public static int addRoute(Route route)throws SQLException{
-        PreparedStatement statement = connection.prepareStatement(Sql.Route.add);
+        PreparedStatement statement = connection.prepareStatement(Sql.Route.addManual);
         //System.err.println(Sql.Route.add);
-        statement.setInt(1, (route.getTakeOffPort()));
-        statement.setInt(2, (route.getLandingPort()));
-        statement.setDouble(3, (route.getDistance())); 
+        statement.setInt(1, (route.getId()));
+        statement.setInt(2, (route.getTakeOffPort()));
+        statement.setInt(3, (route.getLandingPort()));
+        statement.setDouble(4, (route.getDistance()));
         statement.executeUpdate();
         return 0;//тут вернуть id
     }
@@ -341,14 +328,14 @@ public class DataAccessObject {
     public static ArrayList<Flight> getFlights()throws SQLException,java.text.ParseException{
         return selectFlights(Sql.Flight.selectAll);
     }
-    public static ArrayList<Flight> getFlights(boolean useOr,String id,String routeId,
+    public static ArrayList<Flight> getFlights(String id,String routeId,
         String planeId,String takeOffTime,String landTime)throws SQLException,java.text.ParseException{
         StringBuilder where=new StringBuilder("(");
-        insertIntArg(where,Sql.Flight.Field.id,id, useOr);
-        insertIntArg(where,Sql.Flight.Field.routeId,routeId, useOr);
-        insertIntArg(where,Sql.Flight.Field.planeId,planeId, useOr);
-        insertDateArg(where,Sql.Flight.Field.takeOffTime,takeOffTime, useOr);
-        insertDateArg(where,Sql.Flight.Field.landingTime,landTime, useOr);
+        insertIntArg(where,Sql.Flight.Field.id,id);
+        insertIntArg(where,Sql.Flight.Field.routeId,routeId);
+        insertIntArg(where,Sql.Flight.Field.planeId,planeId);
+        insertDateArg(where,Sql.Flight.Field.takeOffTime,takeOffTime);
+        insertDateArg(where,Sql.Flight.Field.landingTime,landTime);
      if(where.toString().equals("("))where=new StringBuilder("true");
      else where.append(")");
      //System.err.println((Sql.Flight.selectWhere+where));
@@ -373,7 +360,7 @@ public class DataAccessObject {
         Flight flight=null;
         PreparedStatement statement = connection.prepareStatement(Sql.Flight.select);
         //System.err.println(Sql.Flight.select);
-        statement.setString(1, Integer.toString(id));
+        statement.setInt(1, id);
         ResultSet sqlResult =statement.executeQuery();
         int count=0;
         while (sqlResult.next()) {
@@ -387,27 +374,25 @@ public class DataAccessObject {
         if (count==0) throw new FlightNotFoundException(id);
         return flight;
     }
+
+    //разобраться с датами
     public static boolean setFlight(Flight flight)throws SQLException{
         PreparedStatement statement = connection.prepareStatement(Sql.Flight.update);
-        //System.err.println(Sql.Flight.update);
         statement.setInt(1, (flight.getPlane()));
         statement.setInt(2, (flight.getRoute()));
         statement.setTimestamp(3, new java.sql.Timestamp(flight.getTakeOffTimeShedule().getTime()));
         statement.setTimestamp(4, new java.sql.Timestamp(flight.getLandingTimeShedule().getTime()));
-        /*statement.setDate(3, new java.sql.Date(flight.getTakeOffTimeShedule().getTime()));
-        statement.setDate(4, new java.sql.Date(flight.getLandingTimeShedule().getTime()));
-        System.err.println(new java.sql.Timestamp(flight.getTakeOffTimeShedule().getTime()).toString());
-        System.err.println(flight.getTakeOffTimeShedule().toString());*/
         statement.setInt(5, flight.getId());
         return statement.executeUpdate()==1;
     }
     public static int addFlight(Flight flight)throws SQLException{
-        PreparedStatement statement = connection.prepareStatement(Sql.Flight.add);
+        PreparedStatement statement = connection.prepareStatement(Sql.Flight.addManual);
         //System.err.println(Sql.Flight.add);
-        statement.setInt(1, (flight.getPlane()));
-        statement.setInt(2, (flight.getRoute()));
-        statement.setDate(3, new java.sql.Date(flight.getTakeOffTimeShedule().getTime())); 
-        statement.setDate(4, new java.sql.Date(flight.getLandingTimeShedule().getTime())); 
+        statement.setInt(1, (flight.getId()));
+        statement.setInt(2, (flight.getPlane()));
+        statement.setInt(3, (flight.getRoute()));
+        statement.setDate(4, new java.sql.Date(flight.getTakeOffTimeShedule().getTime()));
+        statement.setDate(5, new java.sql.Date(flight.getLandingTimeShedule().getTime()));
         statement.executeUpdate();
         return 0;//тут вернуть id
     }
@@ -421,38 +406,6 @@ public class DataAccessObject {
         statement.setDate(5, new java.sql.Date(flight.getLandingTimeShedule().getTime()));
         statement.executeUpdate();
      //   return 0;//тут вернуть id
-    }
-    public static int planeCount()throws SQLException{
-        PreparedStatement statement = connection.prepareStatement(Sql.Plane.count);
-        ResultSet sqlResult =statement.executeQuery();
-        while (sqlResult.next()) {
-            return sqlResult.getInt(1);
-        }
-        return 0;
-    }
-    public static int airportCount()throws SQLException{
-        PreparedStatement statement = connection.prepareStatement(Sql.Airport.count);
-        ResultSet sqlResult =statement.executeQuery();
-        while (sqlResult.next()) {
-            return sqlResult.getInt(1);
-        }
-        return 0;
-    }
-    public static int routeCount()throws SQLException{
-        PreparedStatement statement = connection.prepareStatement(Sql.Route.count);
-        ResultSet sqlResult =statement.executeQuery();
-        while (sqlResult.next()) {
-            return sqlResult.getInt(1);
-        }
-        return 0;
-    }
-    public static int flightCount()throws SQLException{
-        PreparedStatement statement = connection.prepareStatement(Sql.Flight.count);
-        ResultSet sqlResult =statement.executeQuery();
-        while (sqlResult.next()) {
-            return sqlResult.getInt(1);
-        }
-        return 0;
     }
     public static boolean deletePlane(int id)throws SQLException{
         PreparedStatement statement = connection.prepareStatement(Sql.Plane.delete);
@@ -489,14 +442,12 @@ public class DataAccessObject {
         return isOne;
         
     }
-    private static void insertStringArg(StringBuilder where,String name,String arg,boolean useOr){
-        insertStringArg( where, name, arg, useOr,true);
+    private static void insertStringArg(StringBuilder where,String name,String arg){
+        insertStringArg( where, name, arg,true);
     }
-    private static void insertStringArg(StringBuilder where,String name,String arg,boolean useOr,boolean useLike){
+    private static void insertStringArg(StringBuilder where,String name,String arg,boolean useLike){
         if(!arg.equalsIgnoreCase("null")){
-        String logic;
-        if(useOr)logic=" OR ";
-        else logic=" AND ";
+            String logic = " OR ";
         if(!(where.toString().equals("") || where.toString().equals("(")))where.append(logic);
         where.append(name);
             if (useLike)where.append(" LIKE '");
@@ -506,33 +457,27 @@ public class DataAccessObject {
             System.err.println(where);
         }
     }
-    private static void insertIntArg(StringBuilder where,String name,String arg,boolean useOr){
+    private static void insertIntArg(StringBuilder where,String name,String arg){
         if(!arg.equalsIgnoreCase("null")){
-        String logic;
-        if(useOr)logic=" OR ";
-        else logic=" AND ";
+        String logic = " OR ";
         if(!(where.toString().equals("") || where.toString().equals("(")))where.append(logic);
         where.append(name);
         where.append("=");
         where.append(Integer.toString(Integer.parseInt(arg)));
         }
     }
-    private static void insertDoubleArg(StringBuilder where,String name,String arg,boolean useOr){
+    private static void insertDoubleArg(StringBuilder where,String name,String arg){
         if(!arg.equalsIgnoreCase("null")){
-        String logic;
-        if(useOr)logic=" OR ";
-        else logic=" AND ";
+            String logic = " OR ";
         if(!(where.toString().equals("") || where.toString().equals("(")))where.append(logic);
         where.append(name);
         where.append("=");
         where.append(Double.toString(Double.parseDouble(arg)));
         }
     }
-    private static void insertDateArg(StringBuilder where,String name,String arg,boolean useOr) throws java.text.ParseException{
+    private static void insertDateArg(StringBuilder where,String name,String arg) throws java.text.ParseException{
         if(!arg.equalsIgnoreCase("null")){
-        String logic;
-        if(useOr)logic=" OR ";
-        else logic=" AND ";
+            String logic = " OR ";
         if(!(where.toString().equals("") || where.toString().equals("(")))where.append(logic);
         where.append(name);
         where.append("='");

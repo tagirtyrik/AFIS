@@ -3,8 +3,7 @@ package model.airport;
 import model.Airport;
 import java.io.Serializable;
 /*
-    класс международного аэропорта. Для простенькой лабы не обязательно делить аэропорты на классы,
-    но в перспективе аэропорты тоже бывают разными.
+    класс международного аэропорта.
 */
 public class InternationalAirport implements Airport,Serializable{
     private String airportName;//имя аэропорта, например "Френсис Интернэйшионал"

@@ -5,7 +5,7 @@ import java.io.Serializable;
 /*
     экземпляры этого класса - самолеты модели Boeing747SP со сжожими характеристиками
 */
-public class Boeing747SP implements Plane,Serializable{
+public class Aircraft implements Plane,Serializable{
     static double fuelConsumptionDefault=20.3;//расход топлива самолета Boeing747SP л/км
     static int passengerSeatsCountDefault=230;// число пассажирских мест в самолете типа Boeing747SP
     int id;
@@ -14,7 +14,7 @@ public class Boeing747SP implements Plane,Serializable{
     private double fuelConsumption;// настоящее потребление топлива конкретного самолета 
     int passengerSeatsCount;//настоящее количество мест в самолете
     
-    public Boeing747SP(int id,String number){//конструктор экземпляра Boeing747SP, задает бортовой номер самолета(на практике большн и не надо)
+    public Aircraft(int id, String number){//конструктор экземпляра Boeing747SP, задает бортовой номер самолета(на практике большн и не надо)
         this.planeNumber=number;
         this.id=id;
         fuelConsumption=fuelConsumptionDefault;

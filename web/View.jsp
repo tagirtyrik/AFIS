@@ -5,7 +5,6 @@
         contentType="text/xml;charset=UTF-8" language="java"
         import="view.XmlWebView"
 %>
-<%@ page import="model.airport.InternationalAirport" %>
 <response>
   <%XmlWebView view=new XmlWebView();
     String cmd=request.getParameter("cmd");

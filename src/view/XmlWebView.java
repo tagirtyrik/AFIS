@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Created by GeneraL on 02.04.2015.
+ * Created by РљСЃСЋ on 02.03.2016.
  */
 public class XmlWebView  implements View{
     String info=null;
@@ -66,14 +66,14 @@ public class XmlWebView  implements View{
         if(airport.size()>0){
             for(int i=0;i<airport.size();i++) {
               //  responce.append("<airport>");
-                    responce.append(airport.get(i).toString());//делайте что хотите
+                    responce.append(airport.get(i).toString());//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
                // responce.append("</airport>\n");
             }
         }
         if(plane.size()>0){
             for(int i=0;i<plane.size();i++) {
                // responce.append("<plane>");
-                responce.append(plane.get(i).toString());//делайте что хотите
+                responce.append(plane.get(i).toString());//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
                 responce.append("\n");
                 //responce.append("</plane>\n");
             }
@@ -81,7 +81,7 @@ public class XmlWebView  implements View{
         if(route.size()>0){
             for(int i=0;i<route.size();i++) {
                // responce.append("<route>");
-                responce.append(route.get(i).toString());//делайте что хотите
+                responce.append(route.get(i).toString());//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
                 responce.append("\n");
                // responce.append("</route>\n");
             }
@@ -89,7 +89,7 @@ public class XmlWebView  implements View{
         if(flight.size()>0){
             for(int i=0;i<flight.size();i++) {
                 //responce.append("<flight>");
-                responce.append(flight.get(i).toString());//делайте что хотите
+                responce.append(flight.get(i).toString());//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
                 responce.append("\n");
                 //responce.append("</flight>\n");
             }

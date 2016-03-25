@@ -1,25 +1,22 @@
 package model;
 import exception.ComandException;
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
-import xml.OperationWithXml;
 import db.DataAccessObject;
 import java.sql.SQLException;
 
 /**
  * модель управляет источником данных, поддерживает работоспособность контроллера
- * @author GeneraL
+ * @author Ксю
  */
 public class Model {
-    private static boolean databaseIsOn=true;//переменная, отвечающая за использование базы данных либо XML-файла
     public Model(boolean useDataSourse){
         DataAccessObject.setUseDataSourse(useDataSourse);
     }
     public Model(){
     }
     public void close()throws SQLException{
-        if(databaseIsOn) DataAccessObject.closeConnection();
+        DataAccessObject.closeConnection();
         
     }
     /**
@@ -27,54 +24,41 @@ public class Model {
      * @return список рейсов
      */
     public ArrayList getFlights()throws SQLException,java.text.ParseException,IOException, ClassNotFoundException{
-        if(databaseIsOn)return DataAccessObject.getFlights();
-        else return OperationWithXml.getFlights();
+        return DataAccessObject.getFlights();
     }
-    public ArrayList getFlights(boolean useOr,String id,String routeId,String planeId,
-            String takeOffTime,String landingTime)throws SQLException,ComandException,java.text.ParseException{
-        if(databaseIsOn)return DataAccessObject.getFlights(useOr,id,routeId,planeId,
-                takeOffTime,landingTime);
-        else throw new ComandException("В режиме XML команда не поддерживается");
+    public ArrayList getFlights(String id,String routeId,String planeId, String takeOffTime,String landingTime)throws SQLException,ComandException,java.text.ParseException{
+        return DataAccessObject.getFlights(id,routeId,planeId, takeOffTime,landingTime);
     }
     /**
      * возвращает весь список маршрутов
      * @return список маршрутов
      */
     public ArrayList getRoutes()throws SQLException,IOException, ClassNotFoundException{
-        if(databaseIsOn)return DataAccessObject.getRoutes();
-        else return OperationWithXml.getRoutes();
+        return DataAccessObject.getRoutes();
     }
-    public ArrayList getRoutes(boolean useOr,String id,String takeOffId,String LandId,
-            String distanse)throws SQLException,ComandException{
-        if(databaseIsOn)return DataAccessObject.getRoutes(useOr, id, takeOffId, LandId,distanse);
-        else throw new ComandException("В режиме XML команда не поддерживается");
+    public ArrayList getRoutes(String id,String takeOffId,String LandId, String distanse)throws SQLException,ComandException{
+        return DataAccessObject.getRoutes(id, takeOffId, LandId,distanse);
     }
     /**
      * возвращает весь список аэропортов
      * @return список аэропортов
      */
     public ArrayList getAirports()throws SQLException,IOException, ClassNotFoundException{
-        if(databaseIsOn)return DataAccessObject.getAirports();
-        else return OperationWithXml.getAirports();
+        return DataAccessObject.getAirports();
     }
-    public ArrayList getAirports(boolean useOr,String id,
-            String name,String location)throws SQLException,ComandException{
-        if(databaseIsOn)return DataAccessObject.getAirports(useOr, id,
-             name, location);
-        else throw new ComandException("В режиме XML команда не поддерживается");
+    public ArrayList getAirports(String id, String name,String location)throws SQLException,ComandException{
+        return DataAccessObject.getAirports(id, name, location);
     }
     /**
      * возвращает весь список самолетов
      * @return список самолетов
      */
     public ArrayList getPlanes()throws SQLException,IOException, ClassNotFoundException{
-        if(databaseIsOn)return DataAccessObject.getPlanes();
-        else return  OperationWithXml.getPlanes();
+        return DataAccessObject.getPlanes();
     }
-    public ArrayList getPlanes(boolean useOr,String id,String name,String number,
-        String passengerSeatsCount,String fuelCons)throws SQLException,ComandException{
-        if(databaseIsOn)return DataAccessObject.getPlane(useOr, id, name, number, passengerSeatsCount, fuelCons);
-        else throw new ComandException("В режиме XML команда не поддерживается");
+    public ArrayList getPlanes(String id,String name,String number,
+        String passengerSeatsCount,String fuelCons) throws SQLException, ComandException, ClassNotFoundException {
+        return DataAccessObject.getPlane(id, name, number, passengerSeatsCount, fuelCons);
     }
     /**
      * выбор рейса по его id
@@ -82,8 +66,7 @@ public class Model {
      * @return Рейс
      */
     public Flight takeFlight(int id)throws SQLException,java.text.ParseException{
-        if(databaseIsOn)return DataAccessObject.getFlight(id);
-        else return OperationWithXml.getFlight(id);
+        return DataAccessObject.getFlight(id);
     }
     /**
      * выбор маршрута по его id
@@ -91,8 +74,7 @@ public class Model {
      * @return маршрут
      */
     public Route takeRoute(int id)throws SQLException{
-        if(databaseIsOn)return DataAccessObject.getRoute(id);
-        else return OperationWithXml.getRoute(id);
+        return DataAccessObject.getRoute(id);
     }
     /**
      * выбор аэропорта по его id
@@ -100,8 +82,7 @@ public class Model {
      * @return аэропорт
      */
     public Airport takeAirport(int id)throws SQLException{
-        if(databaseIsOn)return DataAccessObject.getAirport(id);
-        else return OperationWithXml.getAirport(id);
+        return DataAccessObject.getAirport(id);
     }
     /**
      * выбор самолета по его id
@@ -109,25 +90,20 @@ public class Model {
      * @return самолет
      */
     public Plane takePlane(int id)throws SQLException,IOException, ClassNotFoundException{
-        if(databaseIsOn) return DataAccessObject.getPlane(id);
-        else return OperationWithXml.getPlane(id);
+        return DataAccessObject.getPlane(id);
     }
     public boolean setPlane(Plane plane)throws SQLException,IOException, ClassNotFoundException{
-        if(databaseIsOn)    return DataAccessObject.setPlane(plane);
-        else return OperationWithXml.setPlane(plane);
+        return DataAccessObject.setPlane(plane);
 
     }
     public boolean setAirport(Airport airport)throws SQLException,IOException, ClassNotFoundException{
-        if(databaseIsOn)return DataAccessObject.setAirport(airport);
-        else return OperationWithXml.setAirport(airport);
+        return DataAccessObject.setAirport(airport);
     }
      public boolean setRoute(Route route)throws SQLException,IOException, ClassNotFoundException{
-        if(databaseIsOn)return DataAccessObject.setRoute(route);
-        else return OperationWithXml.setRoute(route);
+         return DataAccessObject.setRoute(route);
     } 
      public boolean setFlight(Flight flight)throws SQLException,IOException, ClassNotFoundException{
-         if(databaseIsOn)return DataAccessObject.setFlight(flight);
-        else return OperationWithXml.setFlight(flight);
+         return DataAccessObject.setFlight(flight);
      }
     /**
      * добавляет самолет в список, возвращает его номер в списке
@@ -137,8 +113,7 @@ public class Model {
      * @return индекс самолета в коллекции после добавления
      */
     public int addPlane(Plane plane)throws SQLException,IOException, ClassNotFoundException{
-        if(databaseIsOn)return DataAccessObject.addPlane(plane);
-        else return OperationWithXml.addPlane(plane);
+        return DataAccessObject.addPlane(plane);
     }
     /**
      * добавляет аэропорт в список, возвращает его номер в списке
@@ -148,8 +123,7 @@ public class Model {
      * @return индекс аэропорта в коллекции после добавления
      */
     public int addAirport(Airport airport)throws SQLException,IOException, ClassNotFoundException{
-        if(databaseIsOn)return DataAccessObject.addAirport(airport);
-        else return OperationWithXml.addAirport(airport);
+        return DataAccessObject.addAirport(airport);
     }
     /**
      * добавляет маршрут в список, возвращает его номер в списке
@@ -159,8 +133,7 @@ public class Model {
      * @return индекс маршрута в коллекции после добавления
      */
      public int addRoute(Route route)throws SQLException,IOException, ClassNotFoundException{
-        if(databaseIsOn)return DataAccessObject.addRoute(route);
-        else return OperationWithXml.addRoute(route);
+        return DataAccessObject.addRoute(route);
     } 
      /**
      * добавляет рейс в список, возвращает его номер в списке
@@ -170,8 +143,7 @@ public class Model {
      * @return индекс рейса в коллекции после добавления
      */
      public int addFlight(Flight flight)throws SQLException,IOException, ClassNotFoundException{
-        if(databaseIsOn) return DataAccessObject.addFlight(flight);
-        else return OperationWithXml.addFlight(flight);
+         return DataAccessObject.addFlight(flight);
      }
     /**
      * добавляет самолет в список, с заданным id
@@ -181,8 +153,7 @@ public class Model {
      * @return 0
      */
     public void addPlaneManual(Plane plane)throws SQLException,IOException, ClassNotFoundException{
-            if (databaseIsOn) DataAccessObject.addPlaneManual(plane);
-            else  OperationWithXml.addPlaneManual(plane);
+        DataAccessObject.addPlaneManual(plane);
     }
     /**
      * добавляет аэропорт в список, с заданным id
@@ -192,8 +163,7 @@ public class Model {
      * @return 0
      */
     public void addAirportManual(Airport port)throws SQLException,IOException, ClassNotFoundException{
-            if (databaseIsOn) DataAccessObject.addAirportManual(port);
-            else OperationWithXml.addAirportManual(port);
+        DataAccessObject.addAirportManual(port);
     }
     /**
      * добавляет маршрут в список,с заданным id
@@ -203,8 +173,7 @@ public class Model {
      * @return 0
      */
     public void addRouteManual(Route route)throws SQLException,IOException, ClassNotFoundException{
-            if (databaseIsOn) DataAccessObject.addRouteManual(route);
-            else OperationWithXml.addRouteManual(route);
+        DataAccessObject.addRouteManual(route);
     }
 
     /**
@@ -215,87 +184,48 @@ public class Model {
      * @return 0
      */
     public void addFlightManual(Flight flight)throws SQLException,IOException, ClassNotFoundException{
-            if (databaseIsOn) DataAccessObject.addFlightManual(flight);
-            else OperationWithXml.addFlightManual(flight);
+        DataAccessObject.addFlightManual(flight);
     }
     /**
       * удаляет рейс
       * @param id - идентификатор рейса
       */
      public void deleteFlight(int id)throws SQLException,IOException, ClassNotFoundException{
-         if(databaseIsOn)DataAccessObject.deleteFlight(id);
-         else OperationWithXml.deleteFlight(id);
+         DataAccessObject.deleteFlight(id);
      }
      /**
       * удаляет аэропорт
       * @param id - идентификатор аэропорта
       */
      public void deleteAirport(int id)throws SQLException,IOException, ClassNotFoundException{
-         if(databaseIsOn)DataAccessObject.deleteAirport(id);
-         else OperationWithXml.deleteAirport(id);
+         DataAccessObject.deleteAirport(id);
      }
      /**
       * удаляет маршрут
       * @param id - идентификатор маршрута
       */
      public void deleteRoute(int id)throws SQLException,IOException, ClassNotFoundException{
-         if(databaseIsOn)DataAccessObject.deleteRoute(id);
-         else OperationWithXml.deleteRoute(id);
+         DataAccessObject.deleteRoute(id);
      }
      /**
       * удаляет самолет
       * @param id - идентификатор самолета
       */
      public void deletePlane(int id)throws SQLException,IOException, ClassNotFoundException{
-         if(databaseIsOn)DataAccessObject.deletePlane(id);
-         else OperationWithXml.deletePlane(id);
+         DataAccessObject.deletePlane(id);
      }
-    public int flightCount()throws SQLException{
-        if(databaseIsOn) return DataAccessObject.flightCount();
-        else return OperationWithXml.flightCount();
-    }
-    public int planesCount()throws SQLException{
-        if(databaseIsOn) return DataAccessObject.planeCount();
-        else return OperationWithXml.planeCount();
-    }    
-    public int routesCount()throws SQLException{
-        if(databaseIsOn)return DataAccessObject.routeCount();
-        else return OperationWithXml.routeCount();
-    }  
-    public int airportsCount()throws SQLException{
-        if(databaseIsOn)return DataAccessObject.airportCount();
-        else return OperationWithXml.airportCount();
-    } 
     public void loadData() throws IOException, ClassNotFoundException {
-        if(databaseIsOn){
-            try{
-            DataAccessObject.initConnection();
-            }catch(ClassNotFoundException | SQLException e){
-                System.err.println(e.toString());
-                System.err.println("unable to connect database. using XML");
-                OperationWithXml.initData();
-                databaseIsOn=false;
+            try
+            {
+                DataAccessObject.initConnection();
             }
-        }else{
-                   OperationWithXml.initData();
-        }
+            catch(ClassNotFoundException | SQLException e)
+            {
+                System.err.println(e.toString());
+                System.err.println("unable to connect database");
+            }
     }
     public void delAll() throws IOException, ClassNotFoundException,SQLException{
-        if(databaseIsOn){
-            DataAccessObject.dropData();
-        }else OperationWithXml.delAll();
-    }
-
-    public String getXmlPlane() throws SQLException, IOException, ClassNotFoundException {
-        return OperationWithXml.savePlane(getPlanes());
-    }
-    public String getXmlPort() throws SQLException, IOException, ClassNotFoundException {
-        return OperationWithXml.savePlane(getAirports());
-    }
-    public String getXmlRoute() throws SQLException, IOException, ClassNotFoundException {
-        return OperationWithXml.savePlane(getRoutes());
-    }
-    public String getXmlFlight() throws SQLException, IOException, ClassNotFoundException, ParseException {
-        return OperationWithXml.savePlane(getFlights());
+        DataAccessObject.dropData();
     }
 }
