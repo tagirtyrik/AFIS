@@ -52,24 +52,4 @@ public class Aircraft implements Plane,Serializable{
     public void setPassengerSeatsCount(int passengerSeatsCount){
         this.passengerSeatsCount=passengerSeatsCount;
     }
-    public String toString(){
-        StringBuilder rezult=new StringBuilder("<plane>\n");
-        rezult.append("<id>");
-        rezult.append(this.id);
-        rezult.append("</id>");
-        rezult.append("<name>");
-        rezult.append(this.getName());
-        rezult.append("</name>\n");
-        rezult.append("<number>");
-        rezult.append(this.getNumber());
-        rezult.append("</number>\n");
-        rezult.append("<passengers>");
-        rezult.append(this.getPassengerSeatsCount());
-        rezult.append("</passengers>\n");
-        rezult.append("<fuelCons>");
-        rezult.append(this.getFuelConsumption());
-        rezult.append("</fuelCons>\n");
-        rezult.append("</plane>");
-        return new String(rezult);
-    }
 }
