@@ -31,7 +31,7 @@
     else useFSearch=true;
 
     ArrayList<Airport> airports;
-    Controller controller=new Controller(new Model(true));
+    Controller controller=new Controller(new Model());
 
     if(!useFSearch)airports = controller.portList();
     else airports = controller.getFPort(id, name, location);

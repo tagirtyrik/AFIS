@@ -36,7 +36,7 @@
 
     ArrayList<Route> routes;
     ArrayList<Airport> airports;
-    Controller controller=new Controller(new Model(true));
+    Controller controller=new Controller(new Model());
 
     if(!useFSearch)routes = controller.routeList();
     else routes=controller.getFRoute(id, takeOffPort, landingPort, distance);

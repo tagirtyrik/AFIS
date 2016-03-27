@@ -1,17 +1,20 @@
 
 package model.flight;
 import java.io.Serializable;
-import java.util.Date;
+import java.util.*;
+
 import model.Flight;
 import model.Plane;
 import model.Route;
+import model.aircraft.Aircraft;
+import model.route.RegularRoute;
 
 import javax.persistence.*;
 
 /*
     рейс, совершаемый самолетом по маршруту
 */
-@SequenceGenerator(name = "SEQ_ID", sequenceName = "SEQ_ID")
+@SequenceGenerator(name = "SEQ_ID", sequenceName = "regular_flight_seq_id")
 @Entity
 @Table(name = "flight")
 public class ReguarFlight implements Flight,Serializable{
@@ -19,11 +22,11 @@ public class ReguarFlight implements Flight,Serializable{
    // double fuelPrice=26.80;//стоимость литра авиационного керосина(возможно стоит сделать какой-нибудь глобальной константой?)
 
     @javax.persistence.Id
-    @GeneratedValue(generator = "SEQ_ID")
-    @Column(name = "flight_id")
+  //  @GeneratedValue(generator = "SEQ_ID")
     private int id;
 
     @Column(name = "plane_id")
+   // @ManyToOne
     private int planeId;
 
     @Column(name = "route_id")
@@ -34,6 +37,28 @@ public class ReguarFlight implements Flight,Serializable{
 
     @Column(name = "landingtime")
     private  Date landingTime;
+
+    @OneToMany(fetch =FetchType.LAZY,mappedBy = "flight",cascade = CascadeType.ALL)
+   private Set<Aircraft> planes = new HashSet<Aircraft>(0);
+
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "RFlight",cascade = CascadeType.ALL,targetEntity = RegularRoute.class)
+    private Set<RegularRoute> listRouts = new HashSet<>(0);
+
+    public Set<RegularRoute> getListRouts() {
+        return listRouts;
+    }
+
+    public void setListRouts(Set<RegularRoute> listRouts) {
+        this.listRouts = listRouts;
+    }
+
+    public Set<Aircraft> getPlanes() {
+        return planes;
+    }
+
+    public void setPlanes(Set<Aircraft> planes) {
+        this.planes = planes;
+    }
 
     public ReguarFlight()
     {

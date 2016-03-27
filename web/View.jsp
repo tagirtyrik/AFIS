@@ -8,7 +8,7 @@
 <response>
   <%XmlWebView view=new XmlWebView();
     String cmd=request.getParameter("cmd");
-    Controller controller=new Controller(new Model(true),view);
+    Controller controller=new Controller(new Model(),view);
     int argNum=0;
     ArrayList<String> args=new ArrayList<String>();
 

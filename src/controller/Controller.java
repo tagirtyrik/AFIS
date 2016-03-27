@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.*;
 
 import model.Airport;
 import model.Flight;
@@ -195,8 +195,9 @@ public class Controller {
             view.printFlight(flight, model.takeRoute(flight.getRoute()), model.takePlane(flight.getPlane()));
         }
         else if (cmd.equals("getfflight")){
-            ArrayList<Flight> list= getFFlight( arguments[0],
-                    arguments[2], arguments[1], arguments[3], arguments[4]);
+            ArrayList<Flight> list= getFFlight((arguments[0]),
+                    (arguments[2]), (arguments[1]),
+                    (arguments[3]), arguments[4]);
             if(list.isEmpty()){
                 view.printSomeInfo("Список пуст");
             }
@@ -210,7 +211,7 @@ public class Controller {
         else if(cmd.equals("delplane")){
             int id = Integer.parseInt(arguments[0]);
             if(id!=0) {
-                delPlane(Integer.parseInt(arguments[0]));
+                delPlane(id);
                 view.printSomeInfo("Самолет удален");
             }
             else view.printSomeInfo("Не стоит удалять последний элемент.");
@@ -218,7 +219,7 @@ public class Controller {
         else if(cmd.equals("delport")){
             int id = Integer.parseInt(arguments[0]);
             if(id!=0) {
-                delPort(Integer.parseInt(arguments[0]));
+                delPort(id);
                 view.printSomeInfo("Самолет удален");
             }
             else view.printSomeInfo("Не стоит удалять последний элемент.");
@@ -226,7 +227,7 @@ public class Controller {
         else if(cmd.equals("delroute")){
             int id = Integer.parseInt(arguments[0]);
             if(id!=0) {
-                delRoute(Integer.parseInt(arguments[0]));
+                delRoute(id);
                 view.printSomeInfo("Самолет удален");
             }
             else view.printSomeInfo("Не стоит удалять последний элемент.");
@@ -234,14 +235,10 @@ public class Controller {
         else if(cmd.equals("delflight")){
             int id = Integer.parseInt(arguments[0]);
             if(id!=0) {
-                delFlight(Integer.parseInt(arguments[0]));
+                delFlight(id);
                 view.printSomeInfo("Самолет удален");
             }
             else view.printSomeInfo("Не стоит удалять последний элемент.");
-        }
-        else if(cmd.equals("delall")){
-            delAll();
-            view.printSomeInfo("База данных очищена");
         }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -313,7 +310,7 @@ public class Controller {
     }
      public  void exit() throws SQLException{
          isLaunched=false;
-         model.close();
+        // model.close();
      }
     public ArrayList<Route> routeList() throws  SQLException,ParseException,
             IOException,ClassNotFoundException{
@@ -351,7 +348,8 @@ public class Controller {
                             String takeOffTime,String landingTime)
             throws SQLException,IOException
             ,ClassNotFoundException,ParseException{
-        return model.getFlights(id, routeId, planeId,takeOffTime,landingTime);
+        return model.getFlights(id, routeId, planeId,
+               takeOffTime, landingTime);
 
     }
     public  ArrayList<Route> getFRoute(String id,String takeOffId,String landId,
@@ -371,7 +369,7 @@ public class Controller {
                                        String passengersSeats,String fuelCons)
             throws SQLException,IOException
             ,ClassNotFoundException{
-        return model.getPlanes(id,name,number, passengersSeats, fuelCons);
+        return model.getPlanes(id, name,number, passengersSeats, fuelCons);
 
     }
     public void addPort(Airport port)throws SQLException,IOException
@@ -401,10 +399,6 @@ public class Controller {
     public void delRoute(int id)throws SQLException,IOException
             ,ClassNotFoundException{
         model.deleteRoute(id);
-    }
-    public void delAll()throws SQLException,IOException
-            ,ClassNotFoundException{
-        model.delAll();
     }
 
 }

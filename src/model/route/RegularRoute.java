@@ -1,10 +1,12 @@
 
 package model.route;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
+import java.util.Set;
 
 import model.Route;
+import model.airport.InternationalAirport;
 import model.flight.ReguarFlight;
 
 import javax.persistence.*;
@@ -12,14 +14,14 @@ import javax.persistence.*;
 /*
     маршрут между двумя точками
 */
-@SequenceGenerator(name = "SEQ_ID", sequenceName = "SEQ_ID")
+@SequenceGenerator(name = "SEQ_ID", sequenceName = "regular_route_seq_id")
 @Entity
 @Table(name = "route")
 public class RegularRoute implements Route,Serializable{
    // private Airport takeOffPort; //..откуда
   //  private Airport landingPort;//..куда
    @javax.persistence.Id
-   @GeneratedValue(generator = "SEQ_ID")
+  // @GeneratedValue(generator = "SEQ_ID")
    @Column(name = "route_id")
    private int id;
 
@@ -32,9 +34,39 @@ public class RegularRoute implements Route,Serializable{
     @Column(name = "distance")
     private double distance;// расстояние
 
-    @OneToMany(mappedBy = "route_id",cascade = CascadeType.ALL,fetch = FetchType.LAZY,targetEntity = ReguarFlight.class)
-    private List<ReguarFlight> albums = new LinkedList<ReguarFlight>();
+   @OneToMany(mappedBy = "portOffTime",cascade = CascadeType.ALL,fetch = FetchType.LAZY,targetEntity = InternationalAirport.class)
+    private Set<ReguarFlight> ListPartsOfTime = new HashSet<ReguarFlight>(0);
 
+    @OneToMany(mappedBy = "landingTuime",cascade = CascadeType.ALL,fetch = FetchType.LAZY,targetEntity = InternationalAirport.class)
+    private Set<ReguarFlight> ListLandingOfTime = new HashSet<ReguarFlight>(0);
+
+    public ReguarFlight getRFlight() {
+        return RFlight;
+    }
+
+    public void setRFlight(ReguarFlight RFlight) {
+        this.RFlight = RFlight;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "FLIGHT_ID")
+    private ReguarFlight RFlight;
+
+    public Set<ReguarFlight> getListPartsOfTime() {
+        return ListPartsOfTime;
+    }
+
+    public void setListPartsOfTime(Set<ReguarFlight> listPartsOfTime) {
+        ListPartsOfTime = listPartsOfTime;
+    }
+
+    public Set<ReguarFlight> getListLandingOfTime() {
+        return ListLandingOfTime;
+    }
+
+    public void setListLandingOfTime(Set<ReguarFlight> listLandingOfTime) {
+        ListLandingOfTime = listLandingOfTime;
+    }
 
     public RegularRoute()
     {

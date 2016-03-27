@@ -1,7 +1,7 @@
 package model;
 import exception.ComandException;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.*;
 import db.DataAccessObject;
 import java.sql.SQLException;
 
@@ -10,14 +10,10 @@ import java.sql.SQLException;
  * @author Ксю
  */
 public class Model {
-    public Model(boolean useDataSourse){
-        DataAccessObject.setUseDataSourse(useDataSourse);
-    }
+   // public Model(boolean useDataSourse){
+     //   DataAccessObject.setUseDataSourse(useDataSourse);
+   // }
     public Model(){
-    }
-    public void close()throws SQLException{
-        DataAccessObject.closeConnection();
-        
     }
     /**
      * возвращает весь список рейсов
@@ -27,7 +23,7 @@ public class Model {
         return DataAccessObject.getFlights();
     }
     public ArrayList getFlights(String id,String routeId,String planeId, String takeOffTime,String landingTime)throws SQLException,ComandException,java.text.ParseException{
-        return DataAccessObject.getFlights(id,routeId,planeId, takeOffTime,landingTime);
+        return DataAccessObject.getFlightsSearch(id,routeId, planeId, takeOffTime, landingTime);
     }
     /**
      * возвращает весь список маршрутов
@@ -37,7 +33,7 @@ public class Model {
         return DataAccessObject.getRoutes();
     }
     public ArrayList getRoutes(String id,String takeOffId,String LandId, String distanse)throws SQLException,ComandException{
-        return DataAccessObject.getRoutes(id, takeOffId, LandId,distanse);
+        return DataAccessObject.getRoutesSearch(id, takeOffId, LandId, distanse);
     }
     /**
      * возвращает весь список аэропортов
@@ -47,7 +43,7 @@ public class Model {
         return DataAccessObject.getAirports();
     }
     public ArrayList getAirports(String id, String name,String location)throws SQLException,ComandException{
-        return DataAccessObject.getAirports(id, name, location);
+        return DataAccessObject.getAirportsSearch(id, name, location);
     }
     /**
      * возвращает весь список самолетов
@@ -57,8 +53,8 @@ public class Model {
         return DataAccessObject.getPlanes();
     }
     public ArrayList getPlanes(String id,String name,String number,
-        String passengerSeatsCount,String fuelCons) throws SQLException, ComandException, ClassNotFoundException {
-        return DataAccessObject.getPlane(id, name, number, passengerSeatsCount, fuelCons);
+                               String passengerSeatsCount,String fuelCons) throws SQLException, ComandException, ClassNotFoundException {
+        return DataAccessObject.getPlaneSearch(id, name, number, passengerSeatsCount, fuelCons);
     }
     /**
      * выбор рейса по его id
@@ -92,18 +88,18 @@ public class Model {
     public Plane takePlane(int id)throws SQLException,IOException, ClassNotFoundException{
         return DataAccessObject.getPlane(id);
     }
-    public boolean setPlane(Plane plane)throws SQLException,IOException, ClassNotFoundException{
-        return DataAccessObject.setPlane(plane);
+    public void setPlane(Plane plane)throws SQLException,IOException, ClassNotFoundException{
+        DataAccessObject.setPlane(plane);
 
     }
-    public boolean setAirport(Airport airport)throws SQLException,IOException, ClassNotFoundException{
-        return DataAccessObject.setAirport(airport);
+    public void setAirport(Airport airport)throws SQLException,IOException, ClassNotFoundException{
+         DataAccessObject.setAirport(airport);
     }
-     public boolean setRoute(Route route)throws SQLException,IOException, ClassNotFoundException{
-         return DataAccessObject.setRoute(route);
+     public void setRoute(Route route)throws SQLException,IOException, ClassNotFoundException{
+          DataAccessObject.setRoute(route);
     } 
-     public boolean setFlight(Flight flight)throws SQLException,IOException, ClassNotFoundException{
-         return DataAccessObject.setFlight(flight);
+     public void setFlight(Flight flight)throws SQLException,IOException, ClassNotFoundException{
+          DataAccessObject.setFlight(flight);
      }
     /**
      * добавляет самолет в список, возвращает его номер в списке
@@ -112,8 +108,8 @@ public class Model {
      * @param plane добавлекмый самолет
      * @return индекс самолета в коллекции после добавления
      */
-    public int addPlane(Plane plane)throws SQLException,IOException, ClassNotFoundException{
-        return DataAccessObject.addPlane(plane);
+    public void addPlane(Plane plane)throws SQLException,IOException, ClassNotFoundException{
+        DataAccessObject.addPlane(plane);
     }
     /**
      * добавляет аэропорт в список, возвращает его номер в списке
@@ -122,8 +118,8 @@ public class Model {
      * @param airport добавляемый аэропорт
      * @return индекс аэропорта в коллекции после добавления
      */
-    public int addAirport(Airport airport)throws SQLException,IOException, ClassNotFoundException{
-        return DataAccessObject.addAirport(airport);
+    public void addAirport(Airport airport)throws SQLException,IOException, ClassNotFoundException{
+         DataAccessObject.addAirport(airport);
     }
     /**
      * добавляет маршрут в список, возвращает его номер в списке
@@ -132,8 +128,8 @@ public class Model {
      * @param route добавляемый маршрут
      * @return индекс маршрута в коллекции после добавления
      */
-     public int addRoute(Route route)throws SQLException,IOException, ClassNotFoundException{
-        return DataAccessObject.addRoute(route);
+     public void addRoute(Route route)throws SQLException,IOException, ClassNotFoundException{
+         DataAccessObject.addRoute(route);
     } 
      /**
      * добавляет рейс в список, возвращает его номер в списке
@@ -142,50 +138,10 @@ public class Model {
      * @param flight добавляемый рейс
      * @return индекс рейса в коллекции после добавления
      */
-     public int addFlight(Flight flight)throws SQLException,IOException, ClassNotFoundException{
-         return DataAccessObject.addFlight(flight);
+     public void addFlight(Flight flight)throws SQLException,IOException, ClassNotFoundException{
+          DataAccessObject.addFlight(flight);
      }
-    /**
-     * добавляет самолет в список, с заданным id
-     * (если существует - заменяет его)
-     * если в списке есть объект с таким id - заменяет его, иначе добавляет новый
-     * @param plane добавляемый самолет
-     * @return 0
-     */
-    public void addPlaneManual(Plane plane)throws SQLException,IOException, ClassNotFoundException{
-        DataAccessObject.addPlaneManual(plane);
-    }
-    /**
-     * добавляет аэропорт в список, с заданным id
-     * (если существует - заменяет его)
-     * если в списке есть объект с таким id - заменяет его, иначе добавляет новый
-     * @param port добавляемый аэропорт
-     * @return 0
-     */
-    public void addAirportManual(Airport port)throws SQLException,IOException, ClassNotFoundException{
-        DataAccessObject.addAirportManual(port);
-    }
-    /**
-     * добавляет маршрут в список,с заданным id
-     * (если существует - заменяет его)
-     * если в списке есть объект с таким id - заменяет его, иначе добавляет новый
-     * @param route добавляемый маршрут
-     * @return 0
-     */
-    public void addRouteManual(Route route)throws SQLException,IOException, ClassNotFoundException{
-        DataAccessObject.addRouteManual(route);
-    }
 
-    /**
-     * добавляет рейс в список, с заданным id
-     * (если существует - заменяет его)
-     * если в списке есть объект с таким id - заменяет его, иначе добавляет новый
-     * @param flight добавляемый рейс
-     * @return 0
-     */
-    public void addFlightManual(Flight flight)throws SQLException,IOException, ClassNotFoundException{
-        DataAccessObject.addFlightManual(flight);
-    }
     /**
       * удаляет рейс
       * @param id - идентификатор рейса
@@ -224,8 +180,5 @@ public class Model {
                 System.err.println(e.toString());
                 System.err.println("unable to connect database");
             }
-    }
-    public void delAll() throws IOException, ClassNotFoundException,SQLException{
-        DataAccessObject.dropData();
     }
 }

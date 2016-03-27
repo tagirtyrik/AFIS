@@ -35,7 +35,7 @@
         else useFSearch=true;
 
         ArrayList<Plane> list1;
-        Controller controller=new Controller(new Model(true));
+        Controller controller=new Controller(new Model());
 
         if(!useFSearch)list1 = controller.planeList();
         else list1=controller.getFPlane(id,name,number,passengers,fuel);

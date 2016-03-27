@@ -8,6 +8,7 @@
           <element id="module-output" name="afis" />
         </element>
         <element id="directory" name="lib">
+          <element id="library" level="project" name="Hibernate 4.2.2-4.2.2" />
           <element id="library" level="project" name="postgresql-9.4-1201.jdbc4" />
         </element>
       </element>

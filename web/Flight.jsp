@@ -61,7 +61,7 @@
     ArrayList<Plane> planes;
     ArrayList<Route> routes;
 
-    Controller controller=new Controller(new Model(true));
+    Controller controller=new Controller(new Model());
     if(!useFSearch)flights = controller.flightList();
     else flights = controller.getFFlight(id,selectRoute,selectPlane,takeOff,landing);
     planes=controller.planeList();
@@ -91,10 +91,10 @@
     var landTime=document.getElementById("landingTime_"+id).value;
     var dateArr=takeOffDate.split("-");
     var timeArr=takeOffTime.split(":");
-    var  takeOff=dateArr[1]+"."+dateArr[0]+"."+dateArr[2]+"-"+timeArr[0]+":"+timeArr[1];
+    var  takeOff=dateArr[0]+"."+dateArr[1]+"."+dateArr[2]+"-"+timeArr[0]+":"+timeArr[1];
     var dateArr=landDate.split("-");
     var timeArr=landTime.split(":");
-    var landing=dateArr[1]+"."+dateArr[0]+"."+dateArr[2]+"-"+timeArr[0]+":"+timeArr[1];
+    var landing=dateArr[0]+"."+dateArr[1]+"."+dateArr[2]+"-"+timeArr[0]+":"+timeArr[1];
     var xmlhttp = getXmlHttp();
     var url="?cmd=setflight&0="+id+"&1="+planeId+"&2="+routeId+"&3="+takeOff+"&4="+landing;
     xmlhttp.open('GET', "View.jsp"+url, false);

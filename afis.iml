@@ -12,15 +12,6 @@
         </webroots>
       </configuration>
     </facet>
-    <facet type="hibernate" name="Hibernate">
-      <configuration>
-        <datasource-map>
-          <unit-entry name="hibernate.cfg.xml" />
-        </datasource-map>
-        <naming-strategy-map />
-        <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/src/hibernate.cfg.xml" />
-      </configuration>
-    </facet>
     <facet type="web" name="Web2">
       <configuration>
         <descriptors>
@@ -31,6 +22,15 @@
         </webroots>
       </configuration>
     </facet>
+    <facet type="hibernate" name="Hibernate">
+      <configuration>
+        <datasource-map>
+          <unit-entry name="hibernate.cfg.xml" />
+        </datasource-map>
+        <naming-strategy-map />
+        <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/src/hibernate.cfg.xml" />
+      </configuration>
+    </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_7" inherit-compiler-output="true">
     <exclude-output />
@@ -39,7 +39,10 @@
     </content>
     <orderEntry type="jdk" jdkName="1.8 (1)" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="antlr-2.7.7" level="project" />
+    <orderEntry type="library" name="Hibernate 4.2.2-4.2.2" level="project" />
+    <orderEntry type="library" name="xstream-1.4.7" level="project" />
     <orderEntry type="library" name="postgresql-9.4-1201.jdbc4" level="project" />
+    <orderEntry type="library" name="commons-dbcp2-2.1.1-javadoc" level="project" />
+    <orderEntry type="library" name="commons-dbcp2-2.1.1" level="project" />
   </component>
 </module>
