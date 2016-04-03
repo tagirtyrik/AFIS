@@ -44,5 +44,9 @@
     <orderEntry type="library" name="postgresql-9.4-1201.jdbc4" level="project" />
     <orderEntry type="library" name="commons-dbcp2-2.1.1-javadoc" level="project" />
     <orderEntry type="library" name="commons-dbcp2-2.1.1" level="project" />
+    <orderEntry type="library" name="jsp-api" level="project" />
+    <orderEntry type="library" name="derbyclient" level="project" />
+    <orderEntry type="library" name="servlet-api" level="project" />
+    <orderEntry type="library" name="antlr-2.7.7" level="project" />
   </component>
 </module>

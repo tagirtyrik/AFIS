@@ -5,6 +5,9 @@ import model.airport.InternationalAirport;
 import model.flight.ReguarFlight;
 import model.route.RegularRoute;
 import org.hibernate.Session;
+import org.hibernate.Query;
+import org.hibernate.Transaction;
+//import javax.transaction.*;
 
 import java.util.*;
 
@@ -62,39 +65,36 @@ public class Hdb {
         }
 
 
-        public  static void  update(Object o)
-        {
+        public  static void  update(Object o){
             Session session = HibernateUtils.getSession();
-            session.getTransaction().begin();
+            Transaction t = session.beginTransaction();
             session.update(o);
-            session.getTransaction().commit();
-            session.close();
+            t.commit();
         }
 
         public  static void  add(Object o)
         {
             Session session = HibernateUtils.getSession();
-            session.getTransaction().begin();
+            Transaction t = session.beginTransaction();
             session.save(o);
-            session.getTransaction().commit();
-            session.close();
+            t.commit();
         }
 
         public  static void  delete(int id)
         {
             Session session = HibernateUtils.getSession();
+            Transaction t = session.beginTransaction();
             List<Aircraft> aircrafts = session.createCriteria(Aircraft.class).list();
             for(Aircraft a: aircrafts)
             {
                 if(a.getId()== id)
                 {
-                    session.getTransaction().begin();
                     session.delete(a);
                     break;
                 }
             }
-            session.getTransaction().commit();
-            session.close();
+            t.commit();
+   //         session.close();
         }
     }
 
@@ -144,39 +144,36 @@ public class Hdb {
         }
 
 
-        public  static void  update(Object o)
-        {
+        public  static void  update(Object o){
             Session session = HibernateUtils.getSession();
-            session.getTransaction().begin();
+            Transaction t = session.beginTransaction();
             session.update(o);
-            session.getTransaction().commit();
-            session.close();
+            t.commit();
         }
 
         public  static void  add(Object o)
         {
             Session session = HibernateUtils.getSession();
-            session.getTransaction().begin();
+            Transaction t = session.beginTransaction();
             session.save(o);
-            session.getTransaction().commit();
-            session.close();
+            t.commit();
         }
 
         public  static void  delete(int id)
         {
             Session session = HibernateUtils.getSession();
+            Transaction t = session.beginTransaction();
             List<model.Airport> aircrafts = session.createCriteria(InternationalAirport.class).list();
             for(model.Airport a: aircrafts)
             {
                 if(a.getId()== id)
                 {
-                    session.getTransaction().begin();
                     session.delete(a);
                     break;
                 }
             }
-            session.getTransaction().commit();
-            session.close();
+            t.commit();
+         //   session.close();
         }
     }
 
@@ -227,39 +224,35 @@ public class Hdb {
         }
 
 
-        public  static void  update(Object o)
-        {
+        public  static void  update(Object o){
             Session session = HibernateUtils.getSession();
-            session.getTransaction().begin();
+            Transaction t = session.beginTransaction();
             session.update(o);
-            session.getTransaction().commit();
-            session.close();
+            t.commit();
         }
 
         public  static void  add(Object o)
         {
             Session session = HibernateUtils.getSession();
-            session.getTransaction().begin();
+            Transaction t = session.beginTransaction();
             session.save(o);
-            session.getTransaction().commit();
-            session.close();
+            t.commit();
         }
 
         public  static void  delete(int id)
         {
             Session session = HibernateUtils.getSession();
+            Transaction t = session.beginTransaction();
             List<model.Route> routes = session.createCriteria(RegularRoute.class).list();
             for(model.Route a: routes)
             {
                 if(a.getId()== id)
                 {
-                    session.getTransaction().begin();
                     session.delete(a);
                     break;
                 }
             }
-            session.getTransaction().commit();
-            session.close();
+            t.commit();
         }
     }
 
@@ -279,9 +272,11 @@ public class Hdb {
             {
                 if(f.getId() == id)
                 {
+                    session.close();
                     return  f;
                 }
             }
+            session.close();
             return null;
         }
 
@@ -311,39 +306,36 @@ public class Hdb {
         }
 
 
-        public  static void  update(Object o)
-        {
+        public  static void  update(Object o){
             Session session = HibernateUtils.getSession();
-            session.getTransaction().begin();
+            Transaction t = session.beginTransaction();
             session.update(o);
-            session.getTransaction().commit();
-            session.close();
+            t.commit();
         }
 
         public  static void  add(Object o)
         {
             Session session = HibernateUtils.getSession();
-            session.getTransaction().begin();
+            Transaction t = session.beginTransaction();
             session.save(o);
-            session.getTransaction().commit();
-            session.close();
+            t.commit();
         }
 
         public  static void  delete(int id)
         {
             Session session = HibernateUtils.getSession();
+            Transaction t = session.beginTransaction();
             List<model.Flight> flights = session.createCriteria(ReguarFlight.class).list();
             for(model.Flight f: flights)
             {
                 if(f.getId()== id)
                 {
-                    session.getTransaction().begin();
                     session.delete(f);
                     break;
                 }
             }
-            session.getTransaction().commit();
-            session.close();
+            t.commit();
+          //  session.close();
         }
     }
 }

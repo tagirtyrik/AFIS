@@ -53,7 +53,7 @@
             this.location.reload();
         }else {
             alert("Ошибка. Возможно проблемы с доступом к базе данных \n");
-            alert(xmlhttp.responseText);
+        //    alert(xmlhttp.responseText);
             this.location.reload();
         }
 
@@ -71,7 +71,7 @@
             this.location.reload();
         }else {
             alert("Ошибка. Возможно проблемы с доступом к базе данных \n");
-            alert(xmlhttp.responseText);
+        //    alert(xmlhttp.responseText);
             this.location.reload();
         }
     }
@@ -126,7 +126,7 @@
             }
         %>
     </table>
-    <p align="center"><input type="button" value="Добавить самолет" onclick="addPlane(<%=list1.get(list1.size()-1).getId()+1%>, '')"></p>
+    <p align="center"><input type="button" value="Добавить самолет" onclick="addPlane(<%=list1.size()%>, '')"></p>
 </div>
 </body>
 </html>

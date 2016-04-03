@@ -113,7 +113,7 @@
       }
     %>
   </table>
-  <p align="center"><input type="button" value="Добавить аэропорт" onclick="addPort(<%=airports.get(airports.size()-1).getId()+1%>, '', '')"></p>
+  <p align="center"><input type="button" value="Добавить аэропорт" onclick="addPort(<%=airports.size()%>, '', '')"></p>
 </div>
 </body>
 </html>

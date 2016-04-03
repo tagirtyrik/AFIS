@@ -129,7 +129,7 @@
       }
     %>
   </table>
-  <p align="center"><input type="button" value="Добавить маршрут" onclick="addRoute(<%=routes.get(routes.size()-1).getId()+1%>)"></p>
+  <p align="center"><input type="button" value="Добавить маршрут" onclick="addRoute(<%=routes.size()%>)"></p>
 </div>
 </body>
 <%controller.exit();%>
