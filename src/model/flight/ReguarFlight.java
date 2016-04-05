@@ -107,7 +107,7 @@ public class ReguarFlight implements Flight,Serializable{
 
     public double ticketPrice(Route route, Plane plane){//возвращает стоимость билета из расчета цена литра керосина * расстояние полета * потребление топлива / пассажирскиш мест
         double coeff = 6000;
-        return plane.getFuelConsumption()* coeff/( route.getDistance()*
-                plane.getPassengerSeatsCount());
+        return plane.getFuelConsumption() * route.getDistance()/
+                plane.getPassengerSeatsCount();
     }
 }

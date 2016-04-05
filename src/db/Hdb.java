@@ -1,5 +1,6 @@
 package db;
 
+import exception.InvalidArgumentsException;
 import model.aircraft.Aircraft;
 import model.airport.InternationalAirport;
 import model.flight.ReguarFlight;
@@ -9,6 +10,7 @@ import org.hibernate.Query;
 import org.hibernate.Transaction;
 //import javax.transaction.*;
 
+import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -85,6 +87,14 @@ public class Hdb {
             Session session = HibernateUtils.getSession();
             Transaction t = session.beginTransaction();
             List<Aircraft> aircrafts = session.createCriteria(Aircraft.class).list();
+            List<ReguarFlight> flights = session.createCriteria(ReguarFlight.class).list();
+            for (ReguarFlight f: flights)
+            {
+                if(f.getPlane() == id)
+                {
+                    throw new InvalidArgumentsException();
+                }
+            }
             for(Aircraft a: aircrafts)
             {
                 if(a.getId()== id)
@@ -164,6 +174,14 @@ public class Hdb {
             Session session = HibernateUtils.getSession();
             Transaction t = session.beginTransaction();
             List<model.Airport> aircrafts = session.createCriteria(InternationalAirport.class).list();
+            List<RegularRoute> routes = session.createCriteria(RegularRoute.class).list();
+            for (RegularRoute r: routes)
+            {
+                if(r.getLandingPort()==id && r.getTakeOffPort()==id)
+                {
+                    throw  new InvalidArgumentsException();
+                }
+            }
             for(model.Airport a: aircrafts)
             {
                 if(a.getId()== id)
@@ -244,6 +262,14 @@ public class Hdb {
             Session session = HibernateUtils.getSession();
             Transaction t = session.beginTransaction();
             List<model.Route> routes = session.createCriteria(RegularRoute.class).list();
+            List<ReguarFlight> flights = session.createCriteria(ReguarFlight.class).list();
+            for (ReguarFlight f: flights)
+            {
+                if(f.getRoute() == id)
+                {
+                    throw new InvalidArgumentsException();
+                }
+            }
             for(model.Route a: routes)
             {
                 if(a.getId()== id)
