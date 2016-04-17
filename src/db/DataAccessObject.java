@@ -18,17 +18,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 /**
- * объект для доступа к базе данных
- * *управляет соединением
- * *плодит объекты
- * *переводит объекты в SQL
- * *не содержит самого SQL
- * *данные не хранит
  * @author Ксю
  */
 public class DataAccessObject {
     /**
-     * инициализация соединения с БД и создание таблиц, если их нет
      * @throws SQLException
      * @throws ClassNotFoundException 
      */

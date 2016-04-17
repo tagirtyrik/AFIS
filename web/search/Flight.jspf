@@ -25,7 +25,7 @@
   }
 </script>
 <div class="content">
-    <div align="center">Поиск</div>
+    <div align="center">Search</div>
   <table align="center">
     <th>Id</th><th>Plane</th><th>Route</th><th>Take-Off</th><th >Landing</th><th></th>
     <tr>
@@ -58,7 +58,7 @@
         <input id="landingTime_F" type="time" value="<%=landingDate!=null?timeFormat.format(landingDate):""%>" >
       </td>
       <td>
-        <input type="button" value="Поиск" onclick="search()">
+        <input type="button" value="Search" onclick="search()">
         <br>
       </td>
     </tr>

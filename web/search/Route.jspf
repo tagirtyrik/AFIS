@@ -14,7 +14,7 @@
   }
 </script>
 <div class="content">
-    <div align="center">Поиск</div>
+    <div align="center">Search</div>
   <table align="center">
     <th>Id</th><th>Take-Off Port</th><th>Landing Port</th><th>Distance</th>
     <tr>
@@ -31,7 +31,7 @@
         <input id="distance_F" type="text" value="<%=distance.equalsIgnoreCase("null")?"":distance%>">
       </td>
       <td>
-        <input type="button" value="Поиск" onclick="search()">
+        <input type="button" value="Search" onclick="search()">
         <br>
       </td>
     </tr>

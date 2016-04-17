@@ -20,7 +20,4 @@ public interface Flight {
     public void setLandingTimeShedule(Date date);
     public Date getLandingTimeShedule();
     
-   // public String timeAtFlight();
-    
-    public double ticketPrice(Route route, Plane plane);
 }

@@ -17,7 +17,7 @@ import java.util.List;
 public class Aircraft implements Plane,Serializable{
 
     @javax.persistence.Id
-  //  @GeneratedValue(generator = "SEQ_ID")
+    @GeneratedValue(generator = "SEQ_ID")
     private int id;
 
     @Column(name = "type")
@@ -32,7 +32,7 @@ public class Aircraft implements Plane,Serializable{
     @Column(name = "fuelconst")
     private double fuelConsumption;
 
-   @ManyToOne(fetch = FetchType.LAZY)
+   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
    @JoinColumn(name = "FLIGHT_ID")
     private ReguarFlight flight;
 

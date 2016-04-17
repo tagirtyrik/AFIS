@@ -16,7 +16,7 @@
   }
 </script>
 <div class="content">
-    <div align="center">Поиск</div>
+    <div align="center">Search</div>
     <table align="center">
       <th>Id</th><th>Title</th><th>Name</th><th>FuelConsumption</th><th>PassengerSeatsCount</th>
       <tr>
@@ -36,7 +36,7 @@
           <input id="passengers_F" type="text" value="<%=passengers.equalsIgnoreCase("null")?"":passengers%>">
         </td>
         <td>
-          <input type="button" value="Поиск" onclick="search()">
+          <input type="button" value="Search" onclick="search()">
         </td>
       </tr>
     </table>

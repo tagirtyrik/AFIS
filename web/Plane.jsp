@@ -53,7 +53,6 @@
             this.location.reload();
         }else {
             alert("Ошибка. Возможно проблемы с доступом к базе данных \n");
-        //    alert(xmlhttp.responseText);
             this.location.reload();
         }
 
@@ -71,7 +70,6 @@
             this.location.reload();
         }else {
             alert("Ошибка. Возможно проблемы с доступом к базе данных \n");
-        //    alert(xmlhttp.responseText);
             this.location.reload();
         }
     }
@@ -82,7 +80,7 @@
         if(xmlhttp.status == 200) {
             this.location.reload();
         }else {
-            alert("Удаление не возможно, запись используется в другой таблице.");
+            alert("Ошибка. Возможно проблемы с доступом к базе данных \n");
             this.location.reload();
         }
 
@@ -126,7 +124,7 @@
             }
         %>
     </table>
-    <p align="center"><input type="button" value="Добавить самолет" onclick="addPlane(<%=list1.size()%>, '')"></p>
+    <p align="center"><input type="button" value="Add plane" onclick="addPlane(<%=list1.size()%>, '')"></p>
 </div>
 </body>
 </html>

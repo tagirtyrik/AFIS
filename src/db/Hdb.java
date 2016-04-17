@@ -87,14 +87,6 @@ public class Hdb {
             Session session = HibernateUtils.getSession();
             Transaction t = session.beginTransaction();
             List<Aircraft> aircrafts = session.createCriteria(Aircraft.class).list();
-            List<ReguarFlight> flights = session.createCriteria(ReguarFlight.class).list();
-            for (ReguarFlight f: flights)
-            {
-                if(f.getPlane() == id)
-                {
-                    throw new InvalidArgumentsException();
-                }
-            }
             for(Aircraft a: aircrafts)
             {
                 if(a.getId()== id)
@@ -104,7 +96,6 @@ public class Hdb {
                 }
             }
             t.commit();
-   //         session.close();
         }
     }
 
@@ -173,16 +164,8 @@ public class Hdb {
         {
             Session session = HibernateUtils.getSession();
             Transaction t = session.beginTransaction();
-            List<model.Airport> aircrafts = session.createCriteria(InternationalAirport.class).list();
-            List<RegularRoute> routes = session.createCriteria(RegularRoute.class).list();
-            for (RegularRoute r: routes)
-            {
-                if(r.getLandingPort()==id && r.getTakeOffPort()==id)
-                {
-                    throw  new InvalidArgumentsException();
-                }
-            }
-            for(model.Airport a: aircrafts)
+            List<model.Airport> airports = session.createCriteria(InternationalAirport.class).list();
+            for(model.Airport a: airports)
             {
                 if(a.getId()== id)
                 {
@@ -191,7 +174,6 @@ public class Hdb {
                 }
             }
             t.commit();
-         //   session.close();
         }
     }
 
@@ -262,14 +244,6 @@ public class Hdb {
             Session session = HibernateUtils.getSession();
             Transaction t = session.beginTransaction();
             List<model.Route> routes = session.createCriteria(RegularRoute.class).list();
-            List<ReguarFlight> flights = session.createCriteria(ReguarFlight.class).list();
-            for (ReguarFlight f: flights)
-            {
-                if(f.getRoute() == id)
-                {
-                    throw new InvalidArgumentsException();
-                }
-            }
             for(model.Route a: routes)
             {
                 if(a.getId()== id)
@@ -302,7 +276,6 @@ public class Hdb {
                     return  f;
                 }
             }
-            session.close();
             return null;
         }
 
@@ -330,7 +303,6 @@ public class Hdb {
             }
 
         }
-
 
         public  static void  update(Object o){
             Session session = HibernateUtils.getSession();
@@ -361,7 +333,6 @@ public class Hdb {
                 }
             }
             t.commit();
-          //  session.close();
         }
     }
 }

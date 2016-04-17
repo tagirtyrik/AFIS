@@ -1,11 +1,6 @@
 <component name="libraryTable">
   <library name="xstream-1.4.7">
-    <CLASSES>
-      <root url="jar://$USER_HOME$/Libs/xstream-1.4.7.jar!/" />
-      <root url="jar://$USER_HOME$/Libs/servlet-api.jar!/" />
-      <root url="jar://$USER_HOME$/Libs/jsp-api.jar!/" />
-      <root url="jar://$USER_HOME$/Libs/derbyclient.jar!/" />
-    </CLASSES>
+    <CLASSES />
     <JAVADOC />
     <SOURCES />
   </library>

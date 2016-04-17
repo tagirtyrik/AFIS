@@ -155,6 +155,7 @@ public class Model {
       */
      public void deleteAirport(int id)throws SQLException,IOException, ClassNotFoundException{
          DataAccessObject.deleteAirport(id);
+         DataAccessObject.deleteAirport(id);
      }
      /**
       * удаляет маршрут

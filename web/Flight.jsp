@@ -23,7 +23,9 @@
   <script type="text/javascript" src="/lib/ajax.js" charset="utf-8"></script>
   <link rel="stylesheet" type="text/css" href="style.css">
   <%
-    DateFormat formatter =new SimpleDateFormat("dd.MM.yy-HH:mm");
+    SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    DateFormat formatter =new SimpleDateFormat("dd.MM.yyyy-HH:mm");
     String id=request.getParameter("id");
     String selectPlane=request.getParameter("selectPlane");
     String selectRoute=request.getParameter("selectRoute");
@@ -55,8 +57,7 @@
     if(landing==null)landing="null";
     else useFSearch=true;
 
-    SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+
     ArrayList<Flight> flights;
     ArrayList<Plane> planes;
     ArrayList<Route> routes;
@@ -69,8 +70,8 @@
   %>
 </head>
 <script>
- function addFlight(id){
-    var url="?cmd=addflight&0="+id+"&1="+"0"+"&2="+"0"+"&3="+"01.01.2016-00:00"+"&4="+"01.01.2016-00:00";
+ function addFlight(id, plane_id, route_id){
+    var url="?cmd=addflight&0="+id+"&1="+plane_id+"&2="+route_id+"&3="+"01.01.2016-00:00"+"&4="+"01.01.2016-00:00";
     var xmlhttp = getXmlHttp();
     xmlhttp.open('GET', "View.jsp"+url, false);
     xmlhttp.send(null);
@@ -102,7 +103,7 @@
     if(xmlhttp.status == 200) {
       this.location.reload();
     }else {
-      alert(xmlhttp.responseText);
+      alert("Ошибка. Возможно неверный ввод данных. Проверьте правильность ввода. \n");
       this.location.reload();
     }
   }
@@ -115,7 +116,6 @@
       this.location.reload();
     }else {
       alert("Ошибка. Возможно проблемы с доступом к базе данных \n");
-      alert(xmlhttp.responseText);
       this.location.reload();
     }
   }
@@ -128,7 +128,7 @@
 <div class="content">
 <h1 align="center">Flight</h1>
   <table align="center">
-    <th>Id</th><th>Plane</th><th>Route</th><th>Take-Off</th><th >Landing</th><th>Ticket price</th>
+    <th>Id</th><th>Plane</th><th>Route</th><th>Take-Off</th><th>Landing</th>
     <%
       for(Flight flight: flights)
       {
@@ -160,9 +160,6 @@
         <input style="max-width: 35px" id="landingTime_<%=flight.getId()%>"  value="<%=timeFormat.format(flight.getLandingTimeShedule())%>" onchange="setFlight(<%=flight.getId()%>)">
       </td>
       <td>
-        <input id="cost_<%=flight.getId()%>" type="text" value="<%=String.format("%.2f", flight.ticketPrice(controller.getRoute(flight.getRoute()),controller.getPlane(flight.getPlane())))%>" size="7" readonly>
-      </td>
-      <td>
         <input type="button" value="X" onclick="delFlight(<%=flight.getId()%>)">
       </td>
     </tr>
@@ -170,8 +167,15 @@
       }
     %>
   </table>
-  <p align="center"><input type="button" value="Добавить полет" onclick="addFlight(<%=flights.size()%>)"></p>
-  </div>
+  <%if(planes.size()!=0 && routes.size()!=0)
+  {%>
+ <p align="center"><input type="button" value="Add flight" onclick="addFlight(<%=flights.size()%>, <%=planes.get(0).getId()%>,  <%=routes.get(0).getId()%>)"></p>
+  <%} else
+  {%>
+  <p align="center"><input type="button" value="Add flight"></p>
+  <%}%>
+
+</div>
 </body>
 <%controller.exit();%>
 </html>

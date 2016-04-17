@@ -1,13 +1,10 @@
 
 package model.airport;
 import model.Airport;
-import model.flight.ReguarFlight;
 import model.route.RegularRoute;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.List;
 
 /*
     класс международного аэропорта.
@@ -18,7 +15,7 @@ import java.util.List;
 public class InternationalAirport implements Airport,Serializable{
 
     @javax.persistence.Id
-   // @GeneratedValue(generator = "SEQ_ID")
+    @GeneratedValue(generator = "SEQ_ID")
     @Column(name = "port_id")
     private int id;
 
@@ -36,27 +33,23 @@ public class InternationalAirport implements Airport,Serializable{
         this.portOffTime = portOffTime;
     }
 
-    public RegularRoute getLandingTuime() {
-        return landingTuime;
+    public RegularRoute getLandingTime() {
+        return landingTime;
     }
 
-    public void setLandingTuime(RegularRoute landingTuime) {
-        this.landingTuime = landingTuime;
+    public void setLandingTime(RegularRoute landingTime) {
+        this.landingTime = landingTime;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "TAKE_ID")
     private RegularRoute portOffTime;
 
 
     @ManyToOne(fetch =FetchType.LAZY)
     @JoinColumn(name = "LANDING_ID")
-    private RegularRoute landingTuime;
+    private RegularRoute landingTime;
     
-
-   // private String airportName;//имя аэропорта, например "Френсис Интернэйшионал"
-  //  private String airportLocation;//место нахождения аэропорта, например "Либерти-Сити"
-   // int id;
 
     public InternationalAirport()
     {

@@ -12,7 +12,7 @@
   }
 </script>
 <div class="content">
-    <div align="center">Поиск</div>
+    <div align="center">Search</div>
   <table align="center">
     <th>Id</th><th>Name</th><th>Location</th>
     <tr>
@@ -26,7 +26,7 @@
         <input id="location_F" type="text" value="<%=location.equalsIgnoreCase("null")?"":location%>">
       </td>
       <td>
-        <input  type="button" value="Поиск" onclick="search()">
+        <input  type="button" value="Search" onclick="search()">
         <br>
       </td>
     </tr>

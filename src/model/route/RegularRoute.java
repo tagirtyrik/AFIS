@@ -8,6 +8,7 @@ import java.util.Set;
 import model.Route;
 import model.airport.InternationalAirport;
 import model.flight.ReguarFlight;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 
@@ -21,7 +22,7 @@ public class RegularRoute implements Route,Serializable{
    // private Airport takeOffPort; //..откуда
   //  private Airport landingPort;//..куда
    @javax.persistence.Id
-  // @GeneratedValue(generator = "SEQ_ID")
+   @GeneratedValue(generator = "SEQ_ID")
    @Column(name = "route_id")
    private int id;
 
@@ -34,10 +35,10 @@ public class RegularRoute implements Route,Serializable{
     @Column(name = "distance")
     private double distance;// расстояние
 
-   @OneToMany(mappedBy = "portOffTime",cascade = CascadeType.ALL,fetch = FetchType.LAZY,targetEntity = InternationalAirport.class)
-    private Set<ReguarFlight> ListPartsOfTime = new HashSet<ReguarFlight>(0);
+   @OneToMany(mappedBy = "portOffTime",fetch = FetchType.EAGER, cascade = CascadeType.ALL, targetEntity = InternationalAirport.class)
+   private Set<ReguarFlight> ListPartsOfTime = new HashSet<ReguarFlight>(0);
 
-    @OneToMany(mappedBy = "landingTuime",cascade = CascadeType.ALL,fetch = FetchType.LAZY,targetEntity = InternationalAirport.class)
+    @OneToMany(mappedBy = "landingTime",cascade = CascadeType.ALL,fetch = FetchType.LAZY,targetEntity = InternationalAirport.class)
     private Set<ReguarFlight> ListLandingOfTime = new HashSet<ReguarFlight>(0);
 
     public ReguarFlight getRFlight() {

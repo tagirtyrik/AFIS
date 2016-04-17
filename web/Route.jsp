@@ -45,16 +45,15 @@
 </head>
 <script>
 
-   function addRoute(id){
-    var url="?cmd=addroute&0="+id;
+   function addRoute(id, airport1, airport2){
+    var url="?cmd=addroute&0="+id+"&1="+airport1+"&2="+airport2;
     var xmlhttp = getXmlHttp();
     xmlhttp.open('GET', "View.jsp"+url, false);
     xmlhttp.send(null);
      if(xmlhttp.status == 200) {
        this.location.reload();
      }else {
-       alert("Ошибка. Возможно проблемы с доступом к базе данных \n");
-       alert(xmlhttp.responseText);
+       alert("Ошибка. Возможно проблемы с доступом к базе данных \n")
        this.location.reload();
      }
 
@@ -71,7 +70,6 @@
       this.location.reload();
     }else {
       alert("Ошибка. Возможно проблемы с доступом к базе данных \n");
-      alert(xmlhttp.responseText);
       this.location.reload();
     }
   }
@@ -82,7 +80,7 @@
     if(xmlhttp.status == 200) {
       this.location.reload();
     }else {
-      alert("Удаление не возможно, запись используется в другой таблице.");
+      alert("Ошибка. Возможно проблемы с доступом к базе данных \n");
       this.location.reload();
     }
   }
@@ -129,7 +127,12 @@
       }
     %>
   </table>
-  <p align="center"><input type="button" value="Добавить маршрут" onclick="addRoute(<%=routes.size()%>)"></p>
+  <%if(airports.size()!=0)
+  {%>
+  <p align="center"><input type="button" value="Add route" onclick="addRoute(<%=routes.size()%>, <%=airports.size()%>, <%=airports.size()%>)"></p>
+  <%} else{  %>
+  <p align="center"><input type="button" value="Add route"></p>
+  <%}%>
 </div>
 </body>
 <%controller.exit();%>

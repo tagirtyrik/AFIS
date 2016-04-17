@@ -87,7 +87,7 @@ public class Controller {
             view.printSomeInfo("Аэропорт добавлен");
         }
         else if (cmd.equals("addroute")){
-            Route route=new RegularRoute(Integer.parseInt(arguments[0]),0,0,0);
+            Route route=new RegularRoute(Integer.parseInt(arguments[0]),Integer.parseInt(arguments[1]),Integer.parseInt(arguments[2]),0);
             addRoute(route);
             view.printSomeInfo("Маршрут добавлен");
         }
@@ -210,35 +210,19 @@ public class Controller {
 ////////////////////////////////////////////////////////////////////////////////////////// del-block
         else if(cmd.equals("delplane")){
             int id = Integer.parseInt(arguments[0]);
-            if(id!=0) {
-                delPlane(id);
-                view.printSomeInfo("Самолет удален");
-            }
-            else view.printSomeInfo("Не стоит удалять последний элемент.");
+            delPlane(id);
         }
         else if(cmd.equals("delport")){
             int id = Integer.parseInt(arguments[0]);
-            if(id!=0) {
-                delPort(id);
-                view.printSomeInfo("Самолет удален");
-            }
-            else view.printSomeInfo("Не стоит удалять последний элемент.");
+            delPort(id);
         }
         else if(cmd.equals("delroute")){
             int id = Integer.parseInt(arguments[0]);
-            if(id!=0) {
-                delRoute(id);
-                view.printSomeInfo("Самолет удален");
-            }
-            else view.printSomeInfo("Не стоит удалять последний элемент.");
+            delRoute(id);
         }
         else if(cmd.equals("delflight")){
             int id = Integer.parseInt(arguments[0]);
-            if(id!=0) {
-                delFlight(id);
-                view.printSomeInfo("Самолет удален");
-            }
-            else view.printSomeInfo("Не стоит удалять последний элемент.");
+            delFlight(id);
         }
 
 ///////////////////////////////////////////////////////////////////////////////////////
